@@ -31,4 +31,10 @@ public class MaterialController {
 
         return "features/orders-manage";
     }
+
+    @GetMapping("/shop")
+    public String showShop() {
+
+        return "features/shop";
+    }
 }

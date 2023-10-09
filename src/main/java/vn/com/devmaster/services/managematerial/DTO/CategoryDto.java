@@ -1,15 +1,15 @@
 package vn.com.devmaster.services.managematerial.DTO;
 
-import lombok.Value;
+import lombok.*;
 
 import java.io.Serializable;
 import java.time.Instant;
 
-/**
- * DTO for {@link vn.com.devmaster.services.managematerial.domain.Category}
- */
-@Value
-public class CategoryDto implements Serializable {
+@Data
+@AllArgsConstructor
+@NoArgsConstructor
+@Builder
+public class CategoryDto {
     Integer id;
     Integer idparent;
     String name;
