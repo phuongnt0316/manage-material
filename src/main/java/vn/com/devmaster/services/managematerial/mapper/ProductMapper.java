@@ -3,9 +3,9 @@ package vn.com.devmaster.services.managematerial.mapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import vn.com.devmaster.services.managematerial.DTO.ProductDto;
-import vn.com.devmaster.services.managematerial.DTO.ProductImageDto;
 import vn.com.devmaster.services.managematerial.domain.Product;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Component
@@ -14,13 +14,32 @@ public class ProductMapper implements EntityMapper<Product,ProductDto>{
     ProductImagesMapper productImagesMapper;
 
     @Override
-    public Product toEntity(ProductDto productDto) {
-        return null;
+    public Product toEntity(ProductDto dto) {
+        Product product=Product
+                .builder()
+                .id(dto.getId())
+                .name(dto.getName())
+                .description(dto.getDescription())
+                .notes(dto.getNotes())
+                .image(dto.getImage())
+                .price(dto.getPrice())
+                .quatity(dto.getQuatity())
+                .createdDate(dto.getCreatedDate())
+                .updatedDate(dto.getUpdatedDate())
+                .createdBy(dto.getCreatedBy())
+                .updatedBy(dto.getUpdatedBy())
+                .isactive(dto.getIsactive())
+                .build();
+        return product;
     }
 
     @Override
-    public List<Product> toEntity(List<ProductDto> d) {
-        return null;
+    public List<Product> toEntity(List<ProductDto> dtos) {
+        List<Product> products=new ArrayList<>();
+        dtos.forEach(dto->{
+            products.add(toEntity(dto));
+        });
+        return products;
     }
 
     @Override
@@ -45,7 +64,12 @@ public class ProductMapper implements EntityMapper<Product,ProductDto>{
     }
 
     @Override
-    public List<ProductDto> toDto(List<Product> e) {
-        return null;
+    public List<ProductDto> toDto(List<Product> entities) {
+        List<ProductDto> dtos=new ArrayList<>();
+        entities.forEach(product ->{
+            ProductDto dto=toDto(product);
+            dtos.add(dto);
+        });
+        return dtos;
     }
 }

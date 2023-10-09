@@ -13,6 +13,7 @@ public class MaterialController {
     private MaterialRepository materialRepository;
     @Autowired
     private MaterialService materialService;
+
     @GetMapping("/admin")
     public String showAdmin(){
         return "layout/admin";
@@ -33,8 +34,12 @@ public class MaterialController {
     }
 
     @GetMapping("/shop")
-    public String showShop() {
-
+    public String showShop(Model model) {
+    model.addAttribute("products",materialService.getProduct());
         return "features/shop";
+    }
+    @GetMapping("/product-detail")
+    public String showProductDetail(){
+        return "features/product-detail";
     }
 }

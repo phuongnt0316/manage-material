@@ -175,9 +175,13 @@ a:hover {
 
 
 /* - Section Title*/
-h3.card-title,
-h3.cart-title {
-    font-size: 1.5em;
+p.card-title,
+p.cart-title {
+    font-size: 13px;
+    font-weight: bold;
+}
+p.item-price{
+    color: red;
 }
 
 /* - Section width*/
@@ -194,7 +198,7 @@ h3.cart-title {
     font-size: 0.65em;
 }
 .btn.btn-medium {
-    padding: 0.8em 2.8em;
+    padding: 1.0em 1.0em;
     font-size: 1.1em;
     letter-spacing: 2px;
 }
@@ -311,9 +315,23 @@ h3.cart-title {
 
 /* - Buttons Aligns
 ------------------------------------------------------------- */
+.btn-addCart{
+    color: #7ac400;
+    font-size: 11px;
+    text-transform: uppercase;
+    font-weight: bold;
+    background: none;
+    border: 1px solid #7ac400;
+    padding: 6px 14px;
+    margin-top: 5px;
+    line-height: 16px;
+    border-radius: 20px;
+}
 .btn-left {
-    text-align: left;
+
+    text-align: center;
     display: block;
+
 }
 .btn-center {
     text-align: center;
@@ -322,6 +340,9 @@ h3.cart-title {
 .btn-right {
     text-align: right;
     display: block;
+}
+.cart-outline{
+    vertical-align: middle;
 }
 
 /*----------------------------------------------*/
@@ -696,26 +717,12 @@ h3.cart-title {
 
 /* 4. Product
 /*----------------------------------------------*/
-.product-store .product-card .cart-concern {
-    bottom: 75px;
-    width: 100%;
-    display: flex;
-    justify-content: center;
-    cursor: pointer;
-    text-transform: uppercase;
-    transition: all 0.3s ease-out;
-    opacity: 0;
+.product-store .product-card{
+    box-shadow: 0 2px 3px rgba(0,0,0,0.2);
+    border-radius: 6px;
+    padding: 10px 10px;
 }
-.product-store .product-card:hover .cart-concern {
-    bottom: 90px;
-    opacity: 1;
-}
-.product-card .cart-concern svg {
-    width: 16px;
-    height: 16px;
-    fill: var(--light-color);
-    margin-left: 9px;
-}
+
 .product-card .card-detail span {
     font-size: 1.5em;
 }
