@@ -23,5 +23,5 @@ public class ProductDto {
     private String createdBy;
     private String updatedBy;
     private Byte isactive;
-    private List<ProductImageDto> productImageDtos;
+//    private List<ProductImageDto> productImageDtos;
 }

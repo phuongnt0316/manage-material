@@ -58,7 +58,7 @@ public class ProductMapper implements EntityMapper<Product,ProductDto>{
                 .createdBy(entity.getCreatedBy())
                 .updatedBy(entity.getUpdatedBy())
                 .isactive(entity.getIsactive())
-                .productImageDtos(productImagesMapper.toDto(entity.getProductImages()))
+                //.productImageDtos(productImagesMapper.toDto(entity.getProductImages()))
                 .build();
         return pr;
     }

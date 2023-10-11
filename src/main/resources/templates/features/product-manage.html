@@ -43,7 +43,7 @@
                         <thead>
                         <tr>
                             <th>ID</th>
-                            <th>Tên sản phẩm</th>
+                            <th width="300px">Tên sản phẩm</th>
                             <th>Danh mục</th>
                             <th>Số lượng</th>
                             <th>Đơn giá</th>
@@ -52,13 +52,13 @@
                         </tr>
                         </thead>
                         <tbody>
-                        <tr>
-                            <td>ID</td>
-                            <td>Tên sản phẩm</td>
-                            <td>Danh mục</td>
-                            <td>số lượng</td>
-                            <td>Đơn giá</td>
-                            <td class="status"><span class="active">Hiển thị</span></td>
+                        <tr th:each="product:${products}">
+                            <td th:text="${product.getId()}"></td>
+                            <td th:text="${product.getName()}"></td>
+                            <td th:text="${product.getIdcategory().getName()}" class="cl-name"></td>
+                            <td th:text="${product.getQuatity()}"></td>
+                            <td th:text="${#numbers.formatDecimal(product.getPrice(),3,'DEFAULT', 0, 'DEFAULT')}"></td>
+                            <td class="status"><span th:class="${(product.getIsactive()==1)? 'active' : 'waiting'}" th:text="${(product.getIsactive()==1)?'Hoạt động':'Khóa'}"></span></td>
                             <td class="btn-active">
                                 <button type="button" class="btn" data-dismiss="update"
                                         aria-label="Update" title=" Sửa">
@@ -66,86 +66,15 @@
                                                             class="fa-solid fa-pen-to-square"></i></span>
                                 </button>
 
-                                <button type="button" class="btn" data-dismiss="alert"
-                                        aria-label="Delete" title="Xóa">
-                                                    <span aria-hidden="true"><i
-                                                            class="fa-solid fa-trash-can"></i></span>
-                                </button>
 
-
-                                <button id="btnStart" type="button" class="btn" data-toggle="modal"
-                                        title="Chi tiết" data-target="#formModal"><span
-                                        aria-hidden="true"><i
-                                        class="fa-solid fa-circle-info"></i></span></button>
-
-
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>ID</td>
-                            <td>Tên sản phẩm</td>
-
-                            <td>Danh mục</td>
-                            <td>số lượng</td>
-                            <td>Đơn giá</td>
-                            <td class="status"><span class="active">Hiển thị</span></td>
-                            <td class="btn-active">
-                                <button type="button" class="btn" data-dismiss="update"
-                                        aria-label="Update" title=" Sửa">
-                                                    <span aria-hidden="true"><i
-                                                            class="fa-solid fa-pen-to-square"></i></span>
-                                </button>
-
-                                <button type="button" class="btn" data-dismiss="alert"
-                                        aria-label="Delete" title="Xóa">
-                                                    <span aria-hidden="true"><i
-                                                            class="fa-solid fa-trash-can"></i></span>
-                                </button>
-
-
-                                <button id="btnStart" type="button" class="btn" data-toggle="modal"
-                                        title="Chi tiết" data-target="#formModal"><span
-                                        aria-hidden="true"><i
-                                        class="fa-solid fa-circle-info"></i></span></button>
-
-                            </td>
-                        </tr>
-                        <tr class="alert" role="alert">
-                            <td>
-                                <label class="">
-                                    <span>ID</span>
-                                </label>
-                            </td>
-                            <td>
-                                <label for="">
-                                                    <span>
-                                                        <span>Tên sản phẩm</span>
-                                                    </span>
-                                </label>
-                            </td>
-
-                            <td>Danh mục</td>
-                            <td>số lượng</td>
-                            <td>Đơn giá</td>
-                            <td class="status"><span class="active">Hiển thị</span></td>
-                            <td class="btn-active">
-                                <button type="button" class="btn" data-dismiss="update"
-                                        aria-label="Update" title=" Sửa">
-                                                    <span aria-hidden="true"><i
-                                                            class="fa-solid fa-pen-to-square"></i></span>
-                                </button>
-
-                                <button type="button" class="btn" data-dismiss="alert"
-                                        aria-label="Delete" title="Xóa">
-                                                    <span aria-hidden="true"><i
-                                                            class="fa-solid fa-trash-can"></i></span>
-                                </button>
                                 <button id="btnStart" type="button" class="btn" data-toggle="modal"
                                         title="Chi tiết" data-target="#formModal"><span
                                         aria-hidden="true"><i
                                         class="fa-solid fa-circle-info"></i></span></button>
                             </td>
                         </tr>
+
+
                         </tbody>
                     </table>
                 </div>

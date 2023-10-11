@@ -177,11 +177,15 @@ a:hover {
 /* - Section Title*/
 p.card-title,
 p.cart-title {
-    font-size: 13px;
     font-weight: bold;
+    text-align: justify;
 }
 p.item-price{
     color: red;
+}
+p.card-content{
+    font-size: 0.8em;
+    text-align: justify;
 }
 
 /* - Section width*/
@@ -723,10 +727,6 @@ p.item-price{
     padding: 10px 10px;
 }
 
-.product-card .card-detail span {
-    font-size: 1.5em;
-}
-
 @media only screen and (max-width: 575px) {
     .product-store .product-card .card-detail {
         padding: 10px;
@@ -1063,4 +1063,37 @@ figure.instagram-item img.insta-image {
 .post-navigation:hover svg,
 .post-navigation:focus svg {
     fill: var(--primary-color);
+}
+/*Slick*/
+
+.slider {
+    width: 50%;
+    margin: 100px auto;
+}
+
+.slick-slide {
+    margin: 0px 20px;
+}
+
+.slick-slide img {
+    width: 100%;
+}
+
+.slick-prev:before,
+.slick-next:before {
+    color: black;
+}
+
+
+.slick-slide {
+    transition: all ease-in-out .3s;
+    opacity: .2;
+}
+
+.slick-active {
+    opacity: .5;
+}
+
+.slick-current {
+    opacity: 1;
 }

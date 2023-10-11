@@ -51,37 +51,18 @@
                         <div class="col-lg-4 col-md-6 p-3" th:each="product:${products}">
                             <div class="product-card pe-3 pb-3">
                                 <div class="image-holder">
-                                    <img src="images/image-product/pr1.png" alt="product-item" class="img-fluid ">
+                                    <img th:src="'images/image-product/'+${product.getImage()}" alt="product-item" class="img-fluid ">
                                 </div>
                                 <div class="card-detail justify-content-between pb-3">
                                     <p class="card-title text-uppercase">
-                                        <a href="#" th:text="${product.getName()}"></a>
+                                        <a th:href="'/product-detail?idpr='+${product.getId()}" th:text="${product.getName()}"></a>
                                     </p>
-                                    <p th:text="${product.getDescription()}">
+                                    <p class="card-content">
+                                        <span th:text="${product.getDescription()}"></span>
                                     </p>
-                                    <p class="item-price"th:text="${product.getPrice()}"> VNĐ</p>
-                                    <a href="#" class="btn btn-primary btn-addCart">Thêm vào giỏ hàng</a>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-lg-4 col-md-6 p-3">
-                            <div class="product-card pe-3 pb-3">
-                                <div class="image-holder">
-                                    <img src="images/products/pr3.png" alt="product-item" class="img-fluid ">
-                                </div>
-                                <div class="card-detail justify-content-between pb-3">
-                                    <p class="card-title text-uppercase">
-                                        <a href="#">LAPTOP ASUS GAMING TUF FX507ZC4-HN074W (I5 12500H/8GB RAM/512GB
-                                            SSD/15.6 FHD 144HZ/RTX
-                                            3050 4GB/WIN11/XÁM)</a>
-                                    </p>
-                                    <p>
-                                        CPU : Intel® Core™ i3-1215U <br>
-                                        RAM : 8GB (1 x 8GB) DDR4 3200MHz (Còn trống 1 khe,tối đa 32GB) <br>
-                                        Ổ cứng : 256 GB SSD M.2 PCIe
-                                    </p>
-                                    <p class="item-price">12.000.000 VNĐ</p>
-                                    <a href="#" class="btn btn-primary btn-addCart">Thêm vào giỏ hàng</a>
+                                    <p class="item-price" th:text="${#numbers.formatDecimal(product.getPrice(),3,'DEFAULT', 0, 'DEFAULT')}+' VNĐ'"></p>
+                                    <a th:href="'/cart?idpr='+${product.getId()}" class="btn btn-primary"><i class="fa-solid fa-cart-plus"></i></a>
+                                    <a th:href="'/cart?idpr='+${product.getId()}" class="btn btn-danger">Mua ngay</a>
                                 </div>
                             </div>
                         </div>
@@ -124,21 +105,9 @@
                         </div>
                         <div class="widget-product-categories pt-5">
                             <h5 class="widget-title text-decoration-underline text-uppercase">Danh mục</h5>
-                            <ul class="product-categories sidebar-list list-unstyled">
+                            <ul class="product-categories sidebar-list list-unstyled" >
                                 <li class="cat-item">
-                                    <a href="/collections/categories">Tất cả</a>
-                                </li>
-                                <li class="cat-item">
-                                    <a href="">Điện thoại</a>
-                                </li>
-                                <li class="cat-item">
-                                    <a href="">Phụ kiện</a>
-                                </li>
-                                <li class="cat-item">
-                                    <a href="">Máy tính bảng</a>
-                                </li>
-                                <li class="cat-item">
-                                    <a href="">Đồng hồ</a>
+                                    <a href="#"></a>
                                 </li>
                             </ul>
                         </div>
@@ -155,7 +124,7 @@
                                     <a href="">Điện thoại</a>
                                 </li>
                                 <li class="tags-item">
-                                    <a href="Cấu hình"></a>
+                                    <a href=""></a>
                                 </li>
                             </ul>
                         </div>

@@ -7,21 +7,19 @@
     <title>Product-Detail</title>
 </head>
 <body>
-<div layout:fragment="content">
+<div layout:fragment="content" th:each="pr:${product}">
     <section id="selling-product" class="single-product padding-xlarge">
         <div class="container">
             <div class="row mt-5">
                 <div class="col-lg-6">
                     <div class="product-preview mb-3">
-                        <img src="images/image-product/pr1.png" alt="single-product" class="img-fluid">
+                        <img th:src="'images/image-product/'+${pr.getImage()}" alt="single-product" class="img-fluid">
                     </div>
                 </div>
                 <div class="col-lg-6">
                     <div class="product-info">
                         <div class="element-header">
-                            <h3 itemprop="name" class="display-7 text-uppercase">LAPTOP ASUS GAMING TUF FX507ZC4-HN074W (I5 12500H/8GB RAM/512GB
-                                SSD/15.6 FHD 144HZ/RTX
-                                3050 4GB/WIN11/XÁM)</h3>
+                            <h3 itemprop="name" class="display-7 text-uppercase" th:text="${pr.getName()}"></h3>
                             <div class="rating-container d-flex align-items-center">
                                 <div class="rating" data-rating="1" onclick=rate(1)>
                                     <svg class="star star-fill">
@@ -32,11 +30,9 @@
                             </div>
                         </div>
                         <div class="product-price pt-3 pb-3">
-                            <strong class="text-primary display-6 fw-bold">12.000.000 VNĐ</strong>
+                            <strong class="text-primary display-6 fw-bold" th:text="${#numbers.formatDecimal(pr.getPrice(),3,'DEFAULT', 0, 'DEFAULT')}+' VNĐ'"></strong>
                         </div>
-                        <p>Justo, cum feugiat imperdiet nulla molestie ac vulputate scelerisque amet. Bibendum
-                            adipiscing platea blandit sit sed quam semper rhoncus. Diam ultrices maecenas consequat eu
-                            tortor orci, cras lectus mauris, cras egestas quam venenatis neque.</p>
+                        <p th:text="${pr.getDescription()}"></p>
                         <div class="cart-wrap padding-small">
                             <div class="color-options product-select">
                                 <div class="color-toggle" data-option-index="0">
@@ -91,7 +87,7 @@
                                         <span class="input-group-btn">
                                             <button type="button" class="quantity-right-plus btn btn-number"
                                                     data-type="plus" data-field="">
-                                                +
+
                                             </button>
                                         </span>
                                     </div>
