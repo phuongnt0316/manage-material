@@ -36,14 +36,9 @@
                         <div class="sort-by">
                             <select id="input-sort" class="form-control" data-filter-sort="" data-filter-order="">
                                 <option value="">Mặc định</option>
-                                <option value="">Tên tăng dần (A - Z)</option>
-                                <option value="">Tên giảm dần (Z - A)</option>
-                                <option value="">Giá (Thấp-Cao)</option>
-                                <option value="">Giá (Cao-Thấp)</option>
-                                <option value="">Đánh giá (Cao nhất)</option>
-                                <option value="">Đánh giá (Thấp nhất)</option>
-                                <option value="">Cấu hình (A - Z)</option>
-                                <option value="">Cấu hình (Z - A)</option>
+                                <option value="ASC">Giá (Thấp-Cao)</option>
+                                <option value="DESC">Giá (Cao-Thấp)</option>
+
                             </select>
                         </div>
                     </div>
@@ -62,7 +57,7 @@
                                     </p>
                                     <p class="item-price" th:text="${#numbers.formatDecimal(product.getPrice(),3,'DEFAULT', 0, 'DEFAULT')}+' VNĐ'"></p>
                                     <a th:href="'/cart?idpr='+${product.getId()}" class="btn btn-primary"><i class="fa-solid fa-cart-plus"></i></a>
-                                    <a th:href="'/cart?idpr='+${product.getId()}" class="btn btn-danger">Mua ngay</a>
+                                    <a th:href="'/buyProduct?idpr='+${product.getId()}" class="btn btn-danger">Mua ngay</a>
                                 </div>
                             </div>
                         </div>
@@ -103,46 +98,16 @@
                                 </form>
                             </div>
                         </div>
-                        <div class="widget-product-categories pt-5">
-                            <h5 class="widget-title text-decoration-underline text-uppercase">Danh mục</h5>
-                            <ul class="product-categories sidebar-list list-unstyled" >
-                                <li class="cat-item">
-                                    <a href="#"></a>
-                                </li>
-                            </ul>
-                        </div>
-                        <div class="widget-product-tags pt-3">
-                            <h5 class="widget-title text-decoration-underline text-uppercase">Từ khóa</h5>
-                            <ul class="product-tags sidebar-list list-unstyled">
-                                <li class="tags-item">
-                                    <a href="">Trắng</a>
-                                </li>
-                                <li class="tags-item">
-                                    <a href="">Rẻ</a>
-                                </li>
-                                <li class="tags-item">
-                                    <a href="">Điện thoại</a>
-                                </li>
-                                <li class="tags-item">
-                                    <a href=""></a>
-                                </li>
-                            </ul>
-                        </div>
-                        <div class="widget-product-brands pt-3">
-                            <h5 class="widget-title text-decoration-underline text-uppercase">Lọc theo hãng</h5>
-                            <ul class="product-tags sidebar-list list-unstyled">
-                                <li class="tags-item">
-                                    <a href="">Apple</a>
-                                </li>
-                                <li class="tags-item">
-                                    <a href="">Samsung</a>
-                                </li>
-                                <li class="tags-item">
-                                    <a href="">Huwai</a>
-                                </li>
-                            </ul>
-                        </div>
+
                         <div class="widget-price-filter pt-3">
+                            <div class="widget-product-categories pt-5">
+                                <h5 class="widget-title text-decoration-underline text-uppercase">Danh mục</h5>
+                                <ul class="product-categories sidebar-list list-unstyled" th:each="category:${categories}">
+                                    <li class="cat-item">
+                                        <a th:onclick="setcategory()" th:text="${category.getName()}"></a>
+                                    </li>
+                                </ul>
+                            </div>
                             <h5 class="widget-titlewidget-title text-decoration-underline text-uppercase">Lọc theo
                                 giá</h5>
                             <ul class="product-tags sidebar-list list-unstyled">

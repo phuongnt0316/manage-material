@@ -4,13 +4,22 @@ import org.springframework.stereotype.Component;
 import vn.com.devmaster.services.managematerial.DTO.CartDto;
 import vn.com.devmaster.services.managematerial.DTO.ProductDto;
 import vn.com.devmaster.services.managematerial.domain.Cart;
+import vn.com.devmaster.services.managematerial.domain.Product;
 
 import java.util.List;
 @Component
 public class CartMapper implements EntityMapper<Cart, CartDto>{
     @Override
-    public Cart toEntity(CartDto cartDto) {
+    public Cart toEntity(CartDto dto) {
         return null;
+//        Cart cart=Cart
+//                .builder()
+//                .id(dto.getId())
+//                .idCustomer(dto.getIdCustomer())
+//                .product(dto.getClass(dt))
+//                .quantity(dto.getQuantity())
+//                .build();
+//        return cart;
     }
 
     @Override
@@ -23,7 +32,7 @@ public class CartMapper implements EntityMapper<Cart, CartDto>{
         CartDto cartDto= CartDto.builder()
                 .id(entity.getId())
                 .idCustomer(entity.getIdCustomer())
-                .idProduct(entity.getIdProduct())
+                //.idProduct(entity.getProduct().getId())
                 .quantity(entity.getQuantity())
                 .build();
         return cartDto;

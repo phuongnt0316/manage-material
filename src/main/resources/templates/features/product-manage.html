@@ -7,80 +7,162 @@
     <title>Product-Manage</title>
 </head>
 <body>
-<section class="ftco-section" layout:fragment="content">
-    <div class="container">
-        <div class="row justify-content-center">
-            <div class="col-md-6 text-center mb-5">
-                <h3>Danh sách sản phẩm</h3>
+<div layout:fragment="content">
+    <section>
+        <div class="modal fade" id="formModal" role="dialog" aria-labelledby="formModalLabel"
+             aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h3 class="modal-title" id="formModalLabel">Thêm sản phẩm</h3>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="close">
+                            <span aria-hidden="true">Đóng</span>
+                        </button>
+                    </div>
+                    <form id="formAwesome" th:action="@{/new-product}" method="post" th:object="${pro}">
+                        <div class="modal-body">
+                            <div class="form-group row">
+                                <label for="name-product" class="col-sm-6 col-form-label">
+                                    Tên sản phẩm
+                                </label>
+                                <div class="col-sm-6">
+                                    <input type="text" class="form-control" id="name-product" th:field="${pro.name}">
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <label for="category" class="col-sm-6 col-form-label">
+                                    Danh mục
+                                </label>
+                                <div class="col-sm-6">
+                                    <input type="text" class="form-control" id="category" >
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <label for="quantity" class="col-sm-6 col-form-label">
+                                    Số lượng
+                                </label>
+                                <div class="col-sm-6">
+                                    <input type="text" class="form-control" id="quantity" th:field="${pro.quantity}">
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <label for="price" class="col-sm-6 col-form-label">
+                                    Đơn giá
+                                </label>
+                                <div class="col-sm-6">
+                                    <input type="text" class="form-control" id="price" th:field="${pro.price}">
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <label for="decription" class="col-sm-6 col-form-label">
+                                    Mô tả sản phẩm
+                                </label>
+                                <div class="col-sm-6">
+                                            <textarea name="decription" class="form-control" cols="25" rows="5"
+                                                      id="decription" ></textarea>
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <label for="product-active" class="col-sm-6 col-form-label">
+                                    Trạng thái hiển thị
+                                </label>
+                                <div class="col-sm-6">
+                                    <select name="product-active" id="product-active" class="form-control" >
+                                        <option value="0">Tắt</option>
+                                        <option value="1">Bật</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <input type="submit" class="btn btn-secondary" value="Lưu">
+                        </div>
+                    </form>
+                </div>
             </div>
-            <form>
-                <div class="inner-form d-flex float-end pb-3">
-                    <div class="input-field">
-                        <div class="input-select">
-                            <select data-trigger="" name="choices-single-defaul">
-                                <option>----Chọn danh mục----</option>
-                                <option value="id1">Danh mục 1</option>
-                                <option value="id2">Danh mục 2</option>
-                                <option value="id3">Danh mục 3</option>
-                                <option value="id4">Danh mục 4</option>
-                            </select>
+        </div>
+    </section>
+    <section class="ftco-section">
+
+        <div class="container">
+            <div class="row justify-content-center">
+                <div class="col-md-6 text-center mb-5">
+                    <h3>Danh sách sản phẩm</h3>
+
+                    <button id="btnStart" type="button" class="btn" data-toggle="modal"
+                            title="Thêm sản phẩm" data-target="#formModal"><span
+                            aria-hidden="true">
+                    Thêm sản phẩm mới
+                                  <i class="fa-solid fa-circle-plus"></i> </span></button>
+                </div>
+                <form>
+                    <div class="inner-form d-flex float-end pb-3">
+                        <div class="input-field">
+                            <div class="input-select">
+                                <select data-trigger="" name="choices-single-defaul">
+                                    <option>----Chọn danh mục----</option>
+                                    <option value="id1">Danh mục 1</option>
+                                    <option value="id2">Danh mục 2</option>
+                                    <option value="id3">Danh mục 3</option>
+                                    <option value="id4">Danh mục 4</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="input-field ">
+                            <input id="search" type="text" placeholder="Nhập từ khóa"/>
+                        </div>
+
+                        <div class="input-field">
+                            <button class="btn-search btn btn-primary" type="button">Tìm kiếm</button>
                         </div>
                     </div>
-                    <div class="input-field ">
-                        <input id="search" type="text" placeholder="Nhập từ khóa"/>
-                    </div>
-
-                    <div class="input-field">
-                        <button class="btn-search btn btn-primary" type="button">Tìm kiếm</button>
-                    </div>
-                </div>
-            </form>
-        </div>
-        <div class="row">
-            <div class="col-md-12">
-                <div class="table-wrap">
-                    <table class="table table-responsive-xl table-hover">
-                        <thead>
-                        <tr>
-                            <th>ID</th>
-                            <th width="300px">Tên sản phẩm</th>
-                            <th>Danh mục</th>
-                            <th>Số lượng</th>
-                            <th>Đơn giá</th>
-                            <th>Trạng thái</th>
-                            <th>Hành động</th>
-                        </tr>
-                        </thead>
-                        <tbody>
-                        <tr th:each="product:${products}">
-                            <td th:text="${product.getId()}"></td>
-                            <td th:text="${product.getName()}"></td>
-                            <td th:text="${product.getIdcategory().getName()}" class="cl-name"></td>
-                            <td th:text="${product.getQuatity()}"></td>
-                            <td th:text="${#numbers.formatDecimal(product.getPrice(),3,'DEFAULT', 0, 'DEFAULT')}"></td>
-                            <td class="status"><span th:class="${(product.getIsactive()==1)? 'active' : 'waiting'}" th:text="${(product.getIsactive()==1)?'Hoạt động':'Khóa'}"></span></td>
-                            <td class="btn-active">
-                                <button type="button" class="btn" data-dismiss="update"
-                                        aria-label="Update" title=" Sửa">
+                </form>
+            </div>
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="table-wrap">
+                        <table class="table table-responsive-xl table-hover">
+                            <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th width="300px">Tên sản phẩm</th>
+                                <th>Danh mục</th>
+                                <th>Số lượng</th>
+                                <th>Đơn giá</th>
+                                <th>Trạng thái</th>
+                                <th>Hành động</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <tr th:each="product:${products}">
+                                <td th:text="${product.getId()}"></td>
+                                <td th:text="${product.getName()}"></td>
+                                <td th:text="${product.getIdcategory().getName()}" class="cl-name"></td>
+                                <td th:text="${product.getQuantity()}"></td>
+                                <td th:text="${#numbers.formatDecimal(product.getPrice(),3,'DEFAULT', 0, 'DEFAULT')}"></td>
+                                <td class="status"><span th:class="${(product.getIsactive()==1)? 'active' : 'waiting'}"
+                                                         th:text="${(product.getIsactive()==1)?'Bật':'Tắt'}"></span>
+                                </td>
+                                <td class="btn-active">
+                                    <button type="button" class="btn" data-dismiss="update"
+                                            aria-label="Update" title=" Sửa">
                                                     <span aria-hidden="true"><i
                                                             class="fa-solid fa-pen-to-square"></i></span>
-                                </button>
-
-
-                                <button id="btnStart" type="button" class="btn" data-toggle="modal"
-                                        title="Chi tiết" data-target="#formModal"><span
-                                        aria-hidden="true"><i
-                                        class="fa-solid fa-circle-info"></i></span></button>
-                            </td>
-                        </tr>
-
-
-                        </tbody>
-                    </table>
+                                    </button>
+                                    <button id="btn" type="button" class="btn" data-toggle="modalq"
+                                            title="Chi tiết" data-target="#formModalq"><span
+                                            aria-hidden="true">
+                                    <i class="fa-solid fa-circle-info"></i> </span></button>
+                                <td>
+                                </td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
                 </div>
             </div>
         </div>
-    </div>
-</section>
+    </section>
+</div>
 </body>
 </html>

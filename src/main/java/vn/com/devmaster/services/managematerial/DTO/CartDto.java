@@ -1,16 +1,15 @@
 package vn.com.devmaster.services.managematerial.DTO;
 
 import lombok.*;
-
-import java.io.Serializable;
+import vn.com.devmaster.services.managematerial.domain.Product;
 
 @Data
-@AllArgsConstructor
 @NoArgsConstructor
+@AllArgsConstructor
 @Builder
-public class CartDto implements Serializable {
+public class CartDto{
     Integer id;
     Integer idCustomer;
-    Integer idProduct;
+    Product product;
     Integer quantity;
 }

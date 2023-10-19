@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout/index}">
+<head>
+    <meta charset="UTF-8">
+    <title>Check Out</title>
+</head>
+<body>
+<div >
+  <section class="hero-section position-relative bg-light-blue padding-medium">
+    <div class="hero-content">
+      <div class="container">
+        <div class="row">
+          <div class="text-center padding-large no-padding-bottom">
+            <h1 class="display-4 text-uppercase fw-bold text-dark">Thanh toán</h1>
+            <div class="breadcrumbs">
+                <span class="item">
+                  <a href="index.html">Trang chủ ></a>
+                </span>
+              <span class="item">Thanh toán</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+  <section class="shopify-cart checkout-wrap padding-large">
+    <div class="container">
+      <form class="form-group">
+        <div class="row d-flex flex-wrap">
+          <div class="col-lg-6">
+            <h2 class="display-7 text-uppercase text-dark pb-4">Thông tin người nhận</h2>
+            <form action="/checkout" method="post">
+            <div class="billing-details">
+              <label for="fname">Họ tên</label>
+              <input type="text" id="fname" name="firstname" class="form-control mt-2 mb-4 ps-3">
+              <label for="email">Số điện thoại</label>
+              <input type="text" id="phone" name="phone" class="form-control mt-2 mb-4 ps-3">
+              <label for="cname">Thành phố/Tỉnh</label>
+              <select class="form-select form-control mt-2 mb-4" aria-label="Default select example">
+                <option selected="" hidden="">Hà Nội</option>
+                <option value="1">TP. Hồ Chí Minh</option>
+                <option value="2">Hải Dương</option>
+                <option value="3">Hưng Yên</option>
+              </select>
+              <label for="cname">Quận/Huyện</label>
+              <select class="form-select form-control mt-2 mb-4" aria-label="Default select example">
+                <option selected="" hidden="">Hà Nội</option>
+                <option value="1">TP. Hồ Chí Minh</option>
+                <option value="2">Hải Dương</option>
+                <option value="3">Hưng Yên</option>
+              </select>
+              <label for="cname">Phường/Xã</label>
+              <select class="form-select form-control mt-2 mb-4" aria-label="Default select example">
+                <option selected="" hidden="">Hà Nội</option>
+                <option value="1">TP. Hồ Chí Minh</option>
+                <option value="2">Hải Dương</option>
+                <option value="3">Hưng Yên</option>
+              </select>
+              <label for="address">Tên đường/Tòa nhà/Số nhà</label>
+              <input type="text" id="adr" name="address" class="form-control mt-3 ps-3 mb-3">
+              <div class="billing-details">
+                <label for="fname">Ghi chú</label>
+                <textarea class="form-control pt-3 pb-3 ps-3 mt-2" placeholder="Ghi chú về đơn đặt hàng của bạn."></textarea>
+              </div>
+            </div>
+            </form>
+          </div>
+          <div class="col-lg-6">
+            <div class="your-order">
+              <h2 class="display-7 text-uppercase text-dark pb-4">Chi tiết thanh toán</h2>
+              <div class="total-price">
+                <table cellspacing="0" class="table">
+                  <tbody>
+                  <tr th:each="pro:${product}">
+                    <td th:text="${pro.getName()}"></td>
+                    <td><input id="form1" min="0" name="quantity" type="number">
+                               class="form-control form-control-sm"/></td>
+                    <td th:text="${pro.getPrice()}"></td>
+                    <td></td>
+                  </tr>
+                  <tr class="subtotal border-top border-bottom pt-2 pb-2 text-uppercase">
+                    <th>Tổng tiền hàng</th>
+                    <td data-title="Subtotal">
+                            <span class="price-amount amount text-primary ps-5">
+                              <bdi>
+                                <span class="price-currency-symbol">$</span>2,370.00 </bdi>
+                            </span>
+                    </td>
+                  </tr>
+                  <tr class="order-total border-bottom pt-2 pb-2 text-uppercase">
+                    <th>Tổng thanh toán</th>
+                    <td data-title="Total">
+                            <span class="price-amount amount text-primary ps-5">
+                              <bdi>
+                                <span class="price-currency-symbol">$</span>2,370.00 </bdi>
+                            </span>
+                    </td>
+                  </tr>
+                  </tbody>
+                </table>
+                <div class="list-group mt-5 mb-3">
+                  <label class="list-group-item d-flex gap-2 border-0">
+                    <input class="form-check-input flex-shrink-0" type="radio" name="listGroupRadios" id="listGroupRadios1" value="" checked>
+                    <span>
+                          <strong class="text-uppercase">Chuyển khoản trực tiếp</strong>
+                          <small class="d-block text-body-secondary">Chuyển khoản ngân hàng trực tiếp. Thực hiện thanh toán trực tiếp vào tài khoản ngân hàng của chúng tôi. Vui lòng sử dụng ID đơn hàng của bạn. Đơn đặt hàng của bạn sẽ được chuyển đi sau khi tiền đã được chuyển đến tài khoản của chúng tôi.</small>
+                        </span>
+                  </label>
+                  <label class="list-group-item d-flex gap-2 border-0">
+                    <input class="form-check-input flex-shrink-0" type="radio" name="listGroupRadios" id="listGroupRadios3" value="">
+                    <span>
+                          <strong class="text-uppercase">Thanh toán khi nhận hàng</strong>
+                          <small class="d-block text-body-secondary">Thanh toán bằng tiền mặt khi nhận hàng.</small>
+                        </span>
+                  </label>
+                  <label class="list-group-item d-flex gap-2 border-0">
+                    <input class="form-check-input flex-shrink-0" type="radio" name="listGroupRadios" id="listGroupRadios3" value="">
+                    <span>
+                          <strong class="text-uppercase">Paypal</strong>
+                          <small class="d-block text-body-secondary">Thanh toán qua PayPal. Bạn có thể thanh toán bằng thẻ tín dụng nếu bạn không có tài khoản PayPal.</small>
+                        </span>
+                  </label>
+                </div>
+                <button type="submit" name="submit" class="btn btn-dark btn-medium text-uppercase btn-rounded-none">Đặt hàng</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </form>
+    </div>
+  </section>
+</div>
+</body>
+</html>

@@ -15,7 +15,7 @@ import java.util.List;
 @Table(name = "product")
 public class Product {
     @Id
-    @Column(name = "ID", nullable = false)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
     @Column(name = "NAME", length = 500)
@@ -39,8 +39,8 @@ public class Product {
     @Column(name = "PRICE")
     private Double price;
 
-    @Column(name = "QUATITY")
-    private Integer quatity;
+    @Column(name = "QUANTITY")
+    private Integer quantity;
 
     @Column(name = "CREATED_DATE")
     private Instant createdDate;
@@ -58,7 +58,7 @@ public class Product {
     private Byte isactive;
 
     @OneToMany
-    @JoinColumn(name = "IDPRODUCT")
+    @JoinColumn(name = "ID_PRODUCT")
     List<ProductImage> productImages=new ArrayList<>();
 
 }

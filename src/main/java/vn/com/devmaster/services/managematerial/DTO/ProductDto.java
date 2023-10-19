@@ -11,13 +11,13 @@ import java.util.List;
 @NoArgsConstructor
 @Builder
 public class ProductDto {
-    private Integer id;
+   // private Integer id;
     private String name;
     private String description;
     private String notes;
      private String image;
     private Double price;
-    private Integer quatity;
+    private Integer quantity;
     private Instant createdDate;
     private Instant updatedDate;
     private String createdBy;

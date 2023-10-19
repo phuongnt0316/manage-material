@@ -17,13 +17,13 @@ public class ProductMapper implements EntityMapper<Product,ProductDto>{
     public Product toEntity(ProductDto dto) {
         Product product=Product
                 .builder()
-                .id(dto.getId())
+                //.id(dto.getId())
                 .name(dto.getName())
                 .description(dto.getDescription())
                 .notes(dto.getNotes())
                 .image(dto.getImage())
                 .price(dto.getPrice())
-                .quatity(dto.getQuatity())
+                .quantity(dto.getQuantity())
                 .createdDate(dto.getCreatedDate())
                 .updatedDate(dto.getUpdatedDate())
                 .createdBy(dto.getCreatedBy())
@@ -46,13 +46,13 @@ public class ProductMapper implements EntityMapper<Product,ProductDto>{
     public ProductDto toDto(Product entity) {
         ProductDto pr=ProductDto
                 .builder()
-                .id(entity.getId())
+                //.id(entity.getId())
                 .name(entity.getName())
                 .description(entity.getDescription())
                 .notes(entity.getNotes())
                 .image(entity.getImage())
                 .price(entity.getPrice())
-                .quatity(entity.getQuatity())
+                .quantity(entity.getQuantity())
                 .createdDate(entity.getCreatedDate())
                 .updatedDate(entity.getUpdatedDate())
                 .createdBy(entity.getCreatedBy())

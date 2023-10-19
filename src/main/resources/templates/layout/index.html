@@ -202,17 +202,18 @@
                                     <li class="dropdown pe-1">
                                         <a class=" dropbtn" href="#" role="button" data-bs-toggle="dropdown"
                                            aria-expanded="false">
-                                            <!-- <i class="fa-regular fa-circle-user"></i> -->
-
                                             <svg class="user">
                                                 <use xlink:href="#user"></use>
                                             </svg>
                                         </a>
-                                        <div class="dropdown-content">
-                                            <a href="#">Thông tin cá nhân</a>
-                                            <a href="#">Đơn hàng</a>
-                                            <a href="#">Giỏ hàng</a>
-                                            <a href="#">Đăng xuất</a>
+                                        <div class="dropdown-content" >
+                                            <div th:remove="tag" th:utext="${design}">
+
+                                            </div>
+<!--                                            <a href="#">Thông tin cá nhân</a>-->
+<!--                                            <a href="#">Đơn hàng</a>-->
+<!--                                            <a href="#">Giỏ hàng</a>-->
+<!--                                            <a href="#">Đăng xuất</a>-->
                                         </div>
                                     </li>
                                     <li class="search-item pe-3">
@@ -370,6 +371,7 @@
                             </div>
                             <div class="card-detail justify-content-between pb-3">
                                 <p class="card-title text-uppercase">
+
                                     <a href="#">LAPTOP ASUS GAMING TUF FX507ZC4-HN074W (I5 12500H/8GB RAM/512GB
                                         SSD/15.6 FHD 144HZ/RTX
                                         3050 4GB/WIN11/XÁM)</a>
@@ -842,9 +844,10 @@
                     </div>
                 </div>
             </div>
-            <div class="col-md-4 col-sm-6">
+            <div class="col-md-4 col-sm-6" >
+
                 <div class="copyright">
-                    <p>© Copyright 2023 MiniStore</a>
+                    <p >© Copyright 2023 MiniStore
                     </p>
                 </div>
             </div>

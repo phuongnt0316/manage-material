@@ -40,15 +40,15 @@
                                     </div>
                                     <hr class="my-4">
 
-                                    <div class="row mb-4 d-flex justify-content-between align-items-center">
+                                    <div class="row mb-4 d-flex justify-content-between align-items-center" th:each="cart:${carts}">
                                         <div class="col-md-2 col-lg-2 col-xl-2">
                                             <img
                                                     src="images/cart-item1.jpg"
-                                                    class="img-fluid rounded-3" alt="Cotton T-shirt">
+                                                    class="img-fluid rounded-3" alt="">
                                         </div>
                                         <div class="col-md-3 col-lg-3 col-xl-3">
                                             <h6 class="text-muted">Shirt - Tên loại sp</h6>
-                                            <h6 class="text-black mb-0">Cotton T-shirt - Tên sản phẩm</h6>
+                                            <h6 class="text-black mb-0" th:text="${cart.getId()}"></h6>
                                         </div>
                                         <div class=" d-flex col-lg-3  col-md-3 ">
                                             <button class="btn btn-link px-2"
@@ -56,7 +56,7 @@
                                                 <i class="fas fa-minus"></i>
                                             </button>
 
-                                            <input id="form1" min="0" name="quantity" value="1" type="number"
+                                            <input id="form1" min="0" name="quantity" type="number" th:value="${cart.getQuantity()}"
                                                    class="form-control form-control-sm"/>
 
                                             <button class="btn btn-link px-2"
