@@ -1,6 +1,9 @@
 package vn.com.devmaster.services.managematerial.domain;
 
 import lombok.*;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 
 import javax.persistence.*;
 import java.time.Instant;
@@ -15,7 +18,7 @@ import java.util.List;
 @Table(name = "customer")
 public class Customer {
     @Id
-    @Column(name = "ID", nullable = false)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
     @Column(name = "NAME", length = 250)

@@ -86,15 +86,13 @@
                     <div class="sidebar">
                         <div class="widget-menu">
                             <div class="widget-search-bar">
-                                <form role="search" method="get" class="d-flex">
-                                    <input class="search-field" placeholder="Search" type="search">
-                                    <div class="search-icon bg-dark">
-                                        <a href="#">
-                                            <svg class="search text-light">
-                                                <use xlink:href="#search"></use>
-                                            </svg>
-                                        </a>
-                                    </div>
+                                <form role="search" method="get" class="d-flex" th:action="@{/shop}">
+                                    <input class="search-field" placeholder="Nhập ..." type="search" name="txtSearch">
+
+                                        <button type="submit">
+                                            Tìm kiếm
+                                        </button>
+
                                 </form>
                             </div>
                         </div>
@@ -104,29 +102,10 @@
                                 <h5 class="widget-title text-decoration-underline text-uppercase">Danh mục</h5>
                                 <ul class="product-categories sidebar-list list-unstyled" th:each="category:${categories}">
                                     <li class="cat-item">
-                                        <a th:onclick="setcategory()" th:text="${category.getName()}"></a>
+                                        <a th:href="'/shop?idcate='+${category.getId()}" th:text="${category.getName()}"></a>
                                     </li>
                                 </ul>
                             </div>
-                            <h5 class="widget-titlewidget-title text-decoration-underline text-uppercase">Lọc theo
-                                giá</h5>
-                            <ul class="product-tags sidebar-list list-unstyled">
-                                <li class="tags-item">
-                                    <a href="">Nhỏ hơn 3.000.000 đ</a>
-                                </li>
-                                <li class="tags-item">
-                                    <a href="">3.0000.000- 5.000.000 đ</a>
-                                </li>
-                                <li class="tags-item">
-                                    <a href="">5.0000.000- 7.000.000 đ</a>
-                                </li>
-                                <li class="tags-item">
-                                    <a href="">7.0000.000- 10.000.000 đ</a>
-                                </li>
-                                <li class="tags-item">
-                                    <a href="">1.0000.000- 20.000.000 đ</a>
-                                </li>
-                            </ul>
                         </div>
                     </div>
                 </aside>

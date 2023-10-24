@@ -5,20 +5,18 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 import vn.com.devmaster.services.managematerial.domain.*;
-import vn.com.devmaster.services.managematerial.repository.MaterialRepository;
+import vn.com.devmaster.services.managematerial.projection.IViewCart;
 import vn.com.devmaster.services.managematerial.service.MaterialService;
 
-import java.util.List;
-
+import javax.servlet.http.HttpSession;
+import java.util.*;
 
 @Controller
-public class MaterialController {
-    @Autowired
-    private MaterialRepository materialRepository;
+//@RequestMapping("/ministore")
+
+public class MaterialController implements IMaterialControll{
     @Autowired
     private MaterialService materialService;
 
@@ -32,61 +30,98 @@ public class MaterialController {
     public String showIndex() {
         return "layout/index";
     }
-
-    @GetMapping("/shop")
-    public String showShop(Model model) {
-        List<Category> categories=materialService.getAllCategory();
-        model.addAttribute("products", materialService.getProduct());
+    @GetMapping(path = {"/shop"})
+  public String getProductByCategory(Model model,@RequestParam(required=false,name="idcate") String idcate,@RequestParam(required = false,name = "sort") String sort,@RequestParam(required = false,name = "txtSearch") String search){
+        List<Product> products=materialService.getProduct();
         model.addAttribute("categories",materialService.getAllCategory());
+        if(idcate!=null) {
+            products = materialService.getProductByCategory(idcate);
+        }
+        if(sort!=null){
+            Collections.sort(products,(a,b)->{
+                int rs= (int) (a.getPrice()-b.getPrice());
+                if(sort.equals("ASC")){
+                   return rs>0?rs:(-rs);
+                }
+                else {
+                    return rs>0?(-rs):rs;
+                }
+            });
+        }
+        model.addAttribute("products",products);
         return "features/shop";
-    }
 
-    private void setcategory(String id) {
-
-    }
-
-//    @PostMapping("/login-check")
-//    public String login() {
-//        CustomUser userDetail = new CustomUser("admin", "admin", "ADMIN");
-//        UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(userDetail, userDetail.getAuthorities());
-//        SecurityContextHolder.getContext().setAuthentication(authenticationToken);
-//        return "redirect:/ministore";
-//    }
-
-    @GetMapping("/product-detail")
+  }
+      @GetMapping("/product-detail")
     public String getProductByID(@RequestParam("idpr") String idpr, Model model) {
         model.addAttribute("product", materialService.getProductByID(idpr));
         return "features/product-detail";
     }
 
     @GetMapping("/cart")
-    public String save(@RequestParam("idpr") Integer idpr) {
-        Cart cart = new Cart().builder().idCustomer(2).idProduct(idpr).quantity(1).build();
+    public String save(@RequestParam("idpr") Integer idpr, HttpSession session) {
+        Customer customer=(Customer) session.getAttribute("customer");
+        Integer id=customer.getId();
+        Cart cart = new Cart().builder().idCustomer(id).idProduct(idpr).quantity(1).build();
         materialService.save(cart);
         return "redirect:/view-cart";
     }
-
+@GetMapping("/deleteCart")
+public String deleteCart(@RequestParam("delete") String delete_idpr,@RequestParam("idcustomer") String idcustomer){
+    materialService.deleteProductCarts(delete_idpr,idcustomer);
+    return "redirect:/view-cart";
+}
     @GetMapping("/view-cart")
-    public String showCart(Model model, Integer idcustomer) {
+    public String showCart(Model model, HttpSession session)  {
+        if(session.getAttribute("customer")!=null) {
+            Customer customer = (Customer) session.getAttribute("customer");
+            String idcustomer = String.valueOf(customer.getId());
+            List<IViewCart> carts = materialService.getCartByIdCustomer(idcustomer);
+            if (carts.size() == 0) {
+                model.addAttribute("emptycart", "<p>Giỏ hàng trống</p>");
+            } else {
+                model.addAttribute("customer", session.getAttribute("customer"));
+                model.addAttribute("carts", carts);
+                model.addAttribute("totalmoney", getTotalMoney(carts));
+                model.addAttribute("total", carts.size());
+                model.addAttribute("design", session.getAttribute("design"));
+                model.addAttribute("transports", materialService.getTransport());
 
-        model.addAttribute("carts", materialService.getCartByIdCustomer(idcustomer));
-        return "features/cart";
+            }
+            return "features/cart";
+        }
+
+
+        else {
+            return "redirect:/login";
+        }
+
+
+    }
+
+    private Integer getTotalMoney(List <IViewCart> carts) {
+        int sum=0;
+        for(IViewCart cart:carts){
+            sum+=cart.getPrice();
+        }
+        return sum;
     }
 
     @PostMapping("/login-action")
-    public String Login(Model model, @RequestParam(name = "txtEmail") String email, @RequestParam(name = "txtPassword") String password) {
+    public String Login(Model model, HttpSession session, @RequestParam(name = "txtEmail") String email, @RequestParam(name = "txtPassword") String password) {
         List<Customer> customers = materialService.getCustomerByID(email, password);
-        Customer customer = customers.get(0);
         if (customers.size() > 0) {
-            CustomUser userDetail = new CustomUser(customer.getUsername(), null, "ADMIN");
-            UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(userDetail, userDetail.getAuthorities());
+            Customer customer = customers.get(0);
+            CustomUser userDetail = new CustomUser(customer.getUsername(), customer.getPassword(), "USER");
+            UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(userDetail,null, userDetail.getAuthorities());
             SecurityContextHolder.getContext().setAuthentication(authenticationToken);
-            model.addAttribute("customer", customers);
-            model.addAttribute("design", "<a href=\"#\">Thông tin cá nhân</a>\n" +
-                    "                                            <a href=\"#\">Đơn hàng</a>\n" +
-                    "                                            <a href=\"#\">Giỏ hàng</a>\n" +
-                    "                                            <a href=\"#\">Đăng xuất</a>");
-          //   return "redirect:/admin";
+            //model.addAttribute("customer", customers);
+            session.setAttribute("customer",customer);
+            model.addAttribute("customer",session.getAttribute("customer"));
+           // session.setAttribute("idcustomer",customer.getId());
+            session.setAttribute("design",MENU_CUSTOMER);
+            model.addAttribute("design", MENU_CUSTOMER);
+            // return "redirect:/admin";
             return "layout/index";
         } else {
             model.addAttribute("login", "<script>\n" +
@@ -95,10 +130,13 @@ public class MaterialController {
             return "layout/login";
         }
     }
-
+    @GetMapping("/logout")
+    public String logout(){
+        return null;
+    }
     @GetMapping("/checkout")
-    public String checkOut(Model model, @RequestParam("idpr") String idpr) {
-        model.addAttribute("product", materialService.getProductByID(idpr));
+    public String checkOut(Model model) {
+        model.addAttribute("payments",materialService.getPayment());
         model.addAttribute("order", new Order());
         return ("features/checkout");
     }

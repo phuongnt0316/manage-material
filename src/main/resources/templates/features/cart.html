@@ -8,119 +8,109 @@
 </head>
 <body>
 <div layout:fragment="content">
-<section class="hero-section position-relative bg-light-blue padding-medium">
-    <div class="hero-content">
-        <div class="container">
-            <div class="row">
-                <div class="text-center padding-large no-padding-bottom">
-                    <h1 class="display-4 text-uppercase fw-bolder text-dark">Giỏ hàng</h1>
-                    <div class="breadcrumbs">
+    <section class="hero-section position-relative bg-light-blue padding-medium">
+        <div class="hero-content">
+            <div class="container">
+                <div class="row">
+                    <div class="text-center padding-large no-padding-bottom">
+                        <h1 class="display-4 text-uppercase fw-bolder text-dark">Giỏ hàng</h1>
+                        <div class="breadcrumbs">
                 <span class="item">
                   <a href="index.html">Trang chủ ></a>
                 </span>
-                        <span class="item">Giỏ hàng</span>
+                            <span class="item">Giỏ hàng</span>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
-    </div>
-</section>
-<section class="h-100 h-custom">
-    <div class="container py-5 h-100">
-        <div class="row d-flex justify-content-center align-items-center h-100">
-            <div class="col-12">
-                <div class="card card-registration card-registration-2" style="border-radius: 15px;">
-                    <div class="card-body p-0">
-                        <div class="row g-0">
-                            <div class="col-lg-8">
-                                <div class="p-5">
-                                    <div class="d-flex justify-content-between align-items-center mb-5">
-                                        <h1 class="fw-bold mb-0 text-black">Giỏ hàng của bạn</h1>
-                                        <h6 class="mb-0 text-muted">3 sản phẩm</h6>
-                                    </div>
-                                    <hr class="my-4">
-
-                                    <div class="row mb-4 d-flex justify-content-between align-items-center" th:each="cart:${carts}">
-                                        <div class="col-md-2 col-lg-2 col-xl-2">
-                                            <img
-                                                    src="images/cart-item1.jpg"
-                                                    class="img-fluid rounded-3" alt="">
+    </section>
+    <section class="h-100 h-custom">
+        <div class="container py-5 h-100">
+            <div class="row d-flex justify-content-center align-items-center h-100">
+                <div class="col-12">
+                    <div class="card card-registration card-registration-2" style="border-radius: 15px;">
+                        <p th:text="${total==null?'Giỏ hàng trống':''}"></p>
+                        <div class="card-body p-0" th:remove="${total==null}?all:none">
+                            <div class="row g-0" >
+                                <div class="col-lg-8">
+                                    <div class="p-5">
+                                        <div class="d-flex justify-content-between align-items-center mb-5">
+                                            <h1 class="fw-bold mb-0 text-black">Giỏ hàng của bạn</h1>
+                                            <h6 class="mb-0 text-muted" th:text="${total}+' sản phẩm'"></h6>
                                         </div>
-                                        <div class="col-md-3 col-lg-3 col-xl-3">
-                                            <h6 class="text-muted">Shirt - Tên loại sp</h6>
-                                            <h6 class="text-black mb-0" th:text="${cart.getId()}"></h6>
+                                        <hr class="my-4">
+
+                                        <div class="row mb-4 d-flex justify-content-between align-items-center"
+                                             th:each="cart:${carts}">
+                                            <div class="col-md-2 col-lg-2 col-xl-2">
+                                                <img
+                                                        th:src="'images/image-product/'+${cart.getImage()}"
+                                                        class="img-fluid rounded-3" alt="">
+                                            </div>
+                                            <div class="col-md-3 col-lg-3 col-xl-3">
+                                                <h6 class="text-muted" th:text="${cart.getIdProduct()}">Shirt - Tên loại sp</h6>
+                                                <h6 class="text-black mb-0" th:text="${cart.getName()}"></h6>
+                                            </div>
+                                            <div class=" d-flex col-lg-3  col-md-3 ">
+                                                <button class="btn btn-link px-2"
+                                                        onclick="this.parentNode.querySelector('input[type=number]').stepDown()">
+                                                    <i class="fas fa-minus"></i>
+                                                </button>
+
+                                                <input id="form1" min="0" name="quantity" type="number"
+                                                       th:value="${cart.getQuantity()}"
+                                                       class="form-control form-control-sm"/>
+
+                                                <button class="btn btn-link px-2"
+                                                        onclick="this.parentNode.querySelector('input[type=number]').stepUp()">
+                                                    <i class="fas fa-plus"></i>
+                                                </button>
+                                            </div>
+                                            <div class="col-md-3 col-lg-2 col-xl-2 offset-lg-1">
+                                                <h6 class="mb-0" th:text="${#numbers.formatDecimal(cart.getPrice(),3,'DEFAULT', 0, 'DEFAULT')}"> </h6>
+                                            </div>
+
+                                            <div class="col-md-1 col-lg-1 col-xl-1 text-end">
+                                                <a th:href="'/deleteCart?delete='+${cart.getIdProduct()}+'&&idcustomer='+${customer.getId()}" class="text-danger"><i class="fas fa-trash fa-lg"></i></a>
+                                            </div>
                                         </div>
-                                        <div class=" d-flex col-lg-3  col-md-3 ">
-                                            <button class="btn btn-link px-2"
-                                                    onclick="this.parentNode.querySelector('input[type=number]').stepDown()">
-                                                <i class="fas fa-minus"></i>
-                                            </button>
 
-                                            <input id="form1" min="0" name="quantity" type="number" th:value="${cart.getQuantity()}"
-                                                   class="form-control form-control-sm"/>
+                                        <hr class="my-4">
 
-                                            <button class="btn btn-link px-2"
-                                                    onclick="this.parentNode.querySelector('input[type=number]').stepUp()">
-                                                <i class="fas fa-plus"></i>
-                                            </button>
+
+                                        <div class="pt-5">
+                                            <h6 class="mb-0"><a href="/shop" class="text-body"><i
+                                                    class="fas fa-long-arrow-alt-left me-2"></i>Trở lại cửa hàng</a>
+                                            </h6>
                                         </div>
-                                        <div class="col-md-3 col-lg-2 col-xl-2 offset-lg-1">
-                                            <h6 class="mb-0">€ 44.00 </h6>
-                                        </div>
-
-                                        <div class="col-md-1 col-lg-1 col-xl-1 text-end">
-                                            <a href="#!" class="text-danger"><i class="fas fa-trash fa-lg"></i></a>
-                                        </div>
-                                    </div>
-
-                                    <hr class="my-4">
-
-
-                                    <div class="pt-5">
-                                        <h6 class="mb-0"><a href="#!" class="text-body"><i
-                                                class="fas fa-long-arrow-alt-left me-2"></i>Trở lại cửa hàng</a></h6>
                                     </div>
                                 </div>
-                            </div>
-                            <div class="col-lg-4 bg-grey">
-                                <div class="p-5">
-                                    <h3 class="fw-bold mb-5 mt-2 pt-1">Thanh toán</h3>
-                                    <hr class="my-4">
+                                <div class="col-lg-4 bg-grey">
+                                    <div class="p-5">
+                                        <h3 class="fw-bold mb-5 mt-2 pt-1">Thanh toán</h3>
+                                        <hr class="my-4">
 
-                                    <div class="d-flex justify-content-between mb-4">
-                                        <h5 class="text-uppercase">3 sản phẩm</h5>
-                                        <h5>€ 132.00</h5>
-                                    </div>
-
-
-                                    <h5 class="text-uppercase mb-3">Phí ship</h5>
-
-                                    <div class="mb-4 pb-2">
-                                        <select class="select">
-                                            <option value="1">Standard-Delivery- €5.00</option>
-                                            <option value="2">Two</option>
-                                            <option value="3">Three</option>
-                                            <option value="4">Four</option>
-                                        </select>
-                                    </div>
-
-                                    <h5 class="text-uppercase mb-3">Mã giảm giá</h5>
-                                    <div class="mb-5">
-                                        <div class="form-outline">
-                                            <input type="text" id="form3Examplea2"
-                                                   class="form-control form-control-lg"/>
-                                            <label class="form-label" for="form3Examplea2">Nhập mã giảm giá</label>
+                                        <div class="d-flex justify-content-between mb-4">
+                                            <p th:text="'Tổng '+${total}+' sản phẩm'"></p>
+                                            <h5  th:text="${#numbers.formatDecimal(totalmoney,3,'DEFAULT', 0, 'DEFAULT')}+'VNĐ'"></h5>
                                         </div>
-                                    </div>
-                                    <hr class="my-4">
+                                        <p class="mb-3">Phí ship</p>
+                                        <form th:action="@{/checkout}" method="get">
+                                        <div class="mb-4 pb-2">
 
-                                    <div class="d-flex justify-content-between mb-5">
-                                        <h5 class="text-uppercase">Tổng thanh toán</h5>
-                                        <h5>€ 137.00</h5>
+                                            <select class="select" name="transport">
+                                                <option  th:each="transport:${transports}" th:value="${transport.getId()}" th:text="${transport.getName()}"></option>
+                                            </select>
+                                        </div>
+                                        <hr class="my-4">
+                                        <div class="d-flex justify-content-between mb-5">
+                                            <p>Tổng thanh toán</p>
+                                            <h5 th:text="${#numbers.formatDecimal(totalmoney,3,'DEFAULT', 0, 'DEFAULT')}+'VNĐ'"></h5>
+                                        </div>
+                                        <input type="submit" value="Thanh toán" class="btn btn-dark">
+                                        </form>
                                     </div>
-                                    <button type="button" class="btn btn-dark btn-block btn-lg"
-                                            data-mdb-ripple-color="dark">Thanh toán
-                                    </button>
                                 </div>
                             </div>
                         </div>
@@ -128,8 +118,7 @@
                 </div>
             </div>
         </div>
-    </div>
-</section>
+    </section>
 </div>
 </body>
 </html>

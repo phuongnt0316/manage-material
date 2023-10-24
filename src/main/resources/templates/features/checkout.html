@@ -7,8 +7,8 @@
     <title>Check Out</title>
 </head>
 <body>
-<div >
-  <section class="hero-section position-relative bg-light-blue padding-medium">
+<div layout:fragment="content">
+  <section class="hero-section position-relative bg-light-blue padding-medium" >
     <div class="hero-content">
       <div class="container">
         <div class="row">
@@ -32,39 +32,31 @@
           <div class="col-lg-6">
             <h2 class="display-7 text-uppercase text-dark pb-4">Thông tin người nhận</h2>
             <form action="/checkout" method="post">
-            <div class="billing-details">
-              <label for="fname">Họ tên</label>
-              <input type="text" id="fname" name="firstname" class="form-control mt-2 mb-4 ps-3">
-              <label for="email">Số điện thoại</label>
-              <input type="text" id="phone" name="phone" class="form-control mt-2 mb-4 ps-3">
-              <label for="cname">Thành phố/Tỉnh</label>
-              <select class="form-select form-control mt-2 mb-4" aria-label="Default select example">
-                <option selected="" hidden="">Hà Nội</option>
-                <option value="1">TP. Hồ Chí Minh</option>
-                <option value="2">Hải Dương</option>
-                <option value="3">Hưng Yên</option>
-              </select>
-              <label for="cname">Quận/Huyện</label>
-              <select class="form-select form-control mt-2 mb-4" aria-label="Default select example">
-                <option selected="" hidden="">Hà Nội</option>
-                <option value="1">TP. Hồ Chí Minh</option>
-                <option value="2">Hải Dương</option>
-                <option value="3">Hưng Yên</option>
-              </select>
-              <label for="cname">Phường/Xã</label>
-              <select class="form-select form-control mt-2 mb-4" aria-label="Default select example">
-                <option selected="" hidden="">Hà Nội</option>
-                <option value="1">TP. Hồ Chí Minh</option>
-                <option value="2">Hải Dương</option>
-                <option value="3">Hưng Yên</option>
-              </select>
-              <label for="address">Tên đường/Tòa nhà/Số nhà</label>
-              <input type="text" id="adr" name="address" class="form-control mt-3 ps-3 mb-3">
               <div class="billing-details">
-                <label for="fname">Ghi chú</label>
-                <textarea class="form-control pt-3 pb-3 ps-3 mt-2" placeholder="Ghi chú về đơn đặt hàng của bạn."></textarea>
+                <label for="fname">Họ tên</label>
+                <input type="text" id="fname" name="firstname" class="form-control mt-2 mb-4 ps-3">
+                <label >Số điện thoại</label>
+                <input type="text" id="phone" name="phone" class="form-control mt-2 mb-4 ps-3">
+                <label >Thành phố/Tỉnh</label>
+                <select class="form-select form-control mt-2 mb-4" id="city" aria-label=".form-select-sm">
+                  <option value="" selected>Chọn tỉnh thành</option>
+                </select>
+                <label >Quận/Huyện</label>
+                <select class="form-select form-control mt-2 mb-4" id="district" aria-label=".form-select-sm">
+                  <option value="" selected>Chọn quận huyện</option>
+
+                </select>
+                <label >Phường/Xã</label>
+                <select class="form-select form-control mt-2 mb-4" id="ward" aria-label=".form-select-sm">
+                  <option value="" selected>Chọn phường xã</option>
+                </select>
+                <label>Tên đường/Tòa nhà/Số nhà</label>
+                <input type="text" id="adr" name="address" class="form-control mt-3 ps-3 mb-3">
+                <div class="billing-details">
+                  <label for="fname">Ghi chú</label>
+                  <textarea class="form-control pt-3 pb-3 ps-3 mt-2" placeholder="Ghi chú về đơn đặt hàng của bạn."></textarea>
+                </div>
               </div>
-            </div>
             </form>
           </div>
           <div class="col-lg-6">
@@ -100,26 +92,12 @@
                   </tr>
                   </tbody>
                 </table>
-                <div class="list-group mt-5 mb-3">
+                <div class="list-group mt-5 mb-3" th:each="payment:${payments}">
                   <label class="list-group-item d-flex gap-2 border-0">
                     <input class="form-check-input flex-shrink-0" type="radio" name="listGroupRadios" id="listGroupRadios1" value="" checked>
                     <span>
-                          <strong class="text-uppercase">Chuyển khoản trực tiếp</strong>
-                          <small class="d-block text-body-secondary">Chuyển khoản ngân hàng trực tiếp. Thực hiện thanh toán trực tiếp vào tài khoản ngân hàng của chúng tôi. Vui lòng sử dụng ID đơn hàng của bạn. Đơn đặt hàng của bạn sẽ được chuyển đi sau khi tiền đã được chuyển đến tài khoản của chúng tôi.</small>
-                        </span>
-                  </label>
-                  <label class="list-group-item d-flex gap-2 border-0">
-                    <input class="form-check-input flex-shrink-0" type="radio" name="listGroupRadios" id="listGroupRadios3" value="">
-                    <span>
-                          <strong class="text-uppercase">Thanh toán khi nhận hàng</strong>
-                          <small class="d-block text-body-secondary">Thanh toán bằng tiền mặt khi nhận hàng.</small>
-                        </span>
-                  </label>
-                  <label class="list-group-item d-flex gap-2 border-0">
-                    <input class="form-check-input flex-shrink-0" type="radio" name="listGroupRadios" id="listGroupRadios3" value="">
-                    <span>
-                          <strong class="text-uppercase">Paypal</strong>
-                          <small class="d-block text-body-secondary">Thanh toán qua PayPal. Bạn có thể thanh toán bằng thẻ tín dụng nếu bạn không có tài khoản PayPal.</small>
+                          <strong class="text-uppercase" th:text="${payment.getName()}"></strong>
+                          <small class="d-block text-body-secondary" th:text="${payment.notes}"></small>
                         </span>
                   </label>
                 </div>

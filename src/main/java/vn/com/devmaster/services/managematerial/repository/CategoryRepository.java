@@ -14,4 +14,5 @@ public interface CategoryRepository extends JpaRepository<Category, Integer> {
 
     @Query(value = "select * from Category s where s.isactive=1",nativeQuery = true)
     List<Category> getAllCategory1();
+
 }

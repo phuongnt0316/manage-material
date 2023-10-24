@@ -594,7 +594,13 @@ p.card-content{
 .navbar-nav .nav-item a.nav-link:hover {
     color: var(--primary-color);
 }
-
+/* profile*/
+.fs-3 {
+    font-size: 0.8rem !important;
+}
+.mb-0 {
+    margin-bottom: 0 !important;
+}
 /*------------ Offcanvas -------------- */
 #header-nav .navbar-toggler:focus {
     box-shadow: none;

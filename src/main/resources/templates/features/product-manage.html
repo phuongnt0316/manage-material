@@ -5,6 +5,29 @@
 <head>
     <meta charset="UTF-8">
     <title>Product-Manage</title>
+    <style>
+        .pagination {
+            display: inline-block;
+        }
+
+        .pagination li a {
+            font-size: 0.8em;
+            color: black;
+            float: left;
+            padding: 8px 16px;
+            text-decoration: none;
+            transition: background-color .3s;
+            border: 1px solid #ddd;
+        }
+
+        .pagination li a.active {
+            background-color: #4CAF50;
+            color: white;
+            border: 1px solid #4CAF50;
+        }
+
+        .pagination li a:hover:not(.active) {background-color: #ddd;}
+    </style>
 </head>
 <body>
 <div layout:fragment="content">
@@ -99,21 +122,18 @@
                     <div class="inner-form d-flex float-end pb-3">
                         <div class="input-field">
                             <div class="input-select">
-                                <select data-trigger="" name="choices-single-defaul">
+                                <select data-trigger="" name="categary">
                                     <option>----Chọn danh mục----</option>
                                     <option value="id1">Danh mục 1</option>
-                                    <option value="id2">Danh mục 2</option>
-                                    <option value="id3">Danh mục 3</option>
-                                    <option value="id4">Danh mục 4</option>
                                 </select>
                             </div>
                         </div>
                         <div class="input-field ">
-                            <input id="search" type="text" placeholder="Nhập từ khóa"/>
+                            <input id="search" type="text" placeholder="Nhập từ khóa" name="keyword"/>
                         </div>
 
                         <div class="input-field">
-                            <button class="btn-search btn btn-primary" type="button">Tìm kiếm</button>
+                            <button class="btn-search btn btn-primary" type="submit">Tìm kiếm</button>
                         </div>
                     </div>
                 </form>
@@ -158,8 +178,21 @@
                             </tr>
                             </tbody>
                         </table>
+
+                            <ul class="pagination pagination-sm d-flex">
+                                <li th:if="${curentpage>1}"><a th:href="@{'?pageNo='+${curentpage-1}}">&laquo;</a></li>
+                                <li th:each="i:${#numbers.sequence(1,totalPage)}" >
+                                    <a th:class="${curentpage==i?'active':''}" th:href="@{${keyword!=null&&keyword!=''?'?keyword='+keyword+'&':'?'}+'pageNo='+${i}}" th:text="${i}"> </a>
+
+                                </li>
+                                <li th:if="${curentpage<totalPage}"><a  th:href="@{'?pageNo='+${curentpage+1}}"> &raquo;</a></li>
+                            </ul>
+
+
                     </div>
+
                 </div>
+
             </div>
         </div>
     </section>
