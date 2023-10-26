@@ -13,7 +13,7 @@ import java.time.Instant;
 @Table(name = "orders")
 public class Order {
     @Id
-    @Column(name = "ID", nullable = false)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
     @Column(name = "IDORDERS", length = 10)

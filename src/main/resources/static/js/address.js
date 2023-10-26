@@ -1,6 +1,9 @@
 var citis = document.getElementById("city");
 var districts = document.getElementById("district");
 var wards = document.getElementById("ward");
+var address1="";
+var address2="";
+var address3="";
 var Parameter = {
     url: "json/vn.json", //Đường dẫn đến file chứa dữ liệu hoặc api do backend cung cấp
     method: "GET", //do backend cung cấp
@@ -28,6 +31,9 @@ function renderCity(data) {
             for (const k of result[0].Districts) {
                 district.options[district.options.length] = new Option(k.Name, k.Id);
             }
+            address1=result[0].Name;
+
+
         }
     };
 
@@ -41,6 +47,22 @@ function renderCity(data) {
             for (const w of dataWards) {
                 wards.options[wards.options.length] = new Option(w.Name, w.Id);
             }
+            address2=dataWards[0].Name;
         }
     };
+    wards.onchange = function () {
+
+        if (this.value != "") {
+            const dataDistricts = data.filter((n) => n.Id === citis.value)[0].Districts.filter((n) => n.Id === districts.value)[0].Wards.filter(n=>n.Id===this.value);
+            address3=dataDistricts[0].Name;
+
+            document.getElementById("address1").setAttribute("value",address3+", "+address2+", "+address1);
+
+        }
+
+
+
+
+    };
+
 }

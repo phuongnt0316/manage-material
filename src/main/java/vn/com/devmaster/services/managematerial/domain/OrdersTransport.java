@@ -12,16 +12,14 @@ import javax.persistence.*;
 @Table(name = "orders_transport")
 public class OrdersTransport {
     @Id
-    @Column(name = "ID", nullable = false)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "IDORD")
-    private Order idord;
+    @Column(name = "IDORD")
+    private Integer idord;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "IDTRANSPORT")
-    private TransportMethod idtransport;
+    @Column(name = "IDTRANSPORT")
+    private Integer idtransport;
 
     @Column(name = "TOTAL")
     private Integer total;

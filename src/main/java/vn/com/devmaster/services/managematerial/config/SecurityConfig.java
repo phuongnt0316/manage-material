@@ -14,7 +14,16 @@ import org.springframework.security.web.SecurityFilterChain;
 public class SecurityConfig {
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-        ((HttpSecurity) ((AuthorizeHttpRequestsConfigurer.AuthorizedUrl) ((AuthorizeHttpRequestsConfigurer.AuthorizedUrl) ((AuthorizeHttpRequestsConfigurer.AuthorizedUrl) ((HttpSecurity) http.csrf().disable()).authorizeHttpRequests().antMatchers(new String[]{"/admin"})).hasAuthority("ADMIN").antMatchers(new String[]{"/ministore"})).hasAnyAuthority(new String[]{"ADMIN", "USER"}).antMatchers(new String[]{"/**"})).permitAll().and()).formLogin().loginPage("/login").permitAll();
+        ((HttpSecurity) ((AuthorizeHttpRequestsConfigurer.AuthorizedUrl) ((AuthorizeHttpRequestsConfigurer.AuthorizedUrl)
+                ((AuthorizeHttpRequestsConfigurer.AuthorizedUrl) ((HttpSecurity)
+                        http.csrf().disable()).authorizeHttpRequests()
+                        .antMatchers(new String[]{"/admin"}))
+                        .hasAuthority("ADMIN")
+                        .antMatchers(new String[]{"/view-cart"}))
+                .hasAnyAuthority(new String[]{"ADMIN", "USER"})
+                .antMatchers(new String[]{"/**"}))
+                .permitAll().and()).formLogin()
+                .loginPage("/login").permitAll();
         return (SecurityFilterChain) http.build();
     }
 

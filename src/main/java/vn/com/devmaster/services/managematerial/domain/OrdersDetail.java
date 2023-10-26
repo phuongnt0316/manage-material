@@ -3,6 +3,7 @@ package vn.com.devmaster.services.managematerial.domain;
 import lombok.*;
 
 import javax.persistence.*;
+import javax.persistence.criteria.CriteriaBuilder;
 
 @Data
 @NoArgsConstructor
@@ -12,16 +13,14 @@ import javax.persistence.*;
 @Table(name = "orders_details")
 public class OrdersDetail {
     @Id
-    @Column(name = "ID", nullable = false)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "IDORD")
-    private Order idord;
+    @Column(name = "IDORD")
+    private Integer idord;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "IDPRODUCT")
-    private Product idproduct;
+    @Column(name = "IDPRODUCT")
+    private Integer idproduct;
 
     @Column(name = "PRICE")
     private Double price;

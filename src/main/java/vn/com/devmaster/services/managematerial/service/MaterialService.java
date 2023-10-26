@@ -10,6 +10,7 @@ import vn.com.devmaster.services.managematerial.DTO.ProductDto;
 import vn.com.devmaster.services.managematerial.domain.*;
 import vn.com.devmaster.services.managematerial.mapper.CartMapper;
 import vn.com.devmaster.services.managematerial.mapper.ProductMapper;
+import vn.com.devmaster.services.managematerial.projection.IOrderDetailDTO;
 import vn.com.devmaster.services.managematerial.projection.IViewCart;
 import vn.com.devmaster.services.managematerial.repository.*;
 
@@ -34,6 +35,14 @@ public class MaterialService {
     private TransportMethodRepository transportMethodRepository;
     @Autowired
     private PaymentMethodRepository paymentMethodRepository;
+    @Autowired
+    private OrderRepository orderRepository;
+    @Autowired
+    private OrdersDetailRepository ordersDetailRepository;
+    @Autowired
+    private OrdersPaymentRepository ordersPaymentRepository;
+    @Autowired
+    private OrdersTransportRepository ordersTransportRepository;
 
     public List<Customer> getAll(){
         List<Customer> customers=materialRepository.findAll();
@@ -95,7 +104,7 @@ public class MaterialService {
         return  new PageImpl<Product>(products,pageable,products.size());
     }
 
-    public void deleteProductCarts(String delete_idpr, String idcustomer) {
+    public void deleteProductCarts(Integer delete_idpr, Integer idcustomer) {
        cartRepository.deleteProductCarts(delete_idpr,idcustomer);
     }
 
@@ -106,5 +115,31 @@ public class MaterialService {
 
     public List<PaymentMethod> getPayment() {
         return paymentMethodRepository.getPayment();
+    }
+
+    public void save(Order order) {
+        orderRepository.save(order);
+    }
+
+    public List<IOrderDetailDTO> getCartById(Integer idcustomer) {
+       return cartRepository.getCartByID(idcustomer);
+    }
+
+    public void saveAll(List<OrdersDetail> ordersDetails) {
+        ordersDetailRepository.saveAll(ordersDetails);
+    }
+
+    public void save(OrdersPayment ordersPayment) {
+        ordersPaymentRepository.save(ordersPayment);
+    }
+
+    public void save(OrdersTransport ordersTransport) {
+        ordersTransportRepository.save(ordersTransport);
+    }
+
+    public void deleteProductCarts(List<OrdersDetail> ordersDetails, Integer id) {
+        for(OrdersDetail ordersDetail:ordersDetails){
+            deleteProductCarts(ordersDetail.getIdproduct(),id);
+        }
     }
 }

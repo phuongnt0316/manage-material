@@ -27,34 +27,36 @@
   </section>
   <section class="shopify-cart checkout-wrap padding-large">
     <div class="container">
-      <form class="form-group">
+      <form class="form-group" th:action="@{/order}" method="post">
         <div class="row d-flex flex-wrap">
           <div class="col-lg-6">
             <h2 class="display-7 text-uppercase text-dark pb-4">Thông tin người nhận</h2>
-            <form action="/checkout" method="post">
+            <form >
               <div class="billing-details">
                 <label for="fname">Họ tên</label>
-                <input type="text" id="fname" name="firstname" class="form-control mt-2 mb-4 ps-3">
+                <input type="text" id="fname" name="fname" class="form-control mt-2 mb-4 ps-3">
                 <label >Số điện thoại</label>
                 <input type="text" id="phone" name="phone" class="form-control mt-2 mb-4 ps-3">
                 <label >Thành phố/Tỉnh</label>
-                <select class="form-select form-control mt-2 mb-4" id="city" aria-label=".form-select-sm">
+                <select class="form-select form-control mt-2 mb-4" id="city" aria-label=".form-select-sm" name="city">
                   <option value="" selected>Chọn tỉnh thành</option>
                 </select>
                 <label >Quận/Huyện</label>
-                <select class="form-select form-control mt-2 mb-4" id="district" aria-label=".form-select-sm">
+                <select class="form-select form-control mt-2 mb-4" id="district" aria-label=".form-select-sm" name="district">
                   <option value="" selected>Chọn quận huyện</option>
 
                 </select>
                 <label >Phường/Xã</label>
-                <select class="form-select form-control mt-2 mb-4" id="ward" aria-label=".form-select-sm">
+                <select class="form-select form-control mt-2 mb-4" id="ward" aria-label=".form-select-sm" name="ward">
                   <option value="" selected>Chọn phường xã</option>
                 </select>
+                <label>Địa chỉ</label>
+                <input type="text" id="address1" name="address1"  readonly class="form-control mt-3 ps-3 mb-3">
                 <label>Tên đường/Tòa nhà/Số nhà</label>
-                <input type="text" id="adr" name="address" class="form-control mt-3 ps-3 mb-3">
+                <input type="text" id="address" name="detail-address" class="form-control mt-3 ps-3 mb-3">
                 <div class="billing-details">
                   <label for="fname">Ghi chú</label>
-                  <textarea class="form-control pt-3 pb-3 ps-3 mt-2" placeholder="Ghi chú về đơn đặt hàng của bạn."></textarea>
+                  <textarea class="form-control pt-3 pb-3 ps-3 mt-2" placeholder="Ghi chú về đơn đặt hàng của bạn." name="note"></textarea>
                 </div>
               </div>
             </form>
@@ -63,30 +65,47 @@
             <div class="your-order">
               <h2 class="display-7 text-uppercase text-dark pb-4">Chi tiết thanh toán</h2>
               <div class="total-price">
-                <table cellspacing="0" class="table">
+                <table cellspacing="0" class="table table-responsive-sm">
                   <tbody>
-                  <tr th:each="pro:${product}">
-                    <td th:text="${pro.getName()}"></td>
-                    <td><input id="form1" min="0" name="quantity" type="number">
-                               class="form-control form-control-sm"/></td>
-                    <td th:text="${pro.getPrice()}"></td>
-                    <td></td>
+                  <tr>
+                    <td width="250px">Tên</td>
+                    <td width="100px">Số lượng</td>
+                    <td data-title="Subtotal">
+                            <span class="price-amount amount ps-5">
+                              <bdi>
+                                <span class="price-currency-symbol"> Đơn giá</span> </bdi>
+                            </span>
+                    </td>
+
+                  </tr>
+                  <tr th:each="cart:${carts}">
+                    <td th:text="${cart.getName()}"></td>
+                    <td th:text="${cart.getQuantity()}"></td>
+                    <td data-title="Subtotal">
+                            <span class="price-amount amount ps-5">
+                              <bdi>
+                                <span class="price-currency-symbol" th:text="${#numbers.formatDecimal(cart.getPrice(),3,'DEFAULT', 0, 'DEFAULT')}"></span> </bdi>
+                            </span>
+                    </td>
+
                   </tr>
                   <tr class="subtotal border-top border-bottom pt-2 pb-2 text-uppercase">
                     <th>Tổng tiền hàng</th>
+                    <td></td>
                     <td data-title="Subtotal">
                             <span class="price-amount amount text-primary ps-5">
                               <bdi>
-                                <span class="price-currency-symbol">$</span>2,370.00 </bdi>
+                                <span class="price-currency-symbol" th:text="${#numbers.formatDecimal(totalmoney,3,'DEFAULT', 0, 'DEFAULT')}"></span> </bdi>
                             </span>
                     </td>
                   </tr>
                   <tr class="order-total border-bottom pt-2 pb-2 text-uppercase">
                     <th>Tổng thanh toán</th>
+                    <td></td>
                     <td data-title="Total">
                             <span class="price-amount amount text-primary ps-5">
                               <bdi>
-                                <span class="price-currency-symbol">$</span>2,370.00 </bdi>
+                                <span class="price-currency-symbol"></span>Tổng tiền(+ship) </bdi>
                             </span>
                     </td>
                   </tr>
@@ -94,7 +113,7 @@
                 </table>
                 <div class="list-group mt-5 mb-3" th:each="payment:${payments}">
                   <label class="list-group-item d-flex gap-2 border-0">
-                    <input class="form-check-input flex-shrink-0" type="radio" name="listGroupRadios" id="listGroupRadios1" value="" checked>
+                    <input class="form-check-input flex-shrink-0" type="radio" name="listGroupRadios" id="listGroupRadios1" th:value="${payment.getId()}" >
                     <span>
                           <strong class="text-uppercase" th:text="${payment.getName()}"></strong>
                           <small class="d-block text-body-secondary" th:text="${payment.notes}"></small>

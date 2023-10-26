@@ -13,7 +13,7 @@ import java.time.Instant;
 @Table(name = "payment_method")
 public class PaymentMethod {
     @Id
-    @Column(name = "ID", nullable = false)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
     @Column(name = "NAME", length = 250)
