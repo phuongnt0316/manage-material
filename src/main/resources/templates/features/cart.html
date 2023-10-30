@@ -30,8 +30,16 @@
             <div class="row d-flex justify-content-center align-items-center h-100">
                 <div class="col-12">
                     <div class="card card-registration card-registration-2" style="border-radius: 15px;">
-                        <p th:text="${total==null?'Giỏ hàng trống':''}"></p>
-                        <div class="card-body p-0" th:remove="${total==null}?all:none">
+                        <div class="d-flex justify-content-center" th:remove="${total==0}?none:all">
+
+                            <div class="empty-cart">
+
+                                <img src="images/emptycart.jpg">
+                                <p>Giỏ hàng trống </p>
+                                <a class="btn btn-addCart" href="/shop">Xem cửa hàng</a>
+                            </div>
+                        </div>
+                        <div class="card-body p-0" th:remove="${total==0}?all:none">
                             <div class="row g-0" >
                                 <div class="col-lg-8">
                                     <div class="p-5">

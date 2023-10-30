@@ -13,4 +13,5 @@ public class Sql {
             "         left join product p on s.id_product = p.ID\n" +
             " where s.id_customer = :idcustomer\n" +
             "  and s.status = 1";
+    public static  final  String COUNT_ORDER_CUSTOMER="select count(*) from orders s where s.IDCUSTOMER=:idcustomer";
 }

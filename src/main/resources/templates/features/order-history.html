@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout/index}">
+<head>
+    <meta charset="UTF-8">
+    <title>Order History</title>
+</head>
+<body>
+<div layout:fragment="content">
+    <section class="ftco-section" >
+        <div class="container">
+            <div class="row justify-content-center">
+                <div class="col-md-6 text-center mb-5">
+                    <h3>Danh sách đơn hàng</h3>
+                </div>
+
+            </div>
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="table-wrap">
+                        <table class="table table-responsive-xl table-hover">
+                            <thead>
+                            <tr>
+                                <th>IDHD</th>
+                                <th>Thời gian đặt</th>
+                                <th>Tổng tiền</th>
+                                <th>Ghi chú</th>
+                                <th>Người nhận</th>
+                                <th>Địa chỉ</th>
+                                <th>SDT</th>
+                                <th>Trạng thái</th>
+                                <th>Tùy chọn</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <tr class="alert" role="alert">
+                                <td>HD0038</td>
+                                <td>00:00:12 20/08/2023</td>
+                                <td>18.000.000</td>
+                                <td>Hàng dễ vỡ</td>
+                                <td>Nguyễn Thị Phương</td>
+                                <td>59 ngõ 577 Kim Mã, Ngọc Khách, Ba Đình, Hà Nội</td>
+                                <td>0123456789</td>
+                                <td>Chờ đóng gói</td>
+                                <td class="btn-active">
+                                    <button id="btnStart" type="button" class="btn"
+                                            title="Chi tiết" ><span><i class="fa-solid fa-eye"></i></span></button>
+
+                                </td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+</div>
+</body>
+</html>

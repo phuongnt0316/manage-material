@@ -14,6 +14,7 @@ import vn.com.devmaster.services.managematerial.projection.IOrderDetailDTO;
 import vn.com.devmaster.services.managematerial.projection.IViewCart;
 import vn.com.devmaster.services.managematerial.repository.*;
 
+import java.time.LocalDate;
 import java.util.List;
 @Service
 public class MaterialService {
@@ -142,4 +143,16 @@ public class MaterialService {
             deleteProductCarts(ordersDetail.getIdproduct(),id);
         }
     }
+
+    public List<Order> getOrderByCustomer(Integer id) {
+        return orderRepository.getOrderByCustomer(id);
+    }
+    public String getOrderId(Integer idcustomer){
+        LocalDate localDate = LocalDate.now();
+        String date=localDate.getYear()+""+localDate.getMonth().getValue()+""+localDate.getDayOfMonth();
+        int n=orderRepository.getCountByCustomer(idcustomer);
+        String orderid=date+idcustomer+(n+1)+"";
+        return orderid;
+    }
+
 }

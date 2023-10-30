@@ -16,6 +16,7 @@
     <link rel="stylesheet" type="text/css" th:href="@{css/main.css}">
     <link rel="stylesheet" type="text/css" th:href="@{css/slick.css}">
     <link rel="stylesheet" type="text/css" th:href="@{css/slick-theme.css}">
+    <link rel="stylesheet" th:href="@{css/user-mana.css}" />
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@9/swiper-bundle.min.css"/>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -26,6 +27,7 @@
     <!-- script
       ================================================== -->
     <script th:src="@{js/modernizr.js}"></script>
+
 </head>
 
 <body data-bs-spy="scroll" data-bs-target="#navbar" data-bs-root-margin="0px 0px -40%" data-bs-smooth-scroll="true"
@@ -119,32 +121,15 @@
                 d="M14 10.5a.5.5 0 0 0-.5-.5h-3a.5.5 0 0 0 0 1h3a.5.5 0 0 0 .5-.5zm0-3a.5.5 0 0 0-.5-.5h-7a.5.5 0 0 0 0 1h7a.5.5 0 0 0 .5-.5zm0-3a.5.5 0 0 0-.5-.5h-11a.5.5 0 0 0 0 1h11a.5.5 0 0 0 .5-.5z"/>
     </symbol>
 </svg>
-<div class="search-popup">
-    <div class="search-popup-container">
-        <form role="search" method="get" action class="search-form">
-            <input type="search" name="s" id="search-field" placeholder="Nhập và ấn enter" value/>
-            <button type="submit" class="search-submit">
-                <svg class="search">
-                    <use xlink:href="#search"></use>
-                </svg>
-            </button>
-            <h5 class="cat-list-title">Danh mục</h5>
-            <ul class="cat-list">
-                <li class="cat-list-item">
-                    <a href="#" title="Lap top">Laptop</a>
-                </li>
-                <li class="cat-list-item">
-                    <a href="#" title="Đồng hồ thông minh">Phụ kiện</a>
-                </li>
-            </ul>
-        </form>
-    </div>
-</div>
 <header th:replace="features/header" id="header" class="site-header header-scrolled position-fixed text-black bg-light">
 </header>
+
 <div layout:fragment="content">
     <section id="billboard" class="position-relative overflow-hidden bg-light-blue">
-        <div class="swiper main-swiper">
+        <div class="swiper main-swiper ">
+
+
+
             <div class="swiper-wrapper">
                 <div class="swiper-slide">
                     <div class="container">
@@ -172,9 +157,9 @@
                             <div class="col-md-6">
                                 <div class="banner-content">
                                     <h1 class="display-2 text-uppercase text-dark pd-5">
-                                        Apple Watch
+                                        Laptop chính hãng
                                     </h1>
-                                    <a href="shop.html"
+                                    <a href="/shop"
                                        class="btn btn-medium bbtn-dark text-uppercase btn-rounded-none">
                                         Xem sản phẩm</a>
                                 </div>
@@ -260,94 +245,27 @@
         <div class="container">
             <div class="row">
                 <div class="display-header d-flex justify-content-between pb-3">
-                    <h2 class="display-7 text-dark text-uppercase">Sản phẩm tương tự</h2>
+                    <h2 class="display-7 text-dark text-uppercase">Sản phẩm bán chạy</h2>
                     <div class="btn-right">
-                        <a href="shop.html" class="btn btn-medium btn-normal text-uppercase">Xem cửa hàng</a>
+                        <a href="/shop" class="btn btn-goShop  text-uppercase">Xem cửa hàng</a>
                     </div>
                 </div>
                 <div class="swiper-wrapper regular slider">
-                    <div class="col-lg-4 col-md-6 p-3">
+                    <div class="col-lg-4 col-md-6 p-3" th:each="product:${products}">
                         <div class="product-card pe-3 pb-3">
                             <div class="image-holder">
-                                <img src="images/image-product/pr1.png" alt="product-item" class="img-fluid ">
+                                <img th:src="'images/image-product/'+${product.getImage()}" alt="product-item" class="img-fluid ">
                             </div>
                             <div class="card-detail justify-content-between pb-3">
                                 <p class="card-title text-uppercase">
-
-                                    <a href="#">LAPTOP ASUS GAMING TUF FX507ZC4-HN074W (I5 12500H/8GB RAM/512GB
-                                        SSD/15.6 FHD 144HZ/RTX
-                                        3050 4GB/WIN11/XÁM)</a>
+                                    <a th:href="'/product-detail?idpr='+${product.getId()}" th:text="${product.getName()}"></a>
                                 </p>
-                                <p>
-                                    CPU : Intel® Core™ i3-1215U <br>
-                                    RAM : 8GB (1 x 8GB) DDR4 3200MHz (Còn trống 1 khe,tối đa 32GB) <br>
-                                    Ổ cứng : 256 GB SSD M.2 PCIe
+                                <p class="card-content">
+                                    <span th:text="${product.getDescription()}"></span>
                                 </p>
-                                <p class="item-price">12.000.000 VNĐ</p>
-                                <a href="#" class="btn btn-primary btn-addCart">Thêm vào giỏ hàng</a>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-lg-4 col-md-6 p-3">
-                        <div class="product-card pe-3 pb-3">
-                            <div class="image-holder">
-                                <img src="images/image-product/pr1.png" alt="product-item" class="img-fluid ">
-                            </div>
-                            <div class="card-detail justify-content-between pb-3">
-                                <p class="card-title text-uppercase">
-                                    <a href="#">LAPTOP ASUS GAMING TUF FX507ZC4-HN074W (I5 12500H/8GB RAM/512GB
-                                        SSD/15.6 FHD 144HZ/RTX
-                                        3050 4GB/WIN11/XÁM)</a>
-                                </p>
-                                <p>
-                                    CPU : Intel® Core™ i3-1215U <br>
-                                    RAM : 8GB (1 x 8GB) DDR4 3200MHz (Còn trống 1 khe,tối đa 32GB) <br>
-                                    Ổ cứng : 256 GB SSD M.2 PCIe
-                                </p>
-                                <p class="item-price">12.000.000 VNĐ</p>
-                                <a href="#" class="btn btn-primary btn-addCart">Thêm vào giỏ hàng</a>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-lg-4 col-md-6 p-3">
-                        <div class="product-card pe-3 pb-3">
-                            <div class="image-holder">
-                                <img src="images/image-product/pr1.png" alt="product-item" class="img-fluid ">
-                            </div>
-                            <div class="card-detail justify-content-between pb-3">
-                                <p class="card-title text-uppercase">
-                                    <a href="#">LAPTOP ASUS GAMING TUF FX507ZC4-HN074W (I5 12500H/8GB RAM/512GB
-                                        SSD/15.6 FHD 144HZ/RTX
-                                        3050 4GB/WIN11/XÁM)</a>
-                                </p>
-                                <p>
-                                    CPU : Intel® Core™ i3-1215U <br>
-                                    RAM : 8GB (1 x 8GB) DDR4 3200MHz (Còn trống 1 khe,tối đa 32GB) <br>
-                                    Ổ cứng : 256 GB SSD M.2 PCIe
-                                </p>
-                                <p class="item-price">12.000.000 VNĐ</p>
-                                <a href="#" class="btn btn-primary btn-addCart">Thêm vào giỏ hàng</a>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-lg-4 col-md-6 p-3">
-                        <div class="product-card pe-3 pb-3">
-                            <div class="image-holder">
-                                <img src="images/image-product/pr1.png" alt="product-item" class="img-fluid ">
-                            </div>
-                            <div class="card-detail justify-content-between pb-3">
-                                <p class="card-title text-uppercase">
-                                    <a href="#">LAPTOP ASUS GAMING TUF FX507ZC4-HN074W (I5 12500H/8GB RAM/512GB
-                                        SSD/15.6 FHD 144HZ/RTX
-                                        3050 4GB/WIN11/XÁM)</a>
-                                </p>
-                                <p>
-                                    CPU : Intel® Core™ i3-1215U <br>
-                                    RAM : 8GB (1 x 8GB) DDR4 3200MHz (Còn trống 1 khe,tối đa 32GB) <br>
-                                    Ổ cứng : 256 GB SSD M.2 PCIe
-                                </p>
-                                <p class="item-price">12.000.000 VNĐ</p>
-                                <a href="#" class="btn btn-primary btn-addCart">Thêm vào giỏ hàng</a>
+                                <p class="item-price" th:text="${#numbers.formatDecimal(product.getPrice(),3,'DEFAULT', 0, 'DEFAULT')}+' VNĐ'"></p>
+                                <a th:href="'/cart?idpr='+${product.getId()}" class="btn btn-primary"><i class="fa-solid fa-cart-plus"></i></a>
+                                <a th:href="'/buyProduct?idpr='+${product.getId()}" class="btn btn-danger">Mua ngay</a>
                             </div>
                         </div>
                     </div>
@@ -359,93 +277,27 @@
         <div class="container">
             <div class="row">
                 <div class="display-header d-flex justify-content-between pb-3">
-                    <h2 class="display-7 text-dark text-uppercase">Sản phẩm tương tự</h2>
+                    <h2 class="display-7 text-dark text-uppercase"> Phụ kiện máy tính</h2>
                     <div class="btn-right">
-                        <a href="shop.html" class="btn btn-medium btn-normal text-uppercase">Xem cửa hàng</a>
+                        <a href="shop.html" class="btn btn-goShop text-uppercase">Xem cửa hàng</a>
                     </div>
                 </div>
                 <div class="swiper-wrapper regular slider">
-                    <div class="col-lg-4 col-md-6 p-3">
+                    <div class="col-lg-4 col-md-6 p-3" th:each="product:${products}">
                         <div class="product-card pe-3 pb-3">
                             <div class="image-holder">
-                                <img src="images/image-product/pr1.png" alt="product-item" class="img-fluid ">
+                                <img th:src="'images/image-product/'+${product.getImage()}" alt="product-item" class="img-fluid ">
                             </div>
-                            <div class="card-detail justify-content-between pb-3">
+                            <div class="card-detail pb-3">
                                 <p class="card-title text-uppercase">
-                                    <a href="#">LAPTOP ASUS GAMING TUF FX507ZC4-HN074W (I5 12500H/8GB RAM/512GB
-                                        SSD/15.6 FHD 144HZ/RTX
-                                        3050 4GB/WIN11/XÁM)</a>
+                                    <a th:href="'/product-detail?idpr='+${product.getId()}" th:text="${product.getName()}"></a>
                                 </p>
-                                <p>
-                                    CPU : Intel® Core™ i3-1215U <br>
-                                    RAM : 8GB (1 x 8GB) DDR4 3200MHz (Còn trống 1 khe,tối đa 32GB) <br>
-                                    Ổ cứng : 256 GB SSD M.2 PCIe
+                                <p class="card-content">
+                                    <span th:text="${product.getDescription()}"></span>
                                 </p>
-                                <p class="item-price">12.000.000 VNĐ</p>
-                                <a href="#" class="btn btn-primary btn-addCart">Thêm vào giỏ hàng</a>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-lg-4 col-md-6 p-3">
-                        <div class="product-card pe-3 pb-3">
-                            <div class="image-holder">
-                                <img src="images/image-product/pr1.png" alt="product-item" class="img-fluid ">
-                            </div>
-                            <div class="card-detail justify-content-between pb-3">
-                                <p class="card-title text-uppercase">
-                                    <a href="#">LAPTOP ASUS GAMING TUF FX507ZC4-HN074W (I5 12500H/8GB RAM/512GB
-                                        SSD/15.6 FHD 144HZ/RTX
-                                        3050 4GB/WIN11/XÁM)</a>
-                                </p>
-                                <p>
-                                    CPU : Intel® Core™ i3-1215U <br>
-                                    RAM : 8GB (1 x 8GB) DDR4 3200MHz (Còn trống 1 khe,tối đa 32GB) <br>
-                                    Ổ cứng : 256 GB SSD M.2 PCIe
-                                </p>
-                                <p class="item-price">12.000.000 VNĐ</p>
-                                <a href="#" class="btn btn-primary btn-addCart">Thêm vào giỏ hàng</a>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-lg-4 col-md-6 p-3">
-                        <div class="product-card pe-3 pb-3">
-                            <div class="image-holder">
-                                <img src="images/image-product/pr1.png" alt="product-item" class="img-fluid ">
-                            </div>
-                            <div class="card-detail justify-content-between pb-3">
-                                <p class="card-title text-uppercase">
-                                    <a href="#">LAPTOP ASUS GAMING TUF FX507ZC4-HN074W (I5 12500H/8GB RAM/512GB
-                                        SSD/15.6 FHD 144HZ/RTX
-                                        3050 4GB/WIN11/XÁM)</a>
-                                </p>
-                                <p>
-                                    CPU : Intel® Core™ i3-1215U <br>
-                                    RAM : 8GB (1 x 8GB) DDR4 3200MHz (Còn trống 1 khe,tối đa 32GB) <br>
-                                    Ổ cứng : 256 GB SSD M.2 PCIe
-                                </p>
-                                <p class="item-price">12.000.000 VNĐ</p>
-                                <a href="#" class="btn btn-primary btn-addCart">Thêm vào giỏ hàng</a>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-lg-4 col-md-6 p-3">
-                        <div class="product-card pe-3 pb-3">
-                            <div class="image-holder">
-                                <img src="images/image-product/pr1.png" alt="product-item" class="img-fluid ">
-                            </div>
-                            <div class="card-detail justify-content-between pb-3">
-                                <p class="card-title text-uppercase">
-                                    <a href="#">LAPTOP ASUS GAMING TUF FX507ZC4-HN074W (I5 12500H/8GB RAM/512GB
-                                        SSD/15.6 FHD 144HZ/RTX
-                                        3050 4GB/WIN11/XÁM)</a>
-                                </p>
-                                <p>
-                                    CPU : Intel® Core™ i3-1215U <br>
-                                    RAM : 8GB (1 x 8GB) DDR4 3200MHz (Còn trống 1 khe,tối đa 32GB) <br>
-                                    Ổ cứng : 256 GB SSD M.2 PCIe
-                                </p>
-                                <p class="item-price">12.000.000 VNĐ</p>
-                                <a href="#" class="btn btn-primary btn-addCart">Thêm vào giỏ hàng</a>
+                                <p class="item-price" th:text="${#numbers.formatDecimal(product.getPrice(),3,'DEFAULT', 0, 'DEFAULT')}+' VNĐ'"></p>
+                                <a th:href="'/cart?idpr='+${product.getId()}" class="btn btn-primary"><i class="fa-solid fa-cart-plus"></i></a>
+                                <a th:href="'/buyProduct?idpr='+${product.getId()}" class="btn btn-danger">Mua ngay</a>
                             </div>
                         </div>
                     </div>
@@ -523,13 +375,13 @@
 <section id="instagram" class="padding-large overflow-hidden no-padding-top">
     <div class="container">
         <div class="row">
-            <div class="play-header text-uppercase text-dark text-center pb-3">
-                <h2 class="display-7 text-primary">Cửa hàng trên Instagram</h2>
+            <div class="display-header text-uppercase text-dark text-center pb-3">
+                <h2 class="display-7">Cửa hàng trên Instagram</h2>
             </div>
             <div class="d-flex flex-wrap">
                 <figure class="instagram-item pe-2">
                     <a href="https://templatesjungle.com/" class="image-link position-relative">
-                        <img src="images/insta-item1.jpg" alt="Instagram" class="insta-image"/>
+                        <img src="images/insta-item1.jpg" alt="instagram" class="insta-image">
                         <div class="icon-overlay position-absolute d-flex justify-content-center">
                             <svg class="instagram">
                                 <use xlink:href="#instagram"></use>
@@ -538,8 +390,8 @@
                     </a>
                 </figure>
                 <figure class="instagram-item pe-2">
-                    <a href="#" class="image-link position-relative">
-                        <img src="images/insta-item1.jpg" alt="Instagram" class="insta-image"/>
+                    <a href="https://templatesjungle.com/" class="image-link position-relative">
+                        <img src="images/insta-item2.jpg" alt="instagram" class="insta-image">
                         <div class="icon-overlay position-absolute d-flex justify-content-center">
                             <svg class="instagram">
                                 <use xlink:href="#instagram"></use>
@@ -548,8 +400,8 @@
                     </a>
                 </figure>
                 <figure class="instagram-item pe-2">
-                    <a href="#" class="image-link position-relative">
-                        <img src="images/insta-item1.jpg" alt="Instagram" class="insta-image"/>
+                    <a href="https://templatesjungle.com/" class="image-link position-relative">
+                        <img src="images/insta-item3.jpg" alt="instagram" class="insta-image">
                         <div class="icon-overlay position-absolute d-flex justify-content-center">
                             <svg class="instagram">
                                 <use xlink:href="#instagram"></use>
@@ -558,8 +410,8 @@
                     </a>
                 </figure>
                 <figure class="instagram-item pe-2">
-                    <a href="#" class="image-link position-relative">
-                        <img src="images/insta-item1.jpg" alt="Instagram" class="insta-image"/>
+                    <a href="https://templatesjungle.com/" class="image-link position-relative">
+                        <img src="images/insta-item4.jpg" alt="instagram" class="insta-image">
                         <div class="icon-overlay position-absolute d-flex justify-content-center">
                             <svg class="instagram">
                                 <use xlink:href="#instagram"></use>
@@ -568,8 +420,8 @@
                     </a>
                 </figure>
                 <figure class="instagram-item pe-2">
-                    <a href="#" class="image-link position-relative">
-                        <img src="images/insta-item1.jpg" alt="Instagram" class="insta-image"/>
+                    <a href="https://templatesjungle.com/" class="image-link position-relative">
+                        <img src="images/insta-item5.jpg" alt="instagram" class="insta-image">
                         <div class="icon-overlay position-absolute d-flex justify-content-center">
                             <svg class="instagram">
                                 <use xlink:href="#instagram"></use>

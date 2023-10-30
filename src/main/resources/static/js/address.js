@@ -47,7 +47,7 @@ function renderCity(data) {
             for (const w of dataWards) {
                 wards.options[wards.options.length] = new Option(w.Name, w.Id);
             }
-            address2=dataWards[0].Name;
+            address2=dataCity[0].Districts.filter(n => n.Id === this.value)[0].Name;
         }
     };
     wards.onchange = function () {

@@ -178,7 +178,7 @@ a:hover {
 p.card-title,
 p.cart-title {
     font-weight: bold;
-    text-align: justify;
+
 }
 p.item-price{
     color: red;
@@ -330,6 +330,23 @@ p.card-content{
     margin-top: 5px;
     line-height: 16px;
     border-radius: 20px;
+}
+.btn-goShop{
+    color: #f1f1f1;
+    font-size: 16px;
+    text-transform: uppercase;
+    font-weight: bold;
+    background:#000 ;
+    border: 1px solid #7ac400;
+    /*padding: 6px 14px;*/
+    margin-top: 5px;
+    line-height: 16px;
+    border-radius: 20px;
+    margin-right: 14px;
+}
+.btn-goShop:hover{
+    color:#000;
+    background:#D8D8D8 ;
 }
 .btn-left {
 
@@ -1102,4 +1119,8 @@ figure.instagram-item img.insta-image {
 
 .slick-current {
     opacity: 1;
+}
+/*CArt*/
+.empty-cart{
+    text-align: center;
 }
