@@ -14,7 +14,7 @@ $(function(){
         return this;
     }
     $('.product-card .card-detail p  span').limit(100);
-    $('.product-card .card-detail .card-title a').limit(60);
+    $('.product-card .card-detail .card-title a').limit(50);
 
 
 });

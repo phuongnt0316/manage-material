@@ -9,13 +9,14 @@ import vn.com.devmaster.services.managematerial.domain.Category;
 import vn.com.devmaster.services.managematerial.domain.Product;
 import vn.com.devmaster.services.managematerial.untils.Sql;
 
+import javax.persistence.criteria.CriteriaBuilder;
 import java.util.List;
 @Component
 @Repository
 public interface ProductRepository extends JpaRepository<Product,Integer> {
 
     @Query(value = Sql.PRODUCT_BY_ID,nativeQuery = true)
-    List<Product> getProductByID(@Param("idpr")String idpr);
+    Product getProductByID(@Param("idpr") Integer idpr);
 
     @Query(value = "select * from product s where s.ISACTIVE=1",nativeQuery = true)
     List<Product> getProduct();

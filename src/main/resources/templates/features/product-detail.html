@@ -7,19 +7,19 @@
     <title>Product-Detail</title>
 </head>
 <body>
-<div layout:fragment="content" th:each="pr:${product}">
+<div layout:fragment="content">
     <section id="selling-product" class="single-product padding-xlarge">
         <div class="container">
             <div class="row mt-5">
                 <div class="col-lg-6">
                     <div class="product-preview mb-3">
-                        <img th:src="'images/image-product/'+${pr.getImage()}" alt="single-product" class="img-fluid">
+                        <img th:src="${product.getImage()}" alt="single-product" class="img-fluid">
                     </div>
                 </div>
                 <div class="col-lg-6">
                     <div class="product-info">
                         <div class="element-header">
-                            <h3 itemprop="name" class="display-7 text-uppercase" th:text="${pr.getName()}"></h3>
+                            <h3 itemprop="name" class="display-7 text-uppercase" th:text="${product.getName()}"></h3>
                             <div class="rating-container d-flex align-items-center">
                                 <div class="rating" data-rating="1" onclick=rate(1)>
                                     <svg class="star star-fill">
@@ -30,9 +30,9 @@
                             </div>
                         </div>
                         <div class="product-price pt-3 pb-3">
-                            <strong class="text-primary display-6 fw-bold" th:text="${#numbers.formatDecimal(pr.getPrice(),3,'DEFAULT', 0, 'DEFAULT')}+' VNĐ'"></strong>
+                            <strong class="text-primary display-6 fw-bold" th:text="${#numbers.formatDecimal(product.getPrice(),3,'DEFAULT', 0, 'DEFAULT')}+' VNĐ'"></strong>
                         </div>
-                        <p th:text="${pr.getDescription()}"></p>
+                        <p th:text="${product.getDescription()}"></p>
                         <div class="cart-wrap padding-small">
                             <div class="color-options product-select">
                                 <div class="color-toggle" data-option-index="0">
@@ -54,23 +54,7 @@
                                     </ul>
                                 </div>
                             </div>
-                            <div class="swatch product-select" data-option-index="1">
-                                <h4 class="item-title text-uppercase text-dark text-decoration-underline">Size:</h4>
-                                <ul class="select-list list-unstyled d-flex">
-                                    <li data-value="S" class="select-item pe-3">
-                                        <a href="#">XL</a>
-                                    </li>
-                                    <li data-value="M" class="select-item pe-3">
-                                        <a href="#">L</a>
-                                    </li>
-                                    <li data-value="L" class="select-item pe-3">
-                                        <a href="#">M</a>
-                                    </li>
-                                    <li data-value="L" class="select-item">
-                                        <a href="#">S</a>
-                                    </li>
-                                </ul>
-                            </div>
+
                             <div class="product-quantity">
                                 <div class="stock-number text-dark">2 in stock</div>
                                 <div class="stock-button-wrap pt-3">

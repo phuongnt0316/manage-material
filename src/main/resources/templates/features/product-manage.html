@@ -42,22 +42,33 @@
                             <span aria-hidden="true">Đóng</span>
                         </button>
                     </div>
-                    <form id="formAwesome" th:action="@{/new-product}" method="post" th:object="${pro}">
+                    <form id="formAwesome" action="#" th:action="@{/new-product}" method="post" enctype="multipart/form-data">
                         <div class="modal-body">
                             <div class="form-group row">
                                 <label for="name-product" class="col-sm-6 col-form-label">
                                     Tên sản phẩm
                                 </label>
                                 <div class="col-sm-6">
-                                    <input type="text" class="form-control" id="name-product" th:field="${pro.name}">
+                                    <input type="text" class="form-control" id="name-product" name="name-product" required>
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <label for="name-product" class="col-sm-6 col-form-label">
+                                    Hình ảnh
+                                </label>
+                                <div class="col-sm-6">
+                                    <input type="file" name="image" placeholder="Chọn file" required>
                                 </div>
                             </div>
                             <div class="form-group row">
                                 <label for="category" class="col-sm-6 col-form-label">
                                     Danh mục
                                 </label>
-                                <div class="col-sm-6">
-                                    <input type="text" class="form-control" id="category" >
+                                <div class="col-sm-6" >
+                                    <select id="category" name="category">
+                                        <option th:each="category:${categories}" th:value="${category.getId()}" th:text="${category.getName()}"></option>
+                                    </select>
+
                                 </div>
                             </div>
                             <div class="form-group row">
@@ -65,7 +76,7 @@
                                     Số lượng
                                 </label>
                                 <div class="col-sm-6">
-                                    <input type="text" class="form-control" id="quantity" th:field="${pro.quantity}">
+                                    <input type="text" class="form-control" id="quantity" name="quantity" required>
                                 </div>
                             </div>
                             <div class="form-group row">
@@ -73,16 +84,25 @@
                                     Đơn giá
                                 </label>
                                 <div class="col-sm-6">
-                                    <input type="text" class="form-control" id="price" th:field="${pro.price}">
+                                    <input type="text" class="form-control" id="price" name="price" required>
                                 </div>
                             </div>
                             <div class="form-group row">
-                                <label for="decription" class="col-sm-6 col-form-label">
+                                <label for="description" class="col-sm-6 col-form-label">
                                     Mô tả sản phẩm
                                 </label>
                                 <div class="col-sm-6">
-                                            <textarea name="decription" class="form-control" cols="25" rows="5"
-                                                      id="decription" ></textarea>
+                                            <textarea name="description" class="form-control" cols="25" rows="5"
+                                                      id="description" required></textarea>
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <label for="notes" class="col-sm-6 col-form-label">
+                                    Ghi chú
+                                </label>
+                                <div class="col-sm-6">
+                                            <textarea name="notes" class="form-control" cols="25" rows="5"
+                                                      id="notes" ></textarea>
                                 </div>
                             </div>
                             <div class="form-group row">
@@ -90,7 +110,7 @@
                                     Trạng thái hiển thị
                                 </label>
                                 <div class="col-sm-6">
-                                    <select name="product-active" id="product-active" class="form-control" >
+                                    <select name="product-active" id="product-active"  class="form-control" >
                                         <option value="0">Tắt</option>
                                         <option value="1">Bật</option>
                                     </select>
@@ -164,15 +184,12 @@
                                                          th:text="${(product.getIsactive()==1)?'Bật':'Tắt'}"></span>
                                 </td>
                                 <td class="btn-active">
-                                    <button type="button" class="btn" data-dismiss="update"
-                                            aria-label="Update" title=" Sửa">
+                                    <a th:href="'/update-product?id='+${product.getId()}" class="btn" title="Sửa">
                                                     <span aria-hidden="true"><i
                                                             class="fa-solid fa-pen-to-square"></i></span>
-                                    </button>
-                                    <button id="btn" type="button" class="btn" data-toggle="modalq"
-                                            title="Chi tiết" data-target="#formModalq"><span
-                                            aria-hidden="true">
-                                    <i class="fa-solid fa-circle-info"></i> </span></button>
+                                    </a>
+<!--                                    <a class="btn" title="Chi tiết"><span>-->
+<!--                                    <i class="fa-solid fa-circle-info"></i> </span></a>-->
                                 <td>
                                 </td>
                             </tr>

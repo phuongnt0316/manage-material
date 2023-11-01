@@ -11,7 +11,7 @@ import java.util.List;
 @NoArgsConstructor
 @Builder
 public class ProductDto {
-   // private Integer id;
+    private Integer id;
     private String name;
     private String description;
     private String notes;
@@ -22,6 +22,7 @@ public class ProductDto {
     private Instant updatedDate;
     private String createdBy;
     private String updatedBy;
+    private CategoryDto idcategory;
     private Byte isactive;
-//    private List<ProductImageDto> productImageDtos;
+    private List<ProductImageDto> productImageDtos;
 }

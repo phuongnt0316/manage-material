@@ -283,7 +283,7 @@
                     </div>
                 </div>
                 <div class="swiper-wrapper regular slider">
-                    <div class="col-lg-4 col-md-6 p-3" th:each="product:${products}">
+                    <div class="col-lg-4 col-md-6 p-1" th:each="product:${products}">
                         <div class="product-card pe-3 pb-3">
                             <div class="image-holder">
                                 <img th:src="'images/image-product/'+${product.getImage()}" alt="product-item" class="img-fluid ">
@@ -576,37 +576,8 @@
         </div>
     </div>
 </section>
-<div id="footer-bottom">
-    <div class="container">
-        <div class="row d-flex flex-wrap justify-content-between">
-            <div class="col-md-4 col-sm-6">
-                <div class="Shipping d-flex">
-                    <p>We ship with:</p>
-                    <div class="card-wrap ps-2">
-                        <img src="images/dhl.png" alt="visa">
-                        <img src="images/shippingcard.png" alt="mastercard">
-                    </div>
-                </div>
-            </div>
-            <div class="col-md-4 col-sm-6">
-                <div class="payment-method d-flex">
-                    <p>Payment options:</p>
-                    <div class="card-wrap ps-2">
-                        <img src="images/visa.jpg" alt="visa">
-                        <img src="images/mastercard.jpg" alt="mastercard">
-                        <img src="images/paypal.jpg" alt="paypal">
-                    </div>
-                </div>
-            </div>
-            <div class="col-md-4 col-sm-6" >
+<div id="footer-bottom" th:replace="features/footer-bottom">
 
-                <div class="copyright">
-                    <p >© Copyright 2023 MiniStore
-                    </p>
-                </div>
-            </div>
-        </div>
-    </div>
 </div>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.21.1/axios.min.js"></script>
 <script th:src="@{/js/address.js}"></script>

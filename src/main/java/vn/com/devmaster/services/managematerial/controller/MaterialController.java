@@ -8,7 +8,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import vn.com.devmaster.services.managematerial.domain.*;
 import vn.com.devmaster.services.managematerial.projection.IOrderDetailDTO;
-import vn.com.devmaster.services.managematerial.projection.IViewCart;
+import vn.com.devmaster.services.managematerial.projection.IViewProduct;
 import vn.com.devmaster.services.managematerial.service.MaterialService;
 
 import javax.servlet.http.HttpSession;
@@ -66,7 +66,7 @@ public class MaterialController implements IMaterialControll{
 
   }
       @GetMapping("/product-detail")
-    public String getProductByID(@RequestParam("idpr") String idpr, Model model,HttpSession session) {
+    public String getProductByID(@RequestParam("idpr") Integer idpr, Model model,HttpSession session) {
         setDesignMenu(session,model);
         model.addAttribute("product", materialService.getProductByID(idpr));
         return "features/product-detail";
@@ -92,8 +92,8 @@ public String deleteCart(@RequestParam("delete") Integer delete_idpr, @RequestPa
             model.addAttribute("customer",session.getAttribute("customer"));
             model.addAttribute("design",MENU_CUSTOMER_LOGIN);
             Customer customer = (Customer) session.getAttribute("customer");
-            String idcustomer = String.valueOf(customer.getId());
-            List<IViewCart> carts = materialService.getCartByIdCustomer(idcustomer);
+            Integer idcustomer=customer.getId();
+            List<IViewProduct> carts = materialService.getCartByIdCustomer(idcustomer);
             if (carts.size() !=0) {
                 model.addAttribute("carts", carts);
                 model.addAttribute("totalmoney", getTotalMoney(carts));
@@ -114,18 +114,17 @@ public String deleteCart(@RequestParam("delete") Integer delete_idpr, @RequestPa
             return "features/cart";
         }
     }
-    private Integer getTotalMoney(List <IViewCart> carts) {
+    private Integer getTotalMoney(List <IViewProduct> carts) {
         int sum=0;
-        for(IViewCart cart:carts){
+        for(IViewProduct cart:carts){
             sum+=cart.getPrice();
         }
         return sum;
     }
     @PostMapping("/login-action")
     public String Login(Model model, HttpSession session, @RequestParam(name = "txtEmail") String email, @RequestParam(name = "txtPassword") String password) {
-        List<Customer> customers = materialService.getCustomerByID(email, password);
-        if (customers.size() > 0) {
-            Customer customer = customers.get(0);
+        Customer customer = materialService.getCustomerByID(email, password);
+        if (customer!=null) {
             CustomUser userDetail = new CustomUser(customer.getUsername(), customer.getPassword(), "USER");
             UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(userDetail,null, userDetail.getAuthorities());
             SecurityContextHolder.getContext().setAuthentication(authenticationToken);
@@ -146,8 +145,8 @@ public String deleteCart(@RequestParam("delete") Integer delete_idpr, @RequestPa
     public String checkOut(Model model,HttpSession session,@RequestParam("transport") Integer idtransport) {
         if(session.getAttribute("customer")!=null) {
             Customer customer = (Customer) session.getAttribute("customer");
-            String idcustomer = String.valueOf(customer.getId());
-            List<IViewCart> carts = materialService.getCartByIdCustomer(idcustomer);
+            Integer idcustomer =customer.getId();
+            List<IViewProduct> carts = materialService.getCartByIdCustomer(idcustomer);
             model.addAttribute("carts",carts);
             model.addAttribute("totalmoney", getTotalMoney(carts));
             model.addAttribute("total", carts.size());
@@ -170,29 +169,45 @@ public String deleteCart(@RequestParam("delete") Integer delete_idpr, @RequestPa
         Customer customer = (Customer) session.getAttribute("customer");
         String idorder=materialService.getOrderId(customer.getId());
         Order order= Order.builder().idorders(idorder).ordersDate(new Date().toInstant()).idcustomer(customer).nameReciver(fname).address(detailadd.concat(", ").concat(address1)).notes(note).phone(phone).build();
-        materialService.save(order);
+        materialService.save(order);//insert orders
         List<IOrderDetailDTO> detailDtoList=materialService.getCartById(customer.getId());
         List<OrdersDetail>ordersDetails=new ArrayList<>();
-
         for(IOrderDetailDTO iorder:detailDtoList){
             OrdersDetail ordersDetail=OrdersDetail.builder().idord(order.getId()).idproduct(iorder.getIdproduct()).price(iorder.getPrice()).qty(iorder.getQuantity()).build();
             ordersDetails.add(ordersDetail);
         }
-        materialService.saveAll(ordersDetails);
+        materialService.saveAll(ordersDetails); //insert orders detail
         OrdersPayment ordersPayment= OrdersPayment.builder().idord(order.getId()).idpayment(idpayment).build();
-        materialService.save(ordersPayment);
+        materialService.save(ordersPayment); //insert orders_payment
         OrdersTransport ordersTransport=OrdersTransport.builder().idord(order.getId()).idtransport(idtransport).build();
-        materialService.save(ordersTransport);
+        materialService.save(ordersTransport);//insert orders_transport
 
-        materialService.deleteProductCarts(ordersDetails,customer.getId());
+        materialService.BuyCarts(ordersDetails,customer.getId());
         return "redirect:/view-cart";
     }
     @GetMapping("/order-history")
-    public String OrderDetail(HttpSession session,Model model){
-//        setDesignMenu(session,model);
-//        Customer customer= (Customer) session.getAttribute("customer");
-//        model.addAttribute("orders",materialService.getOrderByCustomer(customer.getId()));
+    public String OrderHistory(HttpSession session,Model model){
+        setDesignMenu(session,model);
+        Customer customer= (Customer) session.getAttribute("customer");
+        model.addAttribute("orders",materialService.getOrderByCustomer(customer.getId()));
         return "features/order-history";
 
+    }
+    @GetMapping("/order-detail")
+    public String OrderDetail(HttpSession session,Model model,@RequestParam("id") Integer id){
+        setDesignMenu(session,model);
+        Customer customer= (Customer) session.getAttribute("customer");
+        model.addAttribute("orderInfor",materialService.getOrderInfor(id));
+        model.addAttribute("orders",materialService.getOrderDetailByID(id));
+        model.addAttribute("total",getToTal(materialService.getOrderDetailByID(id)));
+        return "features/order-detail";
+
+    }
+    public int getToTal(List<IViewProduct> iViewProducts){
+        int total=0;
+        for(IViewProduct iViewProduct:iViewProducts){
+            total+=iViewProduct.getQuantity()*iViewProduct.getPrice();
+        }
+        return total;
     }
 }

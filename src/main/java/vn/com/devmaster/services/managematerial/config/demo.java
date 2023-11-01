@@ -9,6 +9,6 @@ public class demo {
         LocalDate localDate = LocalDate.now();
         String date=localDate.getYear()+""+localDate.getMonth().getValue()+""+localDate.getDayOfMonth();
         System.out.println(date);
-        System.out.println(new Date());
+        System.out.println(new Date().toInstant());
     }
 }

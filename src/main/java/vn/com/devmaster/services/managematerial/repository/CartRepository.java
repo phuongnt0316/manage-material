@@ -6,10 +6,9 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 import vn.com.devmaster.services.managematerial.domain.Cart;
 import vn.com.devmaster.services.managematerial.projection.IOrderDetailDTO;
-import vn.com.devmaster.services.managematerial.projection.IViewCart;
+import vn.com.devmaster.services.managematerial.projection.IViewProduct;
 import vn.com.devmaster.services.managematerial.untils.Sql;
 
-import javax.persistence.criteria.CriteriaBuilder;
 import javax.transaction.Transactional;
 import java.util.List;
 
@@ -17,7 +16,7 @@ import java.util.List;
 public interface CartRepository extends JpaRepository<Cart,Integer> {
 
     @Query(value = Sql.CART_BY_ID_CUSTOMER,nativeQuery = true)
-    List<IViewCart> getCartByIdCustomer(String idcustomer);
+    List<IViewProduct> getCartByIdCustomer(Integer idcustomer);
 
     @Query(value = Sql.CART_BY_ID,nativeQuery = true)
     List<IOrderDetailDTO> getCartByID(Integer idcustomer);
@@ -26,4 +25,6 @@ public interface CartRepository extends JpaRepository<Cart,Integer> {
     @Transactional
     @Query(value = Sql.DELETE_CART,nativeQuery = true)
     Integer deleteProductCarts(Integer delete_idpr, Integer idcustomer);
+    @Query(value = Sql.BUY_CART,nativeQuery = true)
+    Integer BuyCarts(Integer delete_idpr, Integer idcustomer);
 }

@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout/index}">
+<head>
+  <meta charset="UTF-8">
+  <title>Order History</title>
+</head>
+<body>
+<div layout:fragment="content">
+  <section class="ftco-section" >
+    <div class="container">
+
+      <div class="row justify-content-center">
+        <div class="col-md-6 text-center mb-5" >
+          <h3 th:text="'Thông tin đơn hàng #'+${orderInfor.getId()}"></h3>
+        </div>
+
+      </div>
+      <div class="row">
+        <div class="col-md-12">
+          <div class="table-wrap">
+            <table class="table table-responsive-xl table-hover">
+              <thead>
+              <tr>
+
+                <td class="vertical-center">
+                  Địa chỉ nhận hàng
+                </td>
+
+                <td>
+                  <ul class=" list-unstyled">
+                    <li th:text="'Họ tên: '+${orderInfor.getNameReciver()}" ></li>
+                    <li th:text="'Số điện thoại: '+${orderInfor.getPhone()}"></li>
+                    <li th:text="'Địa chỉ: '+${orderInfor.getAddress()}" ></li>
+                  </ul></td>
+
+              </tr>
+              <tr>
+                <td>Hình thức thanh toán</td>
+                <td th:text="${orderInfor.getNamePayment()}"></td>
+
+              </tr>
+              <tr>
+                <td>Trạng thái đơn</td>
+                <td th:switch="${orderInfor.getStatus()}">
+                  <span th:case="'1'">Đơn đã đặt</span>
+                  <span th:case="'2'">Đang chuẩn bị</span>
+                  <span th:case="'3'">Đã bàn giao cho đơn vị vận chuyển</span>
+                  <span th:case="'4'">Đang vận chuyển</span>
+                  <span th:case="'5'">Đã giao hàng</span>
+
+              </tr>
+              <tr>
+                <td>Hình thức vận chuyển</td>
+                <td th:text="${orderInfor.getNameTranSport()}"></td>
+
+              </tr>
+              </tr>
+              <tr>
+                <td colspan="5">Chi tiết đơn hàng</td>
+              </tr>
+              </thead>
+            </table>
+
+          </div>
+        </div>
+      </div>
+      <div class="row mb-4 d-flex align-items-center"
+           th:each="od:${orders}">
+        <div class="col-md-3 col-lg-2 col-xl-2">
+          <img
+                  th:src="'images/image-product/'+${od.getImage()}"
+                  class="img-fluid rounded-3" alt="">
+        </div>
+        <div class="col-md-3 col-lg-3 col-xl-3" style="width: 40%">
+          <h6 class="text-muted" th:text="'#'+${od.getIdProduct()}"></h6>
+          <p class="text-black" th:text="${od.getName()}"></p>
+        </div>
+        <div class="col-md-1 col-lg-1  col-md-1 ">
+          <h6 class="text-black mb-0" th:text="'x'+${od.getQuantity()}"></h6>
+        </div>
+        <div class="col-md-3 col-lg-2 col-xl-2">
+          <h6 class="mb-0" th:text="'₫'+${#numbers.formatDecimal(od.getPrice(),3,'DEFAULT', 0, 'DEFAULT')}"> </h6>
+        </div>
+<!--        <div class="col-md-3 col-lg-2 col-xl-2">-->
+<!--          <h6 class="mb-0" th:text="'₫'+${#numbers.formatDecimal(od.getPrice(),3,'DEFAULT', 0, 'DEFAULT')}"> </h6>-->
+<!--        </div>-->
+      </div>
+      <hr>
+      <div class="row mb-4 d-flex d-flex align-items-center">
+      <div class="col-md-2  col-lg-2 col-xl-2 ">
+      <h6> Tổng tiền</h6>
+      </div>
+      <div class="col-md-3  col-lg-2 col-xl-2 ">
+        <h6 th:text="'₫'+${#numbers.formatDecimal(total,3,'DEFAULT', 0, 'DEFAULT')}"></h6>
+      </div>
+    </div>
+    </div>
+  </section>
+</div>
+</body>
+</html>

@@ -6,12 +6,12 @@ import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
-import vn.com.devmaster.services.managematerial.DTO.ProductDto;
 import vn.com.devmaster.services.managematerial.domain.*;
 import vn.com.devmaster.services.managematerial.mapper.CartMapper;
 import vn.com.devmaster.services.managematerial.mapper.ProductMapper;
+import vn.com.devmaster.services.managematerial.projection.IODPMTS;
 import vn.com.devmaster.services.managematerial.projection.IOrderDetailDTO;
-import vn.com.devmaster.services.managematerial.projection.IViewCart;
+import vn.com.devmaster.services.managematerial.projection.IViewProduct;
 import vn.com.devmaster.services.managematerial.repository.*;
 
 import java.time.LocalDate;
@@ -57,28 +57,25 @@ public class MaterialService {
         List<Product> products=productRepository.findAll();
         return products;
     }
-    public List<Product> getProductByID(String idpr){
-        List<Product> products=productRepository.getProductByID(idpr);
-        return products;
+    public Product getProductByID(Integer idpr){
+        Product product=productRepository.getProductByID(idpr);
+        return product;
     }
     public void save(Cart cart) {
         cartRepository.save(cart);
     }
 
-    public List<IViewCart> getCartByIdCustomer(String idcustomer) {
-        List<IViewCart> carts=cartRepository.getCartByIdCustomer(idcustomer);
+    public List<IViewProduct> getCartByIdCustomer(Integer idcustomer) {
+        List<IViewProduct> carts=cartRepository.getCartByIdCustomer(idcustomer);
        return carts;
     }
-    public List<Customer> getCustomerByID(String userName, String password){
-       List<Customer> customers= customerRepository.getCustomerByID(userName,password);
-        return customers;
+    public Customer getCustomerByID(String userName, String password){
+       Customer customer= customerRepository.getCustomerByID(userName,password);
+        return customer;
     }
 
-    public void saveProduct(ProductDto dto) {
-
-            Product product=productMapper.toEntity(dto);
+    public void saveProduct(Product product) {
             productRepository.save(product);
-
     }
 
     public List<Category> getAllCategory() {
@@ -107,6 +104,9 @@ public class MaterialService {
 
     public void deleteProductCarts(Integer delete_idpr, Integer idcustomer) {
        cartRepository.deleteProductCarts(delete_idpr,idcustomer);
+    }
+    public void BuyCarts(Integer delete_idpr, Integer idcustomer) {
+        cartRepository.BuyCarts(delete_idpr,idcustomer);
     }
 
 
@@ -138,9 +138,9 @@ public class MaterialService {
         ordersTransportRepository.save(ordersTransport);
     }
 
-    public void deleteProductCarts(List<OrdersDetail> ordersDetails, Integer id) {
+    public void BuyCarts(List<OrdersDetail> ordersDetails, Integer id) {
         for(OrdersDetail ordersDetail:ordersDetails){
-            deleteProductCarts(ordersDetail.getIdproduct(),id);
+            BuyCarts(ordersDetail.getIdproduct(),id);
         }
     }
 
@@ -155,4 +155,11 @@ public class MaterialService {
         return orderid;
     }
 
+    public IODPMTS getOrderInfor(Integer id) {
+        return orderRepository.getorderInfor(id);
+    }
+
+    public List<IViewProduct> getOrderDetailByID(Integer id) {
+        return ordersDetailRepository.getOrderDetailByID(id);
+    }
 }

@@ -2,7 +2,9 @@ package vn.com.devmaster.services.managematerial.mapper;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import vn.com.devmaster.services.managematerial.DTO.CategoryDto;
 import vn.com.devmaster.services.managematerial.DTO.ProductDto;
+import vn.com.devmaster.services.managematerial.domain.Category;
 import vn.com.devmaster.services.managematerial.domain.Product;
 
 import java.util.ArrayList;
@@ -29,6 +31,7 @@ public class ProductMapper implements EntityMapper<Product,ProductDto>{
                 .createdBy(dto.getCreatedBy())
                 .updatedBy(dto.getUpdatedBy())
                 .isactive(dto.getIsactive())
+             //   .idcategory(Category.builder().id(dto.getIdcategory().getId()).build())
                 .build();
         return product;
     }
@@ -58,6 +61,7 @@ public class ProductMapper implements EntityMapper<Product,ProductDto>{
                 .createdBy(entity.getCreatedBy())
                 .updatedBy(entity.getUpdatedBy())
                 .isactive(entity.getIsactive())
+              //  .idcategory(CategoryDto.builder().id(entity.getIdcategory()).build())
                 //.productImageDtos(productImagesMapper.toDto(entity.getProductImages()))
                 .build();
         return pr;

@@ -1124,3 +1124,11 @@ figure.instagram-item img.insta-image {
 .empty-cart{
     text-align: center;
 }
+/*table order-detail*
+ */
+.table{
+    text-align: left;
+}
+.vertical-center{
+vertical-align: middle;
+}

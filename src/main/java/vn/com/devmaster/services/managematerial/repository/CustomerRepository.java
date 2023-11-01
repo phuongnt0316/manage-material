@@ -11,5 +11,5 @@ import java.util.List;
 
 public interface CustomerRepository extends JpaRepository<Customer,Integer> {
     @Query(value = Sql.CUSTOMER_LOGIN,nativeQuery = true)
-    List<Customer> getCustomerByID(String user, String pass);
+    Customer getCustomerByID(String user, String pass);
 }

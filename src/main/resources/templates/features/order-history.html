@@ -34,18 +34,22 @@
                             </tr>
                             </thead>
                             <tbody>
-                            <tr class="alert" role="alert">
-                                <td>HD0038</td>
-                                <td>00:00:12 20/08/2023</td>
-                                <td>18.000.000</td>
-                                <td>Hàng dễ vỡ</td>
-                                <td>Nguyễn Thị Phương</td>
-                                <td>59 ngõ 577 Kim Mã, Ngọc Khách, Ba Đình, Hà Nội</td>
-                                <td>0123456789</td>
-                                <td>Chờ đóng gói</td>
-                                <td class="btn-active">
-                                    <button id="btnStart" type="button" class="btn"
-                                            title="Chi tiết" ><span><i class="fa-solid fa-eye"></i></span></button>
+                            <tr th:each="order:${orders}">
+                                <td th:text="${order.getIdorders()}"></td>
+                                <td th:text="${order.getOrdersDate()}"></td>
+                                <td th:text="${#numbers.formatDecimal(order.getTotalMoney(),3,'DEFAULT', 0, 'DEFAULT')}"></td>
+                                <td th:text="${order.getNotes()}"></td>
+                                <td th:text="${order.getNameReciver()}"></td>
+                                <td th:text="${order.getAddress()}"></td>
+                                <td th:text="${order.getPhone()}"></td>
+                                <td th:switch="${order.getStatus()}">
+                                    <span th:case="'1'">Đơn đã đặt</span>
+                                    <span th:case="'2'">Đang chuẩn bị</span>
+                                    <span th:case="'3'">Đã bàn giao cho đơn vị vận chuyển</span>
+                                    <span th:case="'4'">Đang vận chuyển</span>
+                                    <span th:case="'5'">Đã giao hàng</span>
+                                </td>
+                                <td class="btn-active"><a id="btnStart" type="button" class="btn" th:href="'/order-detail?id='+${order.getId()}">Xem chi tiết</a>
 
                                 </td>
                             </tr>
