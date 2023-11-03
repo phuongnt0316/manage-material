@@ -12,6 +12,7 @@ import vn.com.devmaster.services.managematerial.projection.IViewProduct;
 import vn.com.devmaster.services.managematerial.repository.*;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 @Service
 public class MaterialService {
@@ -146,9 +147,11 @@ public class MaterialService {
     }
     public String getOrderId(Integer idcustomer){
         LocalDate localDate = LocalDate.now();
+
         String date=localDate.getYear()+""+localDate.getMonth().getValue()+""+localDate.getDayOfMonth();
         int n=orderRepository.getCountByCustomer(idcustomer);
-        String orderid=date+idcustomer+(n+1)+"";
+        //String.format("%03d", n+1) format dạng 001,010
+        String orderid=date+String.format("%03d", idcustomer)+(n+1)+"";
         return orderid;
     }
 
@@ -211,6 +214,29 @@ public class MaterialService {
             sum+=cart.getPrice();
         }
         return sum;
+    }
+    public int getToTal(List<IViewProduct> iViewProducts) {
+        int total = 0;
+        for (IViewProduct iViewProduct : iViewProducts) {
+            total += iViewProduct.getQuantity() * iViewProduct.getPrice();
+        }
+        return total;
+    }
+    public List<ViewCart> toViewCart(List<Cart> carts) {
+        List<ViewCart> viewCarts = new ArrayList<>();
+        for (Cart cart : carts) {
+            Product product =getProductByID(cart.getIdProduct());
+            ViewCart viewCart = ViewCart
+                    .builder()
+                    .idProduct(cart.getIdProduct())
+                    .name(product.getName())
+                    .image(product.getImage())
+                    .price(product.getPrice())
+                    .quantity(cart.getQuantity())
+                    .build();
+            viewCarts.add(viewCart);
+        }
+        return viewCarts;
     }
 
 }
