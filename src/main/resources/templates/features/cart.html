@@ -30,7 +30,7 @@
             <div class="row d-flex justify-content-center align-items-center h-100">
                 <div class="col-12">
                     <div class="card card-registration card-registration-2" style="border-radius: 15px;">
-                        <div class="d-flex justify-content-center" th:remove="${total==0}?none:all">
+                        <div class="d-flex justify-content-center" th:remove="${total==0||total==null}?none:all">
 
                             <div class="empty-cart">
 
@@ -39,7 +39,7 @@
                                 <a class="btn btn-addCart" href="/shop">Xem cửa hàng</a>
                             </div>
                         </div>
-                        <div class="card-body p-0" th:remove="${total==0}?all:none">
+                        <div class="card-body p-0" th:remove="${total==0||total==null}?all:none">
                             <div class="row g-0" >
                                 <div class="col-lg-8">
                                     <div class="p-5">
@@ -53,7 +53,7 @@
                                              th:each="cart:${carts}">
                                             <div class="col-md-2 col-lg-2 col-xl-2">
                                                 <img
-                                                        th:src="'images/image-product/'+${cart.getImage()}"
+                                                        th:src="${cart.getImage()}"
                                                         class="img-fluid rounded-3" alt="">
                                             </div>
                                             <div class="col-md-3 col-lg-3 col-xl-3">
@@ -80,7 +80,7 @@
                                             </div>
 
                                             <div class="col-md-1 col-lg-1 col-xl-1 text-end">
-                                                <a th:href="'/deleteCart?delete='+${cart.getIdProduct()}+'&&idcustomer='+${customer.getId()}" class="text-danger"><i class="fas fa-trash fa-lg"></i></a>
+                                                <a th:href="${(check==1)?'/deleteCart?delete='+cart.getIdProduct()+'&&idcustomer='+customer.getId():'deleteCart1?idpr='+cart.getIdProduct()}" class="text-danger"><i class="fas fa-trash fa-lg"></i></a>
                                             </div>
                                         </div>
 

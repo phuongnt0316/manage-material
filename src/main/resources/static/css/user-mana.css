@@ -465,3 +465,6 @@
  }
 
  .pagination li a:hover:not(.active) {background-color: #ddd;}
+ .image-product{
+     width: 50px;
+ }

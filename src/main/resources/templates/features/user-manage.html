@@ -45,11 +45,13 @@
                         <tr>
                             <th>ID</th>
                             <th>Họ tên</th>
+                            <th>Tên người dùng</th>
                             <th>Email</th>
-                            <th>Giới tính</th>
-                            <th>Ngày sinh</th>
+                            <th>Địa chỉ</th>
+                            <th>Số điện thoại</th>
+                            <th>Ngày tạo</th>
                             <th>Trạng thái</th>
-                            <th>Hành động</th>
+                            <th>Tùy chọn</th>
                         </tr>
                         </thead>
                         <tbody>
@@ -61,19 +63,21 @@
                                 <span th:text="${user.getName()}"></span>
                             </td>
                             <td>
+                                <span th:text="${user.getUsername()}"></span>
+                            </td>
+                            <td>
                                 <span th:text="${user.getEmail()}"></span>
                             </td>
                             <td><span th:text="${user.getAddress()}"></span></td>
                             <td><span th:text="${user.getPhone()}"></span></td>
-                            <td class="status"><span class="active">Đang hoạt động</span></td>
+                            <td><span th:text="${user.getCreatedDate()}"></span></td>
+                            <td class="status"><span th:class="${(user.getIsactive()==1)? 'active' : 'waiting'}"
+                                                     th:text="${(user.getIsactive()==1)?'Bật':'Tắt'}"></span>
+                            </td>
                             <td class="btn-active">
-                                <button type="button" class="btn" data-dismiss="alert" aria-label="Update">
-                                    <span aria-hidden="true"><i class="fa-solid fa-pen-to-square"></i></span>
-                                </button>
-
-                                <button type="button" class="btn" data-dismiss="alert" aria-label="Delete">
-                                    <span aria-hidden="true"><i class="fa-solid fa-trash-can"></i></span>
-                                </button>
+                                <a type="button" class="btn" th:href="'/order-manage?idcustomer='+${user.getId()}">
+                                    Đơn hàng
+                                </a>
                             </td>
                         </tr>
                         </tbody>

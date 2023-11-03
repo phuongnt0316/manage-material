@@ -5,6 +5,6 @@ public interface IViewProduct {
     String getName();
     Integer getQuantity();
     String getImage();
-    Integer getPrice();
+    Double getPrice();
 
 }

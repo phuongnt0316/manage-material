@@ -30,4 +30,11 @@ public class Sql {
             " from orders_details\n" +
             "         join product p on orders_details.IDPRODUCT = p.ID\n" +
             " where IDORD = :id";
+
+    //Product
+    public static final String UPDATE_QUANTITY_PRODUCT="update product\n" +
+            " set QUANTITY=QUANTITY + :qty\n" +
+            " where ID = :idproduct\n";
+    public static final String CART_BY_CUSTOMER ="select * from cart where id_customer=:id and status=1" ;
+    public static final String UPDATE_QUANTITY_CART = "update cart set quantity=quantity+1 where id_customer=:id and id_product=:idpr and status=1";
 }

@@ -26,7 +26,9 @@
             border: 1px solid #4CAF50;
         }
 
-        .pagination li a:hover:not(.active) {background-color: #ddd;}
+        .pagination li a:hover:not(.active) {
+            background-color: #ddd;
+        }
     </style>
 </head>
 <body>
@@ -42,14 +44,16 @@
                             <span aria-hidden="true">Đóng</span>
                         </button>
                     </div>
-                    <form id="formAwesome" action="#" th:action="@{/new-product}" method="post" enctype="multipart/form-data">
+                    <form id="formAwesome" action="#" th:action="@{/new-product}" method="post"
+                          enctype="multipart/form-data">
                         <div class="modal-body">
                             <div class="form-group row">
                                 <label for="name-product" class="col-sm-6 col-form-label">
                                     Tên sản phẩm
                                 </label>
                                 <div class="col-sm-6">
-                                    <input type="text" class="form-control" id="name-product" name="name-product" required>
+                                    <input type="text" class="form-control" id="name-product" name="name-product"
+                                           required>
                                 </div>
                             </div>
                             <div class="form-group row">
@@ -64,19 +68,12 @@
                                 <label for="category" class="col-sm-6 col-form-label">
                                     Danh mục
                                 </label>
-                                <div class="col-sm-6" >
+                                <div class="col-sm-6">
                                     <select id="category" name="category">
-                                        <option th:each="category:${categories}" th:value="${category.getId()}" th:text="${category.getName()}"></option>
+                                        <option th:each="category:${categories}" th:value="${category.getId()}"
+                                                th:text="${category.getName()}"></option>
                                     </select>
 
-                                </div>
-                            </div>
-                            <div class="form-group row">
-                                <label for="quantity" class="col-sm-6 col-form-label">
-                                    Số lượng
-                                </label>
-                                <div class="col-sm-6">
-                                    <input type="text" class="form-control" id="quantity" name="quantity" required>
                                 </div>
                             </div>
                             <div class="form-group row">
@@ -102,18 +99,7 @@
                                 </label>
                                 <div class="col-sm-6">
                                             <textarea name="notes" class="form-control" cols="25" rows="5"
-                                                      id="notes" ></textarea>
-                                </div>
-                            </div>
-                            <div class="form-group row">
-                                <label for="product-active" class="col-sm-6 col-form-label">
-                                    Trạng thái hiển thị
-                                </label>
-                                <div class="col-sm-6">
-                                    <select name="product-active" id="product-active"  class="form-control" >
-                                        <option value="0">Tắt</option>
-                                        <option value="1">Bật</option>
-                                    </select>
+                                                      id="notes"></textarea>
                                 </div>
                             </div>
                         </div>
@@ -126,7 +112,6 @@
         </div>
     </section>
     <section class="ftco-section">
-
         <div class="container">
             <div class="row justify-content-center">
                 <div class="col-md-6 text-center mb-5">
@@ -142,18 +127,29 @@
                     <div class="inner-form d-flex float-end pb-3">
                         <div class="input-field">
                             <div class="input-select">
-                                <select data-trigger="" name="categary">
-                                    <option>----Chọn danh mục----</option>
-                                    <option value="id1">Danh mục 1</option>
+                                <select name="choices-single-defaul" th:onchange="'window.location.href = \'/product-manage?sort=\' + this.value '">
+                                    <option>----Sắp xếp----</option>
+                                    <option value="1">Số lượng tăng dần</option>
+                                    <option value="2">Số lượng tăng dần</option>
+                                    <option value="3">Đơn giá tăng dần</option>
+                                    <option value="4">Đơn giá giảm dần</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="input-field">
+                            <div class="input-select">
+                                <select name="choices-single-defaul" th:onchange="'window.location.href = \'/product-manage?category=\' + this.value '">
+                                    <option>----Danh mục----</option>
+                                    <option value="1">Số lượng tăng dần</option>
                                 </select>
                             </div>
                         </div>
                         <div class="input-field ">
-                            <input id="search" type="text" placeholder="Nhập từ khóa" name="keyword"/>
+                            <input id="search" type="text" placeholder="Nhập tên sản phẩm" th:value="${keyword}"/>
                         </div>
 
                         <div class="input-field">
-                            <button class="btn-search btn btn-primary" type="submit">Tìm kiếm</button>
+                            <button class="btn-search btn btn-primary" type="button" th:onclick="'window.location.href=\'/product-manage?key=\'+search.value'">Tìm kiếm</button>
                         </div>
                     </div>
                 </form>
@@ -161,11 +157,12 @@
             <div class="row">
                 <div class="col-md-12">
                     <div class="table-wrap">
-                        <table class="table table-responsive-xl table-hover">
+                        <table class="table table-responsive-xl table-hover sortable">
                             <thead>
                             <tr>
                                 <th>ID</th>
                                 <th width="300px">Tên sản phẩm</th>
+                                <th>Hình ảnh</th>
                                 <th>Danh mục</th>
                                 <th>Số lượng</th>
                                 <th>Đơn giá</th>
@@ -173,43 +170,38 @@
                                 <th>Hành động</th>
                             </tr>
                             </thead>
-                            <tbody>
+                            <tbody id="myTable">
                             <tr th:each="product:${products}">
                                 <td th:text="${product.getId()}"></td>
                                 <td th:text="${product.getName()}"></td>
+                                <td><img th:src="${product.getImage()}" class="image-product"></td>
                                 <td th:text="${product.getIdcategory().getName()}" class="cl-name"></td>
                                 <td th:text="${product.getQuantity()}"></td>
                                 <td th:text="${#numbers.formatDecimal(product.getPrice(),3,'DEFAULT', 0, 'DEFAULT')}"></td>
                                 <td class="status"><span th:class="${(product.getIsactive()==1)? 'active' : 'waiting'}"
                                                          th:text="${(product.getIsactive()==1)?'Bật':'Tắt'}"></span>
                                 </td>
-                                <td class="btn-active">
+                                <td>
                                     <a th:href="'/update-product?id='+${product.getId()}" class="btn" title="Sửa">
-                                                    <span aria-hidden="true"><i
-                                                            class="fa-solid fa-pen-to-square"></i></span>
+                                        <span aria-hidden="true"><i class="fa-solid fa-pen-to-square"></i></span>
                                     </a>
-<!--                                    <a class="btn" title="Chi tiết"><span>-->
-<!--                                    <i class="fa-solid fa-circle-info"></i> </span></a>-->
                                 <td>
                                 </td>
                             </tr>
                             </tbody>
                         </table>
-
-                            <ul class="pagination pagination-sm d-flex">
-                                <li th:if="${curentpage>1}"><a th:href="@{'?pageNo='+${curentpage-1}}">&laquo;</a></li>
-                                <li th:each="i:${#numbers.sequence(1,totalPage)}" >
-                                    <a th:class="${curentpage==i?'active':''}" th:href="@{${keyword!=null&&keyword!=''?'?keyword='+keyword+'&':'?'}+'pageNo='+${i}}" th:text="${i}"> </a>
-
-                                </li>
-                                <li th:if="${curentpage<totalPage}"><a  th:href="@{'?pageNo='+${curentpage+1}}"> &raquo;</a></li>
-                            </ul>
-
-
+                        <ul class="pagination pagination-sm d-flex">
+                            <li th:if="${curentpage>1}"><a th:href="@{${keyword!=null&&keyword!=''?'?key='+keyword+'&':'?'}+'?pageNo='+${curentpage-1}}">&laquo;</a></li>
+                            <li th:each="i:${#numbers.sequence(1,totalPage)}">
+                                <a th:class="${curentpage==i?'active':''}"
+                                   th:href="@{${keyword!=null&&keyword!=''?'?key='+keyword+'&':'?'}+'pageNo='+${i}}"
+                                   th:text="${i}"> </a>
+                            </li>
+                            <li th:if="${curentpage<totalPage}"><a th:href="@{'?pageNo='+${curentpage+1}}"> &raquo;</a>
+                            </li>
+                        </ul>
                     </div>
-
                 </div>
-
             </div>
         </div>
     </section>

@@ -46,7 +46,7 @@
                         <div class="col-lg-4 col-md-6 p-3" th:each="product:${products}">
                             <div class="product-card pe-3 pb-3">
                                 <div class="image-holder">
-                                    <img th:src="'images/image-product/'+${product.getImage()}" alt="product-item" class="img-fluid ">
+                                    <img th:src="${product.getImage()}" alt="product-item" class="img-fluid ">
                                 </div>
                                 <div class="card-detail justify-content-between pb-3">
                                     <p class="card-title text-uppercase">
