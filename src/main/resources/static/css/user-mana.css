@@ -468,3 +468,15 @@
  .image-product{
      width: 50px;
  }
+ .btn-update{
+     color: #f1f1f1;
+     font-size: 12px;
+     background: #40bfc1;
+     border: 1px solid #28a745;
+     /*padding: 6px 14px;*/
+     margin-top: 5px;
+     /*line-height: 12px;*/
+     border-radius: 10px;
+     margin-right: 14px;
+     padding: 5px 5px;
+ }

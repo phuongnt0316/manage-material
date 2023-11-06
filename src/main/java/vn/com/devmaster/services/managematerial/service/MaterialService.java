@@ -1,20 +1,26 @@
 package vn.com.devmaster.services.managematerial.service;
 
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.*;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 import vn.com.devmaster.services.managematerial.domain.*;
 import vn.com.devmaster.services.managematerial.mapper.CartMapper;
 import vn.com.devmaster.services.managematerial.mapper.ProductMapper;
-import vn.com.devmaster.services.managematerial.projection.IODPMTS;
 import vn.com.devmaster.services.managematerial.projection.IOrderDetailDTO;
+import vn.com.devmaster.services.managematerial.projection.IOrderInFor;
 import vn.com.devmaster.services.managematerial.projection.IViewProduct;
 import vn.com.devmaster.services.managematerial.repository.*;
 
+import java.io.IOException;
+import java.time.Instant;
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 @Service
+@RequiredArgsConstructor
 public class MaterialService {
     @Autowired
     MaterialRepository materialRepository;
@@ -42,6 +48,7 @@ public class MaterialService {
     private OrdersPaymentRepository ordersPaymentRepository;
     @Autowired
     private OrdersTransportRepository ordersTransportRepository;
+    private final FileUpload fileUpload;
 
     public List<Customer> getAll(){
         List<Customer> customers=materialRepository.findAll();
@@ -116,16 +123,33 @@ public class MaterialService {
         return paymentMethodRepository.getPayment();
     }
 
-    public void save(Order order) {
-        orderRepository.save(order);
-    }
+
 
     public List<IOrderDetailDTO> getCartById(Integer idcustomer) {
        return cartRepository.getCartByID(idcustomer);
     }
 
-    public void saveAll(List<OrdersDetail> ordersDetails) {
+    public void saveAll(Integer idcustomer,Order order) {
+        List<OrdersDetail> ordersDetails = new ArrayList<>();
+
+            List<IOrderDetailDTO> detailDtoList = getCartById(idcustomer);
+
+            for (IOrderDetailDTO iorder : detailDtoList) {
+                OrdersDetail ordersDetail = OrdersDetail
+                        .builder()
+                        .idord(order.getId())
+                        .idproduct(iorder.getIdproduct())
+                        .price(iorder.getPrice())
+                        .qty(iorder.getQuantity())
+                        .build();
+                ordersDetails.add(ordersDetail);
+            }
+            for (IOrderDetailDTO detail : detailDtoList) {
+                updateQuantityProduct(detail.getIdproduct(), (-detail.getQuantity())); //update quantity after buy product
+            }
+
         ordersDetailRepository.saveAll(ordersDetails);
+        BuyCarts(ordersDetails, idcustomer);
     }
 
     public void save(OrdersPayment ordersPayment) {
@@ -155,7 +179,7 @@ public class MaterialService {
         return orderid;
     }
 
-    public IODPMTS getOrderInfor(Integer id) {
+    public IOrderInFor getOrderInfor(Integer id) {
         return orderRepository.getorderInfor(id);
     }
 
@@ -238,5 +262,136 @@ public class MaterialService {
         }
         return viewCarts;
     }
+    public void updateCart(List<Cart> carts, Integer id) {
 
+        for (Cart cart : carts) {
+            if (cart.getIdProduct() == id) {
+                cart.setQuantity(cart.getQuantity() + 1);
+                break;
+            }
+        }
+
+    }
+
+
+
+    public List<Order> getAllOrders() {
+        return orderRepository.getAllOrders();
+    }
+
+    public Order getOneOrder(Integer idod) {
+        return orderRepository.getOne(idod);
+    }
+
+    public List<Cart> addCart(List<Cart> carts, Integer idpr) {
+        if (carts == null) {
+            carts = new ArrayList<>();
+            Cart cart = new Cart().builder().idCustomer(0).idProduct(idpr).quantity(1).build();
+            carts.add(cart);
+        } else {
+            if (checkCart(carts, idpr)) {
+                Cart cart = new Cart().builder().idCustomer(0).idProduct(idpr).quantity(1).build();
+                carts.add(cart);
+            } else {
+                updateCart(carts, idpr);
+            }
+        }
+        return carts;
+    }
+
+    public void updateProduct(Integer id, String name, Integer idcategory, Double price, String description, String notes, Byte isactive, MultipartFile multipartFile) throws IOException {
+        Product product=getProductByID(id);
+        name=name.trim().isEmpty()?product.getName():name;
+        price=(price==null)?product.getPrice():price;
+        description=description.trim().isEmpty()?product.getDescription():description;
+        notes=notes.trim().isEmpty()?product.getNotes():notes;
+        String urlImage=multipartFile.isEmpty()?product.getImage():fileUpload.uploadFile(multipartFile);
+        Date date=new Date();
+        productRepository.updateProduct(id,name,idcategory,price,description,notes,isactive,urlImage,date.toInstant());
+    }
+    public List<Status> getStatus(){
+        List<Status> statusList=new ArrayList<>();
+        Status status=new Status(1,"Đã đặt đơn");
+        statusList.add(status);
+        status=new Status(2,"Đang chuẩn bị");
+        statusList.add(status);
+        status=new Status(3,"Đang giao hàng");
+        statusList.add(status);
+        status=new Status(4,"Đã giao hàng");
+        statusList.add(status);
+       return statusList;
+    }
+    public void updateOrderStatus(Integer idod, Integer status) {
+        orderRepository.updateOrderStatus(idod,status);
+    }
+
+    public Customer getCustomer(Integer idcustomer) {
+        return customerRepository.getOne(idcustomer);
+    }
+
+    public int getShipMoney(Integer idtransport, Integer size) {
+        int ship=idtransport==4?0:15000*size;
+        return ship;
+    }
+
+    public TransportMethod getTransportByID(Integer idtransport) {
+        return transportMethodRepository.getOne(idtransport);
+    }
+
+
+    public Order save(Integer idcustomer, String fname, String detailadd, String address1, String note, String phone, Double totalMoney) {
+        String idorder = getOrderId(idcustomer);
+         Customer customer = Customer.builder().id(idcustomer).build();
+        Order order = Order
+                .builder()
+                .idorders(idorder)
+                .ordersDate(new Date().toInstant())
+                .idcustomer(customer)
+                .nameReciver(fname)
+                .address(detailadd.concat(", ").concat(address1))
+                .notes(note)
+                .phone(phone)
+                .totalMoney(totalMoney)
+                .build();
+        orderRepository.save(order);
+        return order;
+    }
+
+    public void saveOrderDetail(List<Cart> carts, Order order) {
+        List<OrdersDetail> ordersDetails = new ArrayList<>();
+        List<ViewCart> viewCarts = toViewCart(carts);
+        for (ViewCart viewCart : viewCarts) {
+            OrdersDetail ordersDetail = OrdersDetail
+                    .builder()
+                    .idord(order.getId())
+                    .idproduct(viewCart.getIdProduct())
+                    .price(viewCart.getPrice())
+                    .qty(viewCart.getQuantity())
+                    .build();
+            ordersDetails.add(ordersDetail);
+        }
+        ordersDetailRepository.saveAll(ordersDetails);
+        for (Cart cart : carts) {
+          updateQuantityProduct(cart.getIdProduct(), (-cart.getQuantity())); //update quantity after buy product
+        }
+    }
+
+    public void saveOrderPayment(Integer idpayment, Order order) {
+        OrdersPayment ordersPayment = OrdersPayment
+                .builder()
+                .idord(order.getId())
+                .idpayment(idpayment)
+                .build();
+        ordersPaymentRepository.save(ordersPayment);
+    }
+
+    public void saveTransport(Integer idtransport, int ship, Order order) {
+        OrdersTransport ordersTransport = OrdersTransport
+                .builder()
+                .idord(order.getId())
+                .idtransport(idtransport)
+                .total(ship)
+                .build();
+        ordersTransportRepository.save(ordersTransport);
+    }
 }

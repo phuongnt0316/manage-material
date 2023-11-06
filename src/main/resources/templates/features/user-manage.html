@@ -75,7 +75,7 @@
                                                      th:text="${(user.getIsactive()==1)?'Bật':'Tắt'}"></span>
                             </td>
                             <td class="btn-active">
-                                <a type="button" class="btn" th:href="'/order-manage?idcustomer='+${user.getId()}">
+                                <a type="button" class="btn" th:href="'/orders-manage?idcustomer='+${user.getId()}">
                                     Đơn hàng
                                 </a>
                             </td>

@@ -3,123 +3,105 @@
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
       layout:decorate="~{layout/admin}">
 <head>
-  <meta charset="UTF-8">
-  <title>Product-Manage</title>
-  <style>
-    .pagination {
-      display: inline-block;
-    }
+    <meta charset="UTF-8">
+    <title>Product-Manage</title>
+    <style>
 
-    .pagination li a {
-      font-size: 0.8em;
-      color: black;
-      float: left;
-      padding: 8px 16px;
-      text-decoration: none;
-      transition: background-color .3s;
-      border: 1px solid #ddd;
-    }
-
-    .pagination li a.active {
-      background-color: #4CAF50;
-      color: white;
-      border: 1px solid #4CAF50;
-    }
-
-    .pagination li a:hover:not(.active) {background-color: #ddd;}
-  </style>
+    </style>
 </head>
 <body>
 
-  <section class="ftco-section" layout:fragment="content">
-    <div  class="container">
+<section class="ftco-section" layout:fragment="content">
+    <div class="container">
 
         <div>
 
-            <h3>Sửa sản phẩm</h3>
+            <h3> Cập nhật sản phẩm</h3>
 
-          <form  action="#" th:action="@{/update-product}" method="post" enctype="multipart/form-data">
-            <div>
-              <div class="form-group row">
-                <label for="name-product" class="col-sm-6 col-form-label">
-                  Tên sản phẩm
-                </label>
-                <div class="col-sm-6">
-                  <input type="text" class="form-control" id="name-product" name="name-product" required>
+            <form action="#" th:action="@{/update-product-action}" method="post" enctype="multipart/form-data">
+                <div>
+                    <div class="form-group row">
+                        <label for="id-product" class="col-sm-6 col-form-label">
+                            ID sản phẩm
+                        </label>
+                        <div class="col-sm-6">
+                            <input type="text" readonly class="form-control" id="id-product" name="id-product" th:value="${product.getId()}">
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <label for="name-product" class="col-sm-6 col-form-label">
+                            Tên sản phẩm
+                        </label>
+                        <div class="col-sm-6">
+                            <input type="text" class="form-control" id="name-product" name="name-product" th:value="${product.getName()}">
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <label for="image-product" class="col-sm-6 col-form-label">
+                            Hình ảnh
+                        </label>
+                        <div class="col-sm-6">
+                            <input type="file" name="image" class="form-control" id="image-product" placeholder="Chọn file">
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <label for="category" class="col-sm-6 col-form-label">
+                            Danh mục
+                        </label>
+                        <div class="col-sm-6">
+                            <select id="category" name="category" class="form-control" >
+                                <option th:each="category:${categories}" th:value="${category.getId()}"
+                                        th:text="${category.getName()}"
+                                        th:selected="${category.getId()==product.getIdcategory().getId()}"></option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <label for="price" class="col-sm-6 col-form-label">
+                            Đơn giá
+                        </label>
+                        <div class="col-sm-6">
+                            <input type="text" class="form-control" id="price" name="price"
+                                   onkeypress='return isNumberKey(event)'  th:value="${product.getPrice()}">
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <label for="description" class="col-sm-6 col-form-label">
+                            Mô tả sản phẩm
+                        </label>
+                        <div class="col-sm-6">
+                            <textarea name="description" class="form-control" cols="25" rows="5" id="description"  th:text="${product.getDescription()}"></textarea>
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <label for="notes" class="col-sm-6 col-form-label">
+                            Ghi chú
+                        </label>
+                        <div class="col-sm-6">
+                            <textarea name="notes" class="form-control" cols="25" rows="5" id="notes" th:text="${product.getNotes()}"></textarea>
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <label for="product-active" class="col-sm-6 col-form-label">
+                            Trạng thái hiển thị
+                        </label>
+                        <div class="col-sm-6">
+                            <select name="product-active" id="product-active" class="form-control">
+                                <option value="0">Tắt</option>
+                                <option value="1">Bật</option>
+                            </select>
+                        </div>
+                    </div>
                 </div>
-              </div>
-              <div class="form-group row">
-                <label for="name-product" class="col-sm-6 col-form-label">
-                  Hình ảnh
-                </label>
-                <div class="form-group row">
-                  <input type="file" name="image" placeholder="Chọn file" required>
+                <div>
+                    <input type="submit" class="btn btn-secondary" value="Lưu">
+                    <a class="btn btn-addCart" href="/product-manage"> Hủy</a>
                 </div>
-              </div>
-              <div class="form-group row">
-                <label for="category" class="col-sm-6 col-form-label">
-                  Danh mục
-                </label>
-                <div class="col-sm-6" >
-                  <select id="category" name="category">
-                    <option th:each="category:${categories}" th:value="${category.getId()}" th:text="${category.getName()}"></option>
-                  </select>
+            </form>
 
-                </div>
-              </div>
-              <div class="form-group row">
-                <label for="quantity" class="col-sm-6 col-form-label">
-                  Số lượng
-                </label>
-                <div class="col-sm-6">
-                  <input type="text" class="form-control" id="quantity" name="quantity" required>
-                </div>
-              </div>
-              <div class="form-group row">
-                <label for="price" class="col-sm-6 col-form-label">
-                  Đơn giá
-                </label>
-                <div class="col-sm-6">
-                  <input type="text" class="form-control" id="price" name="price" required>
-                </div>
-              </div>
-              <div class="form-group row">
-                <label for="description" class="col-sm-6 col-form-label">
-                  Mô tả sản phẩm
-                </label>
-                <div class="col-sm-6">
-                                            <textarea name="description" class="form-control" cols="25" rows="5"
-                                                      id="description" required></textarea>
-                </div>
-              </div>
-              <div class="form-group row">
-                <label for="notes" class="col-sm-6 col-form-label">
-                  Ghi chú
-                </label>
-                <div class="col-sm-6">
-                  <textarea name="notes" class="form-control" cols="25" rows="5" id="notes" ></textarea>
-                </div>
-              </div>
-              <div class="form-group row">
-                <label for="product-active" class="col-sm-6 col-form-label">
-                  Trạng thái hiển thị
-                </label>
-                <div class="col-sm-6">
-                  <select name="product-active" id="product-active"  class="form-control" >
-                    <option value="0">Tắt</option>
-                    <option value="1">Bật</option>
-                  </select>
-                </div>
-              </div>
-            </div>
-            <div>
-              <input type="submit" class="btn btn-secondary" value="Lưu">
-            </div>
-          </form>
-
-      </div>
+        </div>
     </div>
-  </section>
+</section>
 
 </body>
 </html>

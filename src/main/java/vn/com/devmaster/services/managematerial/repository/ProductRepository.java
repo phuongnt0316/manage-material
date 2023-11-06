@@ -1,6 +1,5 @@
 package vn.com.devmaster.services.managematerial.repository;
 
-import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
@@ -8,10 +7,10 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Repository;
 import vn.com.devmaster.services.managematerial.domain.Product;
-import vn.com.devmaster.services.managematerial.projection.IViewProduct;
 import vn.com.devmaster.services.managematerial.untils.Sql;
 
 import javax.transaction.Transactional;
+import java.time.Instant;
 import java.util.List;
 @Component
 @Repository
@@ -35,4 +34,8 @@ public interface ProductRepository extends JpaRepository<Product,Integer> {
     @Transactional
     @Query(value = Sql.UPDATE_QUANTITY_PRODUCT, nativeQuery = true)
     Integer updateQuantityProduct(Integer idproduct, Integer qty);
+    @Modifying(clearAutomatically = true)
+    @Transactional
+    @Query(value = Sql.UPDATE_PRODUCT, nativeQuery = true)
+    void updateProduct(Integer id, String name, Integer idcategory, Double price, String description, String notes, Byte isactive, String urlImage, Instant updated_date);
 }

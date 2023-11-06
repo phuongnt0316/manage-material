@@ -81,7 +81,8 @@
                                     Đơn giá
                                 </label>
                                 <div class="col-sm-6">
-                                    <input type="text" class="form-control" id="price" name="price" required>
+                                    <input type="text" class="form-control" id="price" name="price"
+                                           onkeypress='return isNumberKey(event)' required>
                                 </div>
                             </div>
                             <div class="form-group row">
@@ -127,7 +128,8 @@
                     <div class="inner-form d-flex float-end pb-3">
                         <div class="input-field">
                             <div class="input-select">
-                                <select name="choices-single-defaul" th:onchange="'window.location.href = \'/product-manage?sort=\' + this.value '">
+                                <select name="choices-single-defaul"
+                                        th:onchange="'window.location.href = \'/product-manage?sort=\' + this.value '">
                                     <option>----Sắp xếp----</option>
                                     <option value="1">Số lượng tăng dần</option>
                                     <option value="2">Số lượng tăng dần</option>
@@ -138,7 +140,8 @@
                         </div>
                         <div class="input-field">
                             <div class="input-select">
-                                <select name="choices-single-defaul" th:onchange="'window.location.href = \'/product-manage?category=\' + this.value '">
+                                <select name="choices-single-defaul"
+                                        th:onchange="'window.location.href = \'/product-manage?category=\' + this.value '">
                                     <option>----Danh mục----</option>
                                     <option value="1">Số lượng tăng dần</option>
                                 </select>
@@ -149,7 +152,9 @@
                         </div>
 
                         <div class="input-field">
-                            <button class="btn-search btn btn-primary" type="button" th:onclick="'window.location.href=\'/product-manage?key=\'+search.value'">Tìm kiếm</button>
+                            <button class="btn-search btn btn-primary" type="button"
+                                    th:onclick="'window.location.href=\'/product-manage?key=\'+search.value'">Tìm kiếm
+                            </button>
                         </div>
                     </div>
                 </form>
@@ -167,7 +172,7 @@
                                 <th>Số lượng</th>
                                 <th>Đơn giá</th>
                                 <th>Trạng thái</th>
-                                <th>Hành động</th>
+                                <th>Tùy chọn</th>
                             </tr>
                             </thead>
                             <tbody id="myTable">
@@ -191,7 +196,9 @@
                             </tbody>
                         </table>
                         <ul class="pagination pagination-sm d-flex">
-                            <li th:if="${curentpage>1}"><a th:href="@{${keyword!=null&&keyword!=''?'?key='+keyword+'&':'?'}+'?pageNo='+${curentpage-1}}">&laquo;</a></li>
+                            <li th:if="${curentpage>1}"><a
+                                    th:href="@{${keyword!=null&&keyword!=''?'?key='+keyword+'&':'?'}+'?pageNo='+${curentpage-1}}">&laquo;</a>
+                            </li>
                             <li th:each="i:${#numbers.sequence(1,totalPage)}">
                                 <a th:class="${curentpage==i?'active':''}"
                                    th:href="@{${keyword!=null&&keyword!=''?'?key='+keyword+'&':'?'}+'pageNo='+${i}}"

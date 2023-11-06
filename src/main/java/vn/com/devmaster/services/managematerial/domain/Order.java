@@ -20,7 +20,7 @@ public class Order {
     private String idorders;
 
     @Column(name = "ORDERS_DATE")
-    private Instant ordersDate;
+    protected Instant ordersDate;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "IDCUSTOMER")

@@ -101,14 +101,14 @@
 
                                         <div class="d-flex justify-content-between mb-4">
                                             <p th:text="'Tổng '+${total}+' sản phẩm'"></p>
-                                            <h5  th:text="${#numbers.formatDecimal(totalmoney,3,'DEFAULT', 0, 'DEFAULT')}+'VNĐ'"></h5>
+                                            <h5  th:text="${#numbers.formatDecimal(totalCart,3,'DEFAULT', 0, 'DEFAULT')}+'VNĐ'"></h5>
                                         </div>
-                                        <p class="mb-3">Phí ship</p>
+                                        <p class="mb-3" th:text="${'Phí ship '+ship}">Phí ship</p>
                                         <form th:action="@{/checkout}" method="get">
                                         <div class="mb-4 pb-2">
 
-                                            <select class="select" name="transport">
-                                                <option  th:each="transport:${transports}" th:value="${transport.getId()}" th:text="${transport.getName()}"></option>
+                                            <select class="select" name="transport" th:onchange="'window.location.href = \'?idtransport=\' + this.value '">
+                                                <option  th:each="transport:${transports}" th:value="${transport.getId()}" th:text="${transport.getName()}" th:selected="${idtransport==transport.getId()}"></option>
                                             </select>
                                         </div>
                                         <hr class="my-4">

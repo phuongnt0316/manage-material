@@ -56,7 +56,7 @@
                                         <span th:text="${product.getDescription()}"></span>
                                     </p>
                                     <p class="item-price" th:text="${#numbers.formatDecimal(product.getPrice(),3,'DEFAULT', 0, 'DEFAULT')}+' VNĐ'"></p>
-                                    <a th:href="'/cart?idpr='+${product.getId()}" class="btn btn-primary"><i class="fa-solid fa-cart-plus"></i></a>
+                                    <a th:href="${(check==0)?'/add-cart?idpr='+product.getId():'/cart?idpr='+product.getId()}" class="btn btn-primary"><i class="fa-solid fa-cart-plus"></i></a>
                                     <a th:href="'/buyProduct?idpr='+${product.getId()}" class="btn btn-danger">Mua ngay</a>
                                 </div>
                             </div>

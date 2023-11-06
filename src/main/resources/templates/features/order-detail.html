@@ -46,10 +46,8 @@
                 <td th:switch="${orderInfor.getStatus()}">
                   <span th:case="'1'">Đơn đã đặt</span>
                   <span th:case="'2'">Đang chuẩn bị</span>
-                  <span th:case="'3'">Đã bàn giao cho đơn vị vận chuyển</span>
-                  <span th:case="'4'">Đang vận chuyển</span>
-                  <span th:case="'5'">Đã giao hàng</span>
-
+                  <span th:case="'3'">Đang vận chuyển</span>
+                  <span th:case="'4'">Đã giao hàng</span>
               </tr>
               <tr>
                 <td>Hình thức vận chuyển</td>

@@ -15,7 +15,7 @@ public class Sql {
             " where s.id_customer = :idcustomer\n" +
             "  and s.status = 1";
     public static  final  String COUNT_ORDER_CUSTOMER="select count(*) from orders s where s.IDCUSTOMER=:idcustomer";
-    public static final String ORDER_INFOR="select orders.IDORDERS as id,ORDERS_DATE as date,pm.NAME as namePayment ,tm.NAME as nameTransport,orders.TOTAL_MONEY as totalMoney,orders.NAME_RECIVER as nameReciver,orders.ADDRESS as address ,orders.PHONE as phone,orders.STATUS as status\n" +
+    public static final String ORDER_INFOR="select orders.ID as id, orders.IDORDERS as idOrder,ORDERS_DATE as date,pm.NAME as namePayment ,tm.NAME as nameTransport,orders.TOTAL_MONEY as totalMoney,orders.NAME_RECIVER as nameReciver,orders.ADDRESS as address ,orders.PHONE as phone,orders.STATUS as status\n" +
             " from orders\n" +
             "         left join orders_payment op on orders.ID = op.IDORD\n" +
             "         left join orders_transport ot on orders.ID = ot.IDORD\n" +
@@ -23,13 +23,13 @@ public class Sql {
             "         left join transport_method tm on tm.ID = ot.IDTRANSPORT\n" +
             "where orders.id=:idod";
     public static final String VIEW_ORDER_DETAIL="select IDPRODUCT            as idProduct,\n" +
-            "       p.NAME               as name,\n" +
-            "       orders_details.QTY   as quantity,\n" +
-            "       p.IMAGE              as image,\n" +
-            "       orders_details.PRICE as price\n" +
-            " from orders_details\n" +
-            "         join product p on orders_details.IDPRODUCT = p.ID\n" +
-            " where IDORD = :id";
+                                                "       p.NAME               as name,\n" +
+                                                "       orders_details.QTY   as quantity,\n" +
+                                                "       p.IMAGE              as image,\n" +
+                                                "       orders_details.PRICE as price\n" +
+                                                " from orders_details\n" +
+                                                "         join product p on orders_details.IDPRODUCT = p.ID\n" +
+                                                " where IDORD = :id";
 
     //Product
     public static final String UPDATE_QUANTITY_PRODUCT="update product\n" +
@@ -37,4 +37,16 @@ public class Sql {
             " where ID = :idproduct\n";
     public static final String CART_BY_CUSTOMER ="select * from cart where id_customer=:id and status=1" ;
     public static final String UPDATE_QUANTITY_CART = "update cart set quantity=quantity+1 where id_customer=:id and id_product=:idpr and status=1";
+    public static final String UPDATE_PRODUCT = "update product\n" +
+            "set NAME=:name,\n" +
+            "    DESCRIPTION=:description,\n" +
+            "    NOTES=:notes,\n" +
+            "    IMAGE=:urlImage,\n" +
+            "    IDCATEGORY=:idcategory,\n" +
+            "    PRICE=:price,\n" +
+            "    UPDATED_DATE =:updated_date,\n" +
+            "    ISACTIVE=:isactive\n" +
+            "where ID = :id";
+    public static final String ALL_ORDERS = "select * from orders ORDER BY ORDERS_DATE DESC";
+    public static final String UPDATE_ORDER_STATUS = "update orders set STATUS=:status where ID=:idod";
 }

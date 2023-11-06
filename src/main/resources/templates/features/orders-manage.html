@@ -7,173 +7,74 @@
     <title>Orders-Manage</title>
 </head>
 <body>
-<div layout:fragment="content">
-    <div class="modal fade" id="formModal" tabindex="-1" role="dialog" aria-labelledby="formModalLabel"
-         aria-hidden="true">
-        <div class="modal-dialog modal-dialog-centered" role="document">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h3 class="modal-title" id="formModalLabel">Chi tiết hóa đơn #ID</h3>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="close">
-                        <span aria-hidden="true">X</span>
-                    </button>
+    <section class="ftco-section" layout:fragment="content">
+        <div class="container">
+            <div class="row justify-content-center">
+                <div class="col-md-6 text-center mb-5">
+                    <h3 th:text="${customer==null?'Danh sách đơn hàng':'Danh sách đơn hàng #'+customer.getId() +'-'+customer.getName()}"></h3>
                 </div>
-                <div class="modal-body">
-                    <div class="col-md-12">
-                        <div class="table-wrap">
-                            <table class="table table-responsive-xl table-hover">
-                                <thead>
-                                <tr>
-                                    <th>ID hóa đơn</th>
-                                    <th>ID sản phẩm</th>
-                                    <th>Số lượng</th>
-                                    <th>Đơn giá</th>
-                                </tr>
-                                </thead>
-                                <tbody>
-                                <tr class="alert" role="alert">
-                                    <td>HD001</td>
-                                    <td>SP001</td>
-                                    <td>100</td>
-                                    <td>20.000</td>
-                                </tr>
-                                <tr class="alert" role="alert">
-                                    <td>HD001</td>
-                                    <td>SP001</td>
-                                    <td>100</td>
-                                    <td>20.000</td>
-                                </tr>
-                                <tr class="alert" role="alert">
-                                    <td>HD001</td>
-                                    <td>SP001</td>
-                                    <td>100</td>
-                                    <td>20.000</td>
-                                </tr>
-                                <tr class="alert" role="alert">
-                                    <td>HD001</td>
-                                    <td>SP001</td>
-                                    <td>100</td>
-                                    <td>20.000</td>
-                                </tr>
-                                </tbody>
-                            </table>
+                <form>
+                    <div class="inner-form d-flex float-end pb-3">
+                        <div class="input-field">
+                            <div class="input-select">
+                                <select data-trigger="" name="choices-single-defaul">
+                                    <option>----Chọn danh mục----</option>
+                                    <option value="id1">Danh mục 1</option>
+                                    <option value="id2">Danh mục 2</option>
+                                    <option value="id3">Danh mục 3</option>
+                                    <option value="id4">Danh mục 4</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="input-field ">
+                            <input id="search" type="text" placeholder="Nhập từ khóa"/>
+                        </div>
+                        <div class="input-field">
+                            <button class="btn-search btn btn-primary" type="button">Tìm kiếm</button>
                         </div>
                     </div>
+                </form>
+            </div>
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="table-wrap">
+                        <table class="table table-responsive-xl table-hover">
+                            <thead>
+                            <tr>
+                                <th>IDHD</th>
+                                <th>Thời gian đặt</th>
+                                <th>Tổng tiền</th>
+                                <th>Ghi chú</th>
+                                <th>Người nhận</th>
+                                <th>Địa chỉ</th>
+                                <th>SDT</th>
+                                <th>Trạng thái</th>
+                                <th>Tùy chọn</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <tr th:each="order:${orders}">
+                                <td th:text="${order.getIdorders()}"></td>
+                                <td th:text="${#dates.format(order.getOrdersDate(), 'dd-MM-yyyy HH:mm:ss')}"></td>
+                                <td th:text="${#numbers.formatDecimal(order.getTotalMoney(),3,'DEFAULT', 0, 'DEFAULT')}"></td>
+                                <td th:text="${order.getNotes()}"></td>
+                                <td th:text="${order.getNameReciver()}"></td>
+                                <td th:text="${order.getAddress()}"></td>
+                                <td th:text="${order.getPhone()}"></td>
+                                <td th:switch="${order.getStatus()}">
+                                    <span th:each="sta:${status}" th:case="${sta.getId()}" th:text="${sta.getStatus()}">Đơn đã đặt</span>
+                                </td>
+                                <td class="btn-active">
+                                    <a th:href="'/order-detail-manage?idod='+${order.getId()}" class="btn">Chi tiết</i></a>
+                                </td>
+                            </tr>
+
+                            </tbody>
+                        </table>
+                    </div>
                 </div>
             </div>
         </div>
-    </div>
-<section class="ftco-section" >
-    <div class="container">
-        <div class="row justify-content-center">
-            <div class="col-md-6 text-center mb-5">
-                <h3>Danh sách đơn hàng</h3>
-            </div>
-            <form>
-                <div class="inner-form d-flex float-end pb-3">
-                    <div class="input-field">
-                        <div class="input-select">
-                            <select data-trigger="" name="choices-single-defaul">
-                                <option>----Chọn danh mục----</option>
-                                <option value="id1">Danh mục 1</option>
-                                <option value="id2">Danh mục 2</option>
-                                <option value="id3">Danh mục 3</option>
-                                <option value="id4">Danh mục 4</option>
-                            </select>
-                        </div>
-                    </div>
-                    <div class="input-field ">
-                        <input id="search" type="text" placeholder="Nhập từ khóa"/>
-                    </div>
-                    <div class="input-field">
-                        <button class="btn-search btn btn-primary" type="button">Tìm kiếm</button>
-                    </div>
-                </div>
-            </form>
-        </div>
-        <div class="row">
-            <div class="col-md-12">
-                <div class="table-wrap">
-                    <table class="table table-responsive-xl table-hover">
-                        <thead>
-                        <tr>
-                            <th>IDHD</th>
-                            <th>Thời gian đặt</th>
-                            <th>IDKH</th>
-                            <th>Tổng tiền</th>
-                            <th>Ghi chú</th>
-                            <th>Người nhận</th>
-                            <th>Địa chỉ</th>
-                            <th>SDT</th>
-                            <th>Trạng thái</th>
-                            <th>Hành động</th>
-                        </tr>
-                        </thead>
-                        <tbody>
-                        <tr class="alert" role="alert">
-                            <td>HD0038</td>
-                            <td>00:00:12 20/08/2023</td>
-                            <td>KH01</td>
-                            <td>18.000.000</td>
-                            <td>Hàng dễ vỡ</td>
-                            <td>Nguyễn Thị Phương</td>
-                            <td>59 ngõ 577 Kim Mã, Ngọc Khách, Ba Đình, Hà Nội</td>
-                            <td>0123456789</td>
-                            <td>Chờ đóng gói</td>
-                            <td class="btn-active">
-                                <button type="button" class="btn" data-dismiss="update"
-                                        aria-label="Update" title=" Sửa">
-                                                    <span aria-hidden="true"><i
-                                                            class="fa-solid fa-pen-to-square"></i></span>
-                                </button>
-
-                                <button type="button" class="btn" data-dismiss="alert"
-                                        aria-label="Delete" title="Xóa">
-                                                    <span aria-hidden="true"><i
-                                                            class="fa-solid fa-trash-can"></i></span>
-                                </button>
-                                <button id="btnStart" type="button" class="btn" data-toggle="modal"
-                                        title="Chi tiết" data-target="#formModal"><span
-                                        aria-hidden="true"><i
-                                        class="fa-solid fa-circle-info"></i></span></button>
-
-                            </td>
-                        </tr>
-                        <tr class="alert" role="alert">
-                            <td>HD0038</td>
-                            <td>00:00:12 20/08/2023</td>
-                            <td>KH01</td>
-                            <td>18.000.000</td>
-                            <td>Hàng dễ vỡ</td>
-                            <td>Nguyễn Thị Phương</td>
-                            <td>59 ngõ 577 Kim Mã, Ngọc Khách, Ba Đình, Hà Nội</td>
-                            <td>0123456789</td>
-                            <td>Chờ đóng gói</td>
-                            <td class="btn-active">
-                                <button type="button" class="btn" data-dismiss="update"
-                                        aria-label="Update" title=" Sửa">
-                                                    <span aria-hidden="true"><i
-                                                            class="fa-solid fa-pen-to-square"></i></span>
-                                </button>
-                                <button type="button" class="btn" data-dismiss="alert"
-                                        aria-label="Delete" title="Xóa">
-                                                    <span aria-hidden="true"><i
-                                                            class="fa-solid fa-trash-can"></i></span>
-                                </button>
-                                <button id="btnStart" type="button" class="btn" data-toggle="modal"
-                                        title="Chi tiết" data-target="#formModal"><span
-                                        aria-hidden="true"><i
-                                        class="fa-solid fa-circle-info"></i></span></button>
-                            </td>
-                        </tr>
-
-                        </tbody>
-                    </table>
-                </div>
-            </div>
-        </div>
-    </div>
-</section>
-</div>
+    </section>
 </body>
 </html>
