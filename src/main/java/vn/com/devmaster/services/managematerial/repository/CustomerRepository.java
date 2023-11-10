@@ -9,7 +9,10 @@ import vn.com.devmaster.services.managematerial.untils.Sql;
 
 import java.util.List;
 
-public interface CustomerRepository extends JpaRepository<Customer,Integer> {
-    @Query(value = Sql.CUSTOMER_LOGIN,nativeQuery = true)
+public interface CustomerRepository extends JpaRepository<Customer, Integer> {
+    @Query(value = Sql.CUSTOMER_LOGIN, nativeQuery = true)
     Customer getCustomerByID(String user, String pass);
+
+    @Query(value = Sql.CUSTOMER_BY_USER_NAME, nativeQuery = true)
+    Customer getCustomerByUsername(String username);
 }

@@ -4,3 +4,9 @@ function isNumberKey(evt){
         return false;
     return true;
 }
+function validate() {
+    var x= document.getElementById("password").value;
+    var y= document.getElementById("repassword").value;
+    if(x==y) return true;
+    else alert("Mật khẩu không trùng nhau");
+}

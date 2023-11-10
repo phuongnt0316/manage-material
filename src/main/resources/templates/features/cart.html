@@ -48,7 +48,6 @@
                                             <h6 class="mb-0 text-muted" th:text="${total}+' sản phẩm'"></h6>
                                         </div>
                                         <hr class="my-4">
-
                                         <div class="row mb-4 d-flex justify-content-between align-items-center"
                                              th:each="cart:${carts}">
                                             <div class="col-md-2 col-lg-2 col-xl-2">
@@ -57,7 +56,7 @@
                                                         class="img-fluid rounded-3" alt="">
                                             </div>
                                             <div class="col-md-3 col-lg-3 col-xl-3">
-                                                <h6 class="text-muted" th:text="${cart.getIdProduct()}">Shirt - Tên loại sp</h6>
+                                                <h6 class="text-muted" th:text="${cart.getIdProduct()}" name="id-product"></h6>
                                                 <h6 class="text-black mb-0" th:text="${cart.getName()}"></h6>
                                             </div>
                                             <div class=" d-flex col-lg-3  col-md-3 ">
@@ -66,7 +65,7 @@
                                                     <i class="fas fa-minus"></i>
                                                 </button>
 
-                                                <input id="form1" min="0" name="quantity" type="number"
+                                                <input id="quantity" min="0" name="quantity" type="number"
                                                        th:value="${cart.getQuantity()}"
                                                        class="form-control form-control-sm"/>
 
@@ -80,10 +79,10 @@
                                             </div>
 
                                             <div class="col-md-1 col-lg-1 col-xl-1 text-end">
+                                                <a name="update-taga" class="text-danger"><i class="fa-solid fa-square-check"></i></a>
                                                 <a th:href="${(check==1)?'/deleteCart?delete='+cart.getIdProduct()+'&&idcustomer='+customer.getId():'deleteCart1?idpr='+cart.getIdProduct()}" class="text-danger"><i class="fas fa-trash fa-lg"></i></a>
                                             </div>
                                         </div>
-
                                         <hr class="my-4">
 
 

@@ -184,9 +184,9 @@
                         </div>
                         <div class="icon-box-content">
                             <h3 class="card-title text-uppercase text-dark">
-                                Miễn phí vận chuyển
+                                Vận chuyển an toàn
                             </h3>
-                            <p>Miễn phí vận chuyển cho tất cả các đơn hàng</p>
+                            <p>Đảm bảo vận chuyển an toàn, nhanh chóng</p>
                         </div>
                     </div>
                 </div>
@@ -251,7 +251,7 @@
                     <div class="col-lg-4 col-md-6 p-3" th:each="product:${products}">
                         <div class="product-card pe-3 pb-3">
                             <div class="image-holder">
-                                <img th:src="${product.getImage()}" alt="product-item" class="img-fluid ">
+                                <img th:src="${product.getImage()}" alt="product-item" class="img-fluid item-product">
                             </div>
                             <div class="card-detail justify-content-between pb-3">
                                 <p class="card-title text-uppercase">
@@ -261,8 +261,14 @@
                                     <span th:text="${product.getDescription()}"></span>
                                 </p>
                                 <p class="item-price" th:text="${#numbers.formatDecimal(product.getPrice(),3,'DEFAULT', 0, 'DEFAULT')}+' VNĐ'"></p>
+                                <div th:remove="${product.getQuantity()==0}?none:all">
+
+                                    <a href="#" class="btn btn-warning">Tạm hết hàng</a>
+                                </div>
+                                <div th:remove="${product.getQuantity()==0}?all:none">
                                 <a th:href="${(check==0)?'/add-cart?idpr='+product.getId():'/cart?idpr='+product.getId()}" class="btn btn-primary"><i class="fa-solid fa-cart-plus"></i></a>
                                 <a th:href="'/buyProduct?idpr='+${product.getId()}" class="btn btn-danger">Mua ngay</a>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -279,13 +285,13 @@
                         <a href="shop.html" class="btn btn-goShop text-uppercase">Xem cửa hàng</a>
                     </div>
                 </div>
-                <div class="swiper-wrapper regular slider" >
-                    <div class="col-lg-4 col-md-6 p-1" th:each="product:${products}">
+                <div class="swiper-wrapper regular slider">
+                    <div class="col-lg-4 col-md-6 p-3" th:each="product:${products}">
                         <div class="product-card pe-3 pb-3">
                             <div class="image-holder">
-                                <img th:src="${product.getImage()}" alt="product-item" class="img-fluid ">
+                                <img th:src="${product.getImage()}" alt="product-item" class="img-fluid item-product">
                             </div>
-                            <div class="card-detail pb-3">
+                            <div class="card-detail justify-content-between pb-3">
                                 <p class="card-title text-uppercase">
                                     <a th:href="'/product-detail?idpr='+${product.getId()}" th:text="${product.getName()}"></a>
                                 </p>
@@ -293,8 +299,14 @@
                                     <span th:text="${product.getDescription()}"></span>
                                 </p>
                                 <p class="item-price" th:text="${#numbers.formatDecimal(product.getPrice(),3,'DEFAULT', 0, 'DEFAULT')}+' VNĐ'"></p>
-                                <a th:href="${(check==0)?'/add-cart?idpr='+product.getId():'/cart?idpr='+product.getId()}" class="btn btn-primary"><i class="fa-solid fa-cart-plus"></i></a>
-                                <a th:href="'/buyProduct?idpr='+${product.getId()}" class="btn btn-danger">Mua ngay</a>
+                                <div th:remove="${product.getQuantity()==0}?none:all">
+
+                                    <a href="#" class="btn btn-warning">Tạm hết hàng</a>
+                                </div>
+                                <div th:remove="${product.getQuantity()==0}?all:none">
+                                    <a th:href="${(check==0)?'/add-cart?idpr='+product.getId():'/cart?idpr='+product.getId()}" class="btn btn-primary"><i class="fa-solid fa-cart-plus"></i></a>
+                                    <a th:href="'/buyProduct?idpr='+${product.getId()}" class="btn btn-danger">Mua ngay</a>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -587,6 +599,7 @@
 <script type="text/javascript" src="//code.jquery.com/jquery-migrate-1.2.1.min.js"></script>
 <script th:src="@{js/slick.js}" type="text/javascript" charset="utf-8"></script>
 <script th:src="@{js/limit-word.js}" type="text/javascript" charset="utf-8"></script>
+<script th:src="@{js/detail-product.js}" type="text/javascript" charset="utf-8"></script>
 </body>
 
 </html>

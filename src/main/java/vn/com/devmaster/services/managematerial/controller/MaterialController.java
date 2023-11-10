@@ -1,27 +1,35 @@
 package vn.com.devmaster.services.managematerial.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import vn.com.devmaster.services.managematerial.domain.*;
 import vn.com.devmaster.services.managematerial.projection.IViewProduct;
 import vn.com.devmaster.services.managematerial.service.MaterialService;
+import vn.com.devmaster.services.managematerial.vnpay.VNPayService;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
-import java.util.*;
+import java.util.List;
 
 @Controller
 
 public class MaterialController implements IMaterialControll {
     @Autowired
     private MaterialService materialService;
-
+    @Autowired
+    private VNPayService vnPayService;
 
     @GetMapping("/login")
-    public String showLogin() {
+    public String showLogin(Model model) {
+        model.addAttribute("customer", new Customer());
         return "layout/login";
     }
 
@@ -31,7 +39,6 @@ public class MaterialController implements IMaterialControll {
         model.addAttribute("products", materialService.getProduct());
         return "layout/index";
     }
-
     private void setDesignMenu(HttpSession session, Model model) {
 
         if (session.getAttribute("customer") != null) {
@@ -42,24 +49,38 @@ public class MaterialController implements IMaterialControll {
             model.addAttribute("design", MENU_CUSTOMER);
         }
     }
-
     @GetMapping(path = {"/shop"})
-    public String getProductByCategory(Model model, HttpSession session, @RequestParam(required = false, name = "idcate") String idcate, @RequestParam(required = false, name = "sort") String sort, @RequestParam(required = false, name = "txtSearch") String search) {
-        List<Product> products = materialService.getProduct();
+    public String getProductByCategory(Model model,
+                                       HttpSession session,
+                                       @RequestParam(required = false, name = "idcate") String idcate,
+                                       @RequestParam(required = false, name = "sort") String sort,
+                                       @RequestParam(required = false, name = "key") String keyword,
+                                       @RequestParam(name = "pageNo", defaultValue = "1") Integer pageNo) {
+//        List<Product> products = materialService.getProduct();
+//        model.addAttribute("categories", materialService.getAllCategory());
+//        if (idcate != null) {
+//            products = materialService.getProductByCategory(idcate);
+//        }
+        Page<Product> products = materialService.getProduct(pageNo);
+        if (keyword != null) {
+            products = materialService.searchProductbyUser(keyword.toUpperCase(), pageNo);
+            model.addAttribute("keyword", keyword);
+        }
+        model.addAttribute("size", products.getSize());
         model.addAttribute("categories", materialService.getAllCategory());
-        if (idcate != null) {
-            products = materialService.getProductByCategory(idcate);
-        }
-        if (sort != null) {
-            Collections.sort(products, (a, b) -> {
-                int rs = (int) (a.getPrice() - b.getPrice());
-                if (sort.equals("ASC")) {
-                    return rs > 0 ? rs : (-rs);
-                } else {
-                    return rs > 0 ? (-rs) : rs;
-                }
-            });
-        }
+        model.addAttribute("products", products);
+        model.addAttribute("totalPage", products.getTotalPages());
+        model.addAttribute("curentpage", pageNo);
+//        if (sort != null) {
+//            Collections.sort(products, (a, b) -> {
+//                int rs = (int) (a.getPrice() - b.getPrice());
+//                if (sort.equals("ASC")) {
+//                    return rs > 0 ? rs : (-rs);
+//                } else {
+//                    return rs > 0 ? (-rs) : rs;
+//                }
+//            });
+//        }
         setDesignMenu(session, model);
         model.addAttribute("products", products);
         return "features/shop";
@@ -69,6 +90,7 @@ public class MaterialController implements IMaterialControll {
     public String getProductByID(@RequestParam("idpr") Integer idpr, Model model, HttpSession session) {
         setDesignMenu(session, model);
         model.addAttribute("product", materialService.getProductByID(idpr));
+        model.addAttribute("images",materialService.getImageProduct(idpr));
         return "features/product-detail";
     }
 
@@ -93,8 +115,6 @@ public class MaterialController implements IMaterialControll {
         session.setAttribute("carts", carts);
         return "redirect:/view-cart1";
     }
-
-
     @GetMapping("/deleteCart")
     public String deleteCart(@RequestParam("delete") Integer delete_idpr, @RequestParam("idcustomer") Integer idcustomer) {
         materialService.deleteProductCarts(delete_idpr, idcustomer);
@@ -113,7 +133,7 @@ public class MaterialController implements IMaterialControll {
         if (carts.size() != 0) {
 
             idtransport = idtransport == null ? 1 : idtransport;
-            int ship = materialService.getShipMoney(idtransport, carts.size());
+            int ship = materialService.getShipMoney(idtransport, materialService.getTotalProduct(carts));
             model.addAttribute("idtransport", idtransport);
 
             Double totalMoney = materialService.getTotalMoney(carts) + ship;
@@ -122,14 +142,13 @@ public class MaterialController implements IMaterialControll {
             model.addAttribute("totalCart", materialService.getTotalMoney(carts));
             model.addAttribute("totalmoney", totalMoney);
             model.addAttribute("transports", materialService.getTransport());
-            model.addAttribute("total", carts.size());
+            model.addAttribute("total", materialService.getTotalProduct(carts));
 
         } else {
             model.addAttribute("emptycart", "<p>Giỏ hàng trống</p>");
         }
         return "features/cart";
     }
-
     @GetMapping("/view-cart1")
     public String showCart1(Model model,
                             HttpSession session,
@@ -140,7 +159,7 @@ public class MaterialController implements IMaterialControll {
             model.addAttribute("emptycart", "<p>Giỏ hàng trống</p>");
         } else {
             idtransport = idtransport == null ? 1 : idtransport;
-            int ship = materialService.getShipMoney(idtransport, carts.size());
+            int ship = materialService.getShipMoney(idtransport, materialService.getTotalProduct1(carts));
             model.addAttribute("idtransport", idtransport);
             List<ViewCart> viewCarts = materialService.toViewCart(carts);
             Double totalMoney = materialService.getTotal(viewCarts) + ship;
@@ -149,21 +168,45 @@ public class MaterialController implements IMaterialControll {
             model.addAttribute("totalCart", materialService.getTotal(viewCarts));
             model.addAttribute("totalmoney", totalMoney);
             model.addAttribute("transports", materialService.getTransport());
-            model.addAttribute("total", viewCarts.size());
+            model.addAttribute("total", materialService.getTotalProduct1(carts));
         }
         return "features/cart";
-
+    }
+    @GetMapping("/updateCart")
+    public String updateCart(@RequestParam("idproduct") Integer idproduct,
+                             @RequestParam("quantity")Integer quantity,
+                             HttpSession session){
+        if(session.getAttribute("customer")!=null){
+            Customer customer= (Customer) session.getAttribute("customer");
+            materialService.updateQuantityCart(customer.getId(),idproduct,quantity);
+            return "redirect:/view-cart";
+        }
+        else {
+            List<Cart> carts= (List<Cart>) session.getAttribute("carts");
+            materialService.updateQuantityCart(carts,idproduct,quantity);
+            return "redirect:/view-cart1";
+        }
     }
 
     @PostMapping("/login-action")
     public String Login(Model model, HttpSession session, @RequestParam(name = "txtEmail") String email, @RequestParam(name = "txtPassword") String password) {
         Customer customer = materialService.getCustomerByID(email, password);
         if (customer != null) {
-            CustomUser userDetail = new CustomUser(customer.getUsername(), customer.getPassword(), "USER");
-            UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(userDetail, null, userDetail.getAuthorities());
-            SecurityContextHolder.getContext().setAuthentication(authenticationToken);
-            session.setAttribute("customer", customer);
-            return "redirect:/ministore";
+            CustomUser userDetail;
+            String url="redirect:/ministore";
+
+            if(customer.getId()==9){
+                 userDetail = new CustomUser(customer.getUsername(), customer.getPassword(), "ADMIN");
+                url="redirect:/product-manage";
+            }
+            else {
+              userDetail = new CustomUser(customer.getUsername(), customer.getPassword(), "USER");
+            }
+                UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(userDetail, null, userDetail.getAuthorities());
+                SecurityContextHolder.getContext().setAuthentication(authenticationToken);
+                session.setAttribute("customer", customer);
+                return url;
+
         } else {
             model.addAttribute("login", "<script>\n" +
                     "    alert('Sai tên đăng nhập hoặc mật khẩu!');\n" +
@@ -173,10 +216,10 @@ public class MaterialController implements IMaterialControll {
     }
 
     @GetMapping("/logout")
-    public String logout() {
-        return null;
+    public String logout(HttpSession session) {
+        session.removeAttribute("customer");
+        return "redirect:/login";
     }
-
     @GetMapping("/checkout")
     public String checkOut(Model model, HttpSession session, @RequestParam("transport") Integer idtransport) {
         if (session.getAttribute("customer") != null) {
@@ -184,21 +227,21 @@ public class MaterialController implements IMaterialControll {
             Integer idcustomer = customer.getId();
 
             List<IViewProduct> carts = materialService.getCartByIdCustomer(idcustomer);
-            int ship = materialService.getShipMoney(idtransport, carts.size());
+            int ship = materialService.getShipMoney(idtransport, materialService.getTotalProduct(carts));
             model.addAttribute("carts", carts);
             model.addAttribute("totalCart", materialService.getTotalMoney(carts));
             model.addAttribute("totalmoney", materialService.getTotalMoney(carts) + ship);
-            model.addAttribute("total", carts.size());
+            model.addAttribute("total", materialService.getTotalProduct(carts));
             model.addAttribute("ship", ship);
         } else {
             List<Cart> carts = (List<Cart>) session.getAttribute("carts");
             List<ViewCart> viewCarts = materialService.toViewCart(carts);
-            int ship = materialService.getShipMoney(idtransport, carts.size());
+            int ship = materialService.getShipMoney(idtransport, materialService.getTotalProduct1(carts));
             model.addAttribute("carts", viewCarts);
             model.addAttribute("totalCart", materialService.getTotal(viewCarts));
             model.addAttribute("totalmoney", materialService.getTotal(viewCarts) + ship);
-            model.addAttribute("total", viewCarts.size());
-            model.addAttribute("ship", materialService.getShipMoney(idtransport, carts.size()));
+            model.addAttribute("total", materialService.getTotalProduct1(carts));
+            model.addAttribute("ship", materialService.getShipMoney(idtransport, materialService.getTotalProduct1(carts)));
         }
         model.addAttribute("transport", materialService.getTransportByID(idtransport));
         model.addAttribute("payments", materialService.getPayment());
@@ -206,6 +249,14 @@ public class MaterialController implements IMaterialControll {
         return ("features/checkout");
     }
 
+//    @GetMapping("/submitOrder")
+//    public String submidOrder(@RequestParam("amount") int orderTotal,
+//                              @RequestParam("orderInfo") String orderInfo,
+//                              HttpServletRequest request){
+//        String baseUrl = request.getScheme() + "://" + request.getServerName() + ":" + request.getServerPort();
+//        String vnpayUrl = vnPayService.createOrder(orderTotal, orderInfo, baseUrl);
+//        return "redirect:" + vnpayUrl;
+//    }
     @PostMapping("/order")
     public String Order(
             HttpSession session,
@@ -214,7 +265,9 @@ public class MaterialController implements IMaterialControll {
             @RequestParam("address1") String address1,
             @RequestParam("detail-address") String detailadd,
             @RequestParam(name = "note", required = false) String note,
-            @RequestParam("listGroupRadios") Integer idpayment) {
+            @RequestParam("listGroupRadios") Integer idpayment,
+            HttpServletRequest request) {
+
         Integer idtransport = (Integer) session.getAttribute("idtransport");
         session.removeAttribute("idtransport");
         Integer idcustomer = 0;
@@ -226,66 +279,49 @@ public class MaterialController implements IMaterialControll {
         List<Cart> carts = session.getAttribute("customer") == null ? (List<Cart>) session.getAttribute("carts"):materialService.getCartByCustomer(idcustomer);
         int ship = materialService.getShipMoney(idtransport, carts.size());
         Double total = materialService.getTotal(materialService.toViewCart(carts));
-        Double totalMoney = ship + total;
-        Order order = materialService.save(idcustomer, fname, detailadd, address1, note, phone, totalMoney);//insert orders
-
+        int totalMoney = (int) (ship + total);
+        Order order = materialService.save(idcustomer, fname, detailadd, address1, note, phone, Double.valueOf(totalMoney));//insert orders
+        String orderInfo="Thanh toan: "+order.getId();
         if (session.getAttribute("customer") != null) {
-
-//            for (IOrderDetailDTO iorder : detailDtoList) {
-//                OrdersDetail ordersDetail = OrdersDetail
-//                        .builder()
-//                        .idord(order.getId())
-//                        .idproduct(iorder.getIdproduct())
-//                        .price(iorder.getPrice())
-//                        .qty(iorder.getQuantity())
-//                        .build();
-//                ordersDetails.add(ordersDetail);
-//            }
-
             materialService.saveAll(idcustomer, order); //insert orders detail
-
-//            for (IOrderDetailDTO detail : detailDtoList) {
-//                materialService.updateQuantityProduct(detail.getIdproduct(), (-detail.getQuantity())); //update quantity after buy product
-//            }
         } else {
-//            List<ViewCart> viewCarts = materialService.toViewCart(carts);
-//            for (ViewCart viewCart : viewCarts) {
-//                OrdersDetail ordersDetail = OrdersDetail
-//                        .builder()
-//                        .idord(order.getId())
-//                        .idproduct(viewCart.getIdProduct())
-//                        .price(viewCart.getPrice())
-//                        .qty(viewCart.getQuantity())
-//                        .build();
-//                ordersDetails.add(ordersDetail);
-//            }
             materialService.saveOrderDetail(carts, order); //insert orders detail
             session.removeAttribute("carts");
-//            for (Cart cart : carts) {
-//                materialService.updateQuantityProduct(cart.getIdProduct(), (-cart.getQuantity())); //update quantity after buy product
-//            }
         }
 
-//        OrdersPayment ordersPayment = OrdersPayment
-//                .builder()
-//                .idord(order.getId())
-//                .idpayment(idpayment)
-//                .build();
-        materialService.saveOrderPayment(idpayment, order); //insert orders_payment
-//        OrdersTransport ordersTransport = OrdersTransport
-//                .builder()
-//                .idord(order.getId())
-//                .idtransport(idtransport)
-//                .total(ship)
-//                .build();
+
         materialService.saveTransport(idtransport, ship, order);//insert orders_transport
-        if (session.getAttribute("customer") != null) {
-//            materialService.BuyCarts(ordersDetails, idcustomer);//set cart done
-//        } else {
-//            session.removeAttribute("carts");//delete carts
-            return "redirect:/view-cart1";
+//        materialService.saveOrderPayment(idpayment, order); //insert orders_payment
+//        if (session.getAttribute("customer") != null) {
+//            return "redirect:/view-cart1";
+//        }
+//        return "redirect:/view-cart";
+        OrdersPayment ordersPayment=OrdersPayment.builder().idpayment(idpayment).idord(order.getId()).total(totalMoney).build();
+        String baseUrl = request.getScheme() + "://" + request.getServerName() + ":" + request.getServerPort();
+        String vnpayUrl = vnPayService.createOrder(totalMoney, orderInfo, baseUrl);
+        session.setAttribute("orderpayment",ordersPayment);
+        return "redirect:" + vnpayUrl;
+    }
+    @GetMapping("/vnpay-payment")
+    public String GetMapping(HttpServletRequest request,
+                             Model model,HttpSession session){
+        int paymentStatus =vnPayService.orderReturn(request);
+        OrdersPayment ordersPayment= (OrdersPayment) session.getAttribute("orderpayment");
+        String orderInfo = request.getParameter("vnp_OrderInfo");
+        String paymentTime = request.getParameter("vnp_PayDate");
+        String transactionId = request.getParameter("vnp_TransactionNo");
+        String totalPrice = request.getParameter("vnp_Amount");
+        model.addAttribute("orderId", orderInfo);
+        model.addAttribute("totalPrice", totalPrice);
+        model.addAttribute("paymentTime", paymentTime);
+        model.addAttribute("transactionId", transactionId);
+        if(paymentStatus==1){
+            materialService.saveOrderPayment(ordersPayment);
+            //update trang thái
+            return "redirect:/ministore";
+
         }
-        return "redirect:/view-cart";
+        else return "orderfail";
     }
 
     @GetMapping("/order-history")
@@ -306,6 +342,17 @@ public class MaterialController implements IMaterialControll {
         model.addAttribute("total", materialService.getToTal(materialService.getOrderDetailByID(id)));
         return "features/order-detail";
 
+    }
+    @PostMapping("singin")
+    public String singin(@ModelAttribute("customer") Customer customer,Model model){
+        if(materialService.checkUserName(customer.getUsername())){
+            materialService.saveCustomer(customer);
+        }else {
+            model.addAttribute("singin", "<script>\n" +
+                    "    alert('Tên người dùng đã tồn tại!');\n" +
+                    "  </script>");
+        }
+        return "layout/login";
     }
 
 

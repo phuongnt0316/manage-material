@@ -7,74 +7,87 @@
     <title>Orders-Manage</title>
 </head>
 <body>
-    <section class="ftco-section" layout:fragment="content">
-        <div class="container">
-            <div class="row justify-content-center">
-                <div class="col-md-6 text-center mb-5">
-                    <h3 th:text="${customer==null?'Danh sách đơn hàng':'Danh sách đơn hàng #'+customer.getId() +'-'+customer.getName()}"></h3>
-                </div>
-                <form>
-                    <div class="inner-form d-flex float-end pb-3">
-                        <div class="input-field">
-                            <div class="input-select">
-                                <select data-trigger="" name="choices-single-defaul">
-                                    <option>----Chọn danh mục----</option>
-                                    <option value="id1">Danh mục 1</option>
-                                    <option value="id2">Danh mục 2</option>
-                                    <option value="id3">Danh mục 3</option>
-                                    <option value="id4">Danh mục 4</option>
-                                </select>
-                            </div>
-                        </div>
-                        <div class="input-field ">
-                            <input id="search" type="text" placeholder="Nhập từ khóa"/>
-                        </div>
-                        <div class="input-field">
-                            <button class="btn-search btn btn-primary" type="button">Tìm kiếm</button>
-                        </div>
-                    </div>
-                </form>
+<section class="ftco-section" layout:fragment="content">
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-md-6 text-center mb-5">
+                <h3 th:text="${customer==null?'Danh sách đơn hàng':'Danh sách đơn hàng #'+customer.getId() +'-'+customer.getName()}"></h3>
             </div>
-            <div class="row">
-                <div class="col-md-12">
-                    <div class="table-wrap">
-                        <table class="table table-responsive-xl table-hover">
-                            <thead>
-                            <tr>
-                                <th>IDHD</th>
-                                <th>Thời gian đặt</th>
-                                <th>Tổng tiền</th>
-                                <th>Ghi chú</th>
-                                <th>Người nhận</th>
-                                <th>Địa chỉ</th>
-                                <th>SDT</th>
-                                <th>Trạng thái</th>
-                                <th>Tùy chọn</th>
-                            </tr>
-                            </thead>
-                            <tbody>
-                            <tr th:each="order:${orders}">
-                                <td th:text="${order.getIdorders()}"></td>
-                                <td th:text="${#dates.format(order.getOrdersDate(), 'dd-MM-yyyy HH:mm:ss')}"></td>
-                                <td th:text="${#numbers.formatDecimal(order.getTotalMoney(),3,'DEFAULT', 0, 'DEFAULT')}"></td>
-                                <td th:text="${order.getNotes()}"></td>
-                                <td th:text="${order.getNameReciver()}"></td>
-                                <td th:text="${order.getAddress()}"></td>
-                                <td th:text="${order.getPhone()}"></td>
-                                <td th:switch="${order.getStatus()}">
-                                    <span th:each="sta:${status}" th:case="${sta.getId()}" th:text="${sta.getStatus()}">Đơn đã đặt</span>
-                                </td>
-                                <td class="btn-active">
-                                    <a th:href="'/order-detail-manage?idod='+${order.getId()}" class="btn">Chi tiết</i></a>
-                                </td>
-                            </tr>
-
-                            </tbody>
-                        </table>
+            <form>
+                <div class="inner-form d-flex float-end pb-3">
+                    <div class="input-field">
+                        <div class="input-select">
+                            <select data-trigger="" name="choices-single-defaul"
+                                    th:onchange="'window.location.href = \'/orders-manage?idstatus=\' + this.value '">
+                                <option>----Chọn danh mục----</option>
+                                <option th:each="sta:${status}" th:value="${sta.getId()}" th:text="${sta.getStatus()}"
+                                        th:selected="${sta.getId()==idstatus}"></option>
+                            </select>
+                        </div>
                     </div>
+                    <div class="input-field ">
+                        <input id="search" type="text" placeholder="Nhập từ khóa"/>
+                    </div>
+                    <div class="input-field">
+                        <button class="btn-search btn btn-primary" type="button">Tìm kiếm</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+        <div class="row">
+            <div class="col-md-12">
+                <div class="table-wrap">
+                    <table class="table table-responsive-xl table-hover">
+                        <thead>
+                        <tr>
+                            <th>IDHD</th>
+                            <th>Thời gian đặt</th>
+                            <th>Tổng tiền</th>
+                            <th>Ghi chú</th>
+                            <th>Người nhận</th>
+                            <th>Địa chỉ</th>
+                            <th>SDT</th>
+                            <th>Trạng thái</th>
+                            <th>Tùy chọn</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr th:each="order:${orders}">
+                            <td th:text="${order.getIdorders()}"></td>
+                            <td th:text="${#dates.format(order.getOrdersDate(), 'dd-MM-yyyy HH:mm:ss')}"></td>
+                            <td th:text="${#numbers.formatDecimal(order.getTotalMoney(),3,'DEFAULT', 0, 'DEFAULT')}"></td>
+                            <td th:text="${order.getNotes()}"></td>
+                            <td th:text="${order.getNameReciver()}"></td>
+                            <td th:text="${order.getAddress()}"></td>
+                            <td th:text="${order.getPhone()}"></td>
+                            <td th:switch="${order.getStatus()}">
+                                <span th:each="sta:${status}" th:case="${sta.getId()}" th:text="${sta.getStatus()}">Đơn đã đặt</span>
+                            </td>
+                            <td class="btn-active">
+                                <a th:href="'/order-detail-manage?idod='+${order.getId()}" class="btn">Chi tiết</i></a>
+                            </td>
+                        </tr>
+
+                        </tbody>
+                    </table>
+<!--                    <ul class="pagination pagination-sm d-flex">-->
+<!--                        <li th:if="${curentpage>1}"><a-->
+<!--                                th:href="@{${keyword!=null&&keyword!=''?'?key='+keyword+'&':'?'}+'?pageNo='+${curentpage-1}}">&laquo;</a>-->
+<!--                        </li>-->
+<!--                        <li th:each="i:${#numbers.sequence(1,totalPage)}">-->
+<!--                            <a th:class="${curentpage==i?'active':''}"-->
+<!--                               th:href="@{${keyword!=null&&keyword!=''?'?key='+keyword+'&':'?'}+'pageNo='+${i}}"-->
+<!--                               th:text="${i}"> </a>-->
+<!--                        </li>-->
+<!--                        <li th:if="${curentpage<totalPage}"><a-->
+<!--                                th:href="@{${keyword!=null&&keyword!=''?'?key='+keyword+'&':'?'}+'pageNo='+${curentpage+1}}">-->
+<!--                            &raquo;</a>-->
+<!--                        </li>-->
+<!--                    </ul>-->
                 </div>
             </div>
         </div>
-    </section>
+    </div>
+</section>
 </body>
 </html>

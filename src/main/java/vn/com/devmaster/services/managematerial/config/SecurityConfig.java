@@ -23,7 +23,7 @@ public class SecurityConfig {
                         http.csrf().disable()).authorizeHttpRequests()
                         .antMatchers("/admin"))
                         .hasAuthority("ADMIN")
-                        .antMatchers(new String[]{"/order-history"}))
+                        .antMatchers(new String[]{"/product-manage"}))
                 .hasAnyAuthority("ADMIN", "USER")
                 .antMatchers(new String[]{"/**"}))
                 .permitAll().and()).formLogin()

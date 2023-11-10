@@ -87,8 +87,8 @@
                         </label>
                         <div class="col-sm-6">
                             <select name="product-active" id="product-active" class="form-control">
-                                <option value="0">Tắt</option>
-                                <option value="1">Bật</option>
+                                <option value="0" th:selected="${product.getIsactive()==0}">Tắt</option>
+                                <option value="1" th:selected="${product.getIsactive()==1}">Bật</option>
                             </select>
                         </div>
                     </div>

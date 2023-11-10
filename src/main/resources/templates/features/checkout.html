@@ -64,8 +64,8 @@
           <div class="col-lg-6">
             <div class="your-order">
               <h2 class="display-7 text-uppercase text-dark pb-4">Chi tiết thanh toán</h2>
-              <div class="total-price">
-                <table cellspacing="0" class="table table-responsive-sm">
+              <div class="total-price table-responsive">
+                <table cellspacing="0" class="table">
                   <tbody>
                   <tr>
                     <td width="250px">Tên</td>
@@ -95,7 +95,7 @@
                     <td data-title="Subtotal">
                             <span class="price-amount amount text-primary ps-5">
                               <bdi>
-                                <span class="price-currency-symbol" th:text="${#numbers.formatDecimal(totalmoney,3,'DEFAULT', 0, 'DEFAULT')}"></span> </bdi>
+                                <span class="price-currency-symbol" th:text="${#numbers.formatDecimal(totalCart,3,'DEFAULT', 0, 'DEFAULT')}"></span> </bdi>
                             </span>
                     </td>
                   </tr>
@@ -105,7 +105,7 @@
                     <td data-title="Subtotal">
                             <span class="price-amount amount text-primary ps-5">
                               <bdi>
-                                <span class="price-currency-symbol" th:text="${#numbers.formatDecimal(totalmoney,3,'DEFAULT', 0, 'DEFAULT')}"></span> </bdi>
+                                <span class="price-currency-symbol" th:text="${#numbers.formatDecimal(ship,3,'DEFAULT', 0, 'DEFAULT')}"></span> </bdi>
                             </span>
                     </td>
                   </tr>
@@ -115,7 +115,7 @@
                     <td data-title="Total">
                             <span class="price-amount amount text-primary ps-5">
                               <bdi>
-                                <span class="price-currency-symbol"></span>Tổng tiền(+ship) </bdi>
+                                <span class="price-currency-symbol" th:text="${#numbers.formatDecimal(totalmoney,3,'DEFAULT', 0, 'DEFAULT')}"></span></bdi>
                             </span>
                     </td>
                   </tr>

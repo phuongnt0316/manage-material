@@ -16,14 +16,14 @@
     <div class="front">
       <img src="images/anh.jpg" alt="">
       <div class="text">
-        <span class="text-1">Chào mừng đến MiniStore</span>
+        <span class="text-1">Chào mừng đến <a href="/ministore">MiniStore</a></span>
         <span class="text-2">Chúng tôi sẽ đem đến dịch vụ tốt nhất đến cho bạn</span>
       </div>
     </div>
     <div class="back">
       <img class="backImg" src="images/anh.jpg" alt="">
       <div class="text">
-        <span class="text-1">Chào mừng đến MiniStore</span>
+        <span class="text-1">Chào mừng đến <a href="/ministore">MiniStore</a></span>
         <span class="text-2">Chúng tôi sẽ đem đến dịch vụ tốt nhất đến cho bạn</span>
       </div>
     </div>
@@ -53,33 +53,36 @@
       </div>
       <div class="signup-form">
         <div class="title">Đăng ký</div>
-        <form action="/singin">
+        <form th:action="@{/singin}" th:object="${customer}" method="post">
           <div class="input-boxes">
             <div class="input-box">
               <i class="fas fa-user"></i>
-              <input type="text" placeholder="Nhập họ tên" required>
+              <input type="text" placeholder="Nhập họ tên" required th:field="${customer.name}">
             </div>
             <div class="input-box">
               <i class="fas fa-envelope"></i>
-              <input type="text" placeholder="Nhập email" required>
+              <input type="text"  placeholder="Nhập username" required th:field="${customer.username}">
             </div>
             <div class="input-box">
               <i class="fas fa-lock"></i>
-              <input type="password" placeholder="Nhập mật khẩu" required>
+              <input type="password" id="password" name="password"  placeholder="Nhập mật khẩu" required th:field="${customer.password}">
             </div>
             <div class="input-box">
               <i class="fas fa-lock"></i>
-              <input type="password" placeholder="Nhập lại mật khẩu" required>
+              <input type="password" id="repassword" placeholder="Nhập lại mật khẩu" required onblur = "validate()">
             </div>
             <div class="button input-box">
               <input type="submit" value="Đăng ký">
             </div>
             <div class="text sign-up-text">Bạn đã có tài khoản? <label for="flip">Đăng nhập ngay</label></div>
+            <div th:remove="tag" th:utext="${singin}"></div>
           </div>
         </form>
       </div>
     </div>
   </div>
 </div>
+
+<script th:src="@{js/validate.js}" type="text/javascript" charset="utf-8"></script>
 </body>
 </html>

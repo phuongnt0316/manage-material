@@ -31,22 +31,22 @@
                 <main class="col-md-9">
                     <div class="filter-shop d-flex justify-content-between">
                         <div class="showing-product">
-                            <p>Hiển thị 9 trong 55 kết quả</p>
+                            <p>Hiển thị 9 </p>
                         </div>
-                        <div class="sort-by">
-                            <select id="input-sort" class="form-control" data-filter-sort="" data-filter-order="">
-                                <option value="">Mặc định</option>
-                                <option value="ASC">Giá (Thấp-Cao)</option>
-                                <option value="DESC">Giá (Cao-Thấp)</option>
+<!--                        <div class="sort-by">-->
+<!--                            <select id="input-sort" class="form-control" data-filter-sort="" data-filter-order="">-->
+<!--                                <option value="">Mặc định</option>-->
+<!--                                <option value="ASC">Giá (Thấp-Cao)</option>-->
+<!--                                <option value="DESC">Giá (Cao-Thấp)</option>-->
 
-                            </select>
-                        </div>
+<!--                            </select>-->
+<!--                        </div>-->
                     </div>
                     <div class="product-content product-store d-flex justify-content-between flex-wrap">
                         <div class="col-lg-4 col-md-6 p-3" th:each="product:${products}">
                             <div class="product-card pe-3 pb-3">
                                 <div class="image-holder">
-                                    <img th:src="${product.getImage()}" alt="product-item" class="img-fluid ">
+                                    <img th:src="${product.getImage()}" alt="product-item" class="img-fluid item-product">
                                 </div>
                                 <div class="card-detail justify-content-between pb-3">
                                     <p class="card-title text-uppercase">
@@ -56,30 +56,33 @@
                                         <span th:text="${product.getDescription()}"></span>
                                     </p>
                                     <p class="item-price" th:text="${#numbers.formatDecimal(product.getPrice(),3,'DEFAULT', 0, 'DEFAULT')}+' VNĐ'"></p>
-                                    <a th:href="${(check==0)?'/add-cart?idpr='+product.getId():'/cart?idpr='+product.getId()}" class="btn btn-primary"><i class="fa-solid fa-cart-plus"></i></a>
-                                    <a th:href="'/buyProduct?idpr='+${product.getId()}" class="btn btn-danger">Mua ngay</a>
+                                    <div th:remove="${product.getQuantity()==0}?none:all">
+
+                                        <a href="#" class="btn btn-warning">Tạm hết hàng</a>
+                                    </div>
+                                    <div th:remove="${product.getQuantity()==0}?all:none">
+                                        <a th:href="${(check==0)?'/add-cart?idpr='+product.getId():'/cart?idpr='+product.getId()}" class="btn btn-primary"><i class="fa-solid fa-cart-plus"></i></a>
+                                        <a th:href="'/buyProduct?idpr='+${product.getId()}" class="btn btn-danger">Mua ngay</a>
+                                    </div>
                                 </div>
                             </div>
                         </div>
                     </div>
                     <nav class="navigation paging-navigation text-center padding-medium" role="navigation">
-                        <div class="pagination loop-pagination d-flex justify-content-center align-items-center">
-                            <a href="#">
-                                <svg class="chevron-left pe-3">
-                                    <use xlink:href="#chevron-left"></use>
-                                </svg>
-                            </a>
-                            <span aria-current="page" class="page-numbers current pe-3">1</span>
-                            <a class="page-numbers pe-3" href="#">2</a>
-                            <a class="page-numbers pe-3" href="#">3</a>
-                            <a class="page-numbers pe-3" href="#">4</a>
-                            <a class="page-numbers" href="#">5</a>
-                            <a href="#">
-                                <svg class="chevron-right ps-3">
-                                    <use xlink:href="#chevron-right"></use>
-                                </svg>
-                            </a>
-                        </div>
+                        <ul class="pagination loop-pagination d-flex justify-content-center align-items-center">
+                            <li th:if="${curentpage>1}"><a
+                                    th:href="@{${keyword!=null&&keyword!=''?'?key='+keyword+'&':'?'}+'?pageNo='+${curentpage-1}}">&laquo;</a>
+                            </li>
+                            <li th:each="i:${#numbers.sequence(1,totalPage)}">
+                                <a th:class="${curentpage==i?'active':''}"
+                                   th:href="@{${keyword!=null&&keyword!=''?'?key='+keyword+'&':'?'}+'pageNo='+${i}}"
+                                   th:text="${i}"> </a>
+                            </li>
+                            <li th:if="${curentpage<totalPage}"><a
+                                    th:href="@{${keyword!=null&&keyword!=''?'?key='+keyword+'&':'?'}+'pageNo='+${curentpage+1}}">
+                                &raquo;</a>
+                            </li>
+                        </ul>
                     </nav>
                 </main>
                 <aside class="col-md-3">
@@ -87,9 +90,9 @@
                         <div class="widget-menu">
                             <div class="widget-search-bar">
                                 <form role="search" method="get" class="d-flex" th:action="@{/shop}">
-                                    <input class="search-field" placeholder="Nhập ..." type="search" name="txtSearch">
+                                    <input class="search-field" placeholder="Nhập ..." type="search" name="key" th:value="${keyword}">
 
-                                        <button type="submit">
+                                        <button type="submit" class="btn btn-dark">
                                             Tìm kiếm
                                         </button>
 

@@ -5,31 +5,6 @@
 <head>
     <meta charset="UTF-8">
     <title>Product-Manage</title>
-    <style>
-        .pagination {
-            display: inline-block;
-        }
-
-        .pagination li a {
-            font-size: 0.8em;
-            color: black;
-            float: left;
-            padding: 8px 16px;
-            text-decoration: none;
-            transition: background-color .3s;
-            border: 1px solid #ddd;
-        }
-
-        .pagination li a.active {
-            background-color: #4CAF50;
-            color: white;
-            border: 1px solid #4CAF50;
-        }
-
-        .pagination li a:hover:not(.active) {
-            background-color: #ddd;
-        }
-    </style>
 </head>
 <body>
 <div layout:fragment="content">
@@ -70,8 +45,8 @@
                                 </label>
                                 <div class="col-sm-6">
                                     <select id="category" name="category">
-                                        <option th:each="category:${categories}" th:value="${category.getId()}"
-                                                th:text="${category.getName()}"></option>
+                                        <option th:each="cate:${categories}" th:value="${cate.getId()}"
+                                                th:text="${cate.getName()}"></option>
                                     </select>
 
                                 </div>
@@ -126,27 +101,6 @@
                 </div>
                 <form>
                     <div class="inner-form d-flex float-end pb-3">
-                        <div class="input-field">
-                            <div class="input-select">
-                                <select name="choices-single-defaul"
-                                        th:onchange="'window.location.href = \'/product-manage?sort=\' + this.value '">
-                                    <option>----Sắp xếp----</option>
-                                    <option value="1">Số lượng tăng dần</option>
-                                    <option value="2">Số lượng tăng dần</option>
-                                    <option value="3">Đơn giá tăng dần</option>
-                                    <option value="4">Đơn giá giảm dần</option>
-                                </select>
-                            </div>
-                        </div>
-                        <div class="input-field">
-                            <div class="input-select">
-                                <select name="choices-single-defaul"
-                                        th:onchange="'window.location.href = \'/product-manage?category=\' + this.value '">
-                                    <option>----Danh mục----</option>
-                                    <option value="1">Số lượng tăng dần</option>
-                                </select>
-                            </div>
-                        </div>
                         <div class="input-field ">
                             <input id="search" type="text" placeholder="Nhập tên sản phẩm" th:value="${keyword}"/>
                         </div>
@@ -190,22 +144,27 @@
                                     <a th:href="'/update-product?id='+${product.getId()}" class="btn" title="Sửa">
                                         <span aria-hidden="true"><i class="fa-solid fa-pen-to-square"></i></span>
                                     </a>
+                                    <a th:href="'/image-product?idproduct='+${product.getId()}" class="btn" title="Sửa">
+                                        <span aria-hidden="true"><i class="fa-solid fa-image"></i></span>
+                                    </a>
                                 <td>
                                 </td>
                             </tr>
                             </tbody>
                         </table>
-                        <ul class="pagination pagination-sm d-flex">
-                            <li th:if="${curentpage>1}"><a
-                                    th:href="@{${keyword!=null&&keyword!=''?'?key='+keyword+'&':'?'}+'?pageNo='+${curentpage-1}}">&laquo;</a>
-                            </li>
-                            <li th:each="i:${#numbers.sequence(1,totalPage)}">
-                                <a th:class="${curentpage==i?'active':''}"
-                                   th:href="@{${keyword!=null&&keyword!=''?'?key='+keyword+'&':'?'}+'pageNo='+${i}}"
-                                   th:text="${i}"> </a>
-                            </li>
-                            <li th:if="${curentpage<totalPage}"><a th:href="@{'?pageNo='+${curentpage+1}}"> &raquo;</a>
-                            </li>
+                        <ul class="pagination pagination-sm d-flex" th:replace="features/pagination">
+<!--                            <li th:if="${curentpage>1}"><a-->
+<!--                                    th:href="@{${keyword!=null&&keyword!=''?'?key='+keyword+'&':'?'}+'?pageNo='+${curentpage-1}}">&laquo;</a>-->
+<!--                            </li>-->
+<!--                            <li th:each="i:${#numbers.sequence(1,totalPage)}">-->
+<!--                                <a th:class="${curentpage==i?'active':''}"-->
+<!--                                   th:href="@{${keyword!=null&&keyword!=''?'?key='+keyword+'&':'?'}+'pageNo='+${i}}"-->
+<!--                                   th:text="${i}"> </a>-->
+<!--                            </li>-->
+<!--                            <li th:if="${curentpage<totalPage}"><a-->
+<!--                                    th:href="@{${keyword!=null&&keyword!=''?'?key='+keyword+'&':'?'}+'pageNo='+${curentpage+1}}">-->
+<!--                                &raquo;</a>-->
+<!--                            </li>-->
                         </ul>
                     </div>
                 </div>

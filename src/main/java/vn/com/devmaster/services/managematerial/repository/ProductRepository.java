@@ -1,5 +1,7 @@
 package vn.com.devmaster.services.managematerial.repository;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
@@ -38,4 +40,8 @@ public interface ProductRepository extends JpaRepository<Product,Integer> {
     @Transactional
     @Query(value = Sql.UPDATE_PRODUCT, nativeQuery = true)
     void updateProduct(Integer id, String name, Integer idcategory, Double price, String description, String notes, Byte isactive, String urlImage, Instant updated_date);
+    @Query(value = "select * from product s where s.ISACTIVE=1", nativeQuery = true)
+    Page<Product> getProduct(Pageable pageable);
+    @Query(value = "select * from product s where s.NAME like concat('%',:keyword,'%') and s.ISACTIVE=1", nativeQuery = true)
+    List<Product> searchProductbyUser(String keyword);
 }

@@ -55,10 +55,6 @@ body {
     line-height: 1.6;
     margin: 0;
 }
-p {
-    font-size: 1.2em;
-    color: var(--gray-color-500);
-}
 ul.inner-list li {
     font-size: 1.2em;
 }
@@ -899,7 +895,7 @@ figure.instagram-item img.insta-image {
 
 /* ----------- SideBar -----------*/
 .sidebar input.search-field {
-    width: 290px;
+    width: 150px;
     height: 50px;
     box-shadow: 5px 5px 15px 5px #eee;
     border: 1px solid #eee;
@@ -1067,7 +1063,7 @@ figure.instagram-item img.insta-image {
 --------------------------------------------------------------*/
 /*------------ Sidebar -----------*/
 .sidebar-post-item h4.card-title {
-    font-size: 1.2em;
+    font-size: 0.6em;
 }
 
 /* 13. Sibgle Post Page
@@ -1131,4 +1127,8 @@ figure.instagram-item img.insta-image {
 }
 .vertical-center{
 vertical-align: middle;
+}
+.item-product{
+    width: 100%;
+    height: 300px;
 }

@@ -5,6 +5,7 @@
 <head>
     <meta charset="UTF-8">
     <title>Product-Detail</title>
+    <link rel="stylesheet" type="text/css" th:href="@{css/img.css}">
 </head>
 <body>
 <div layout:fragment="content">
@@ -13,52 +14,34 @@
             <div class="row mt-5">
                 <div class="col-lg-6">
                     <div class="product-preview mb-3">
-                        <img th:src="${product.getImage()}" alt="single-product" class="img-fluid">
+                        <img th:src="${product.getImage()}" alt="single-product" class="img-fluid" id="img-main">
+                    </div>
+
+                    <div >
+                        <ul id="img_thumb" class="list_media list-unstyled d-flex flex-wrap mt-2 owl-thumbs">
+                            <!--  -->
+                            <li class="owl-thumb-item" >
+
+                                <img th:each="img:${images}" onclick="changeImg(this.id)" th:id="${img.getId()}" th:src="${img.getUrl()}" class="loading" data-was-processed="true">
+
+                            </li>
+                        </ul>
                     </div>
                 </div>
                 <div class="col-lg-6">
+                    <div>
+                        <p th:text="'Mã sản phẩm: '+${product.getId()}"></p>
+                        <h3 itemprop="name" class="display-7 text-uppercase" th:text="${product.getName()}"></h3>
+                    </div>
                     <div class="product-info">
-                        <div class="element-header">
-                            <h3 itemprop="name" class="display-7 text-uppercase" th:text="${product.getName()}"></h3>
-                            <div class="rating-container d-flex align-items-center">
-                                <div class="rating" data-rating="1" onclick=rate(1)>
-                                    <svg class="star star-fill">
-                                        <use xlink:href="#star-fill"></use>
-                                    </svg>
-                                    <span class="rating-count ps-2">5.2</span>
-                                </div>
-                            </div>
-                        </div>
                         <div class="product-price pt-3 pb-3">
                             <strong class="text-primary display-6 fw-bold" th:text="${#numbers.formatDecimal(product.getPrice(),3,'DEFAULT', 0, 'DEFAULT')}+' VNĐ'"></strong>
                         </div>
+                        <p>Thông số sản phẩm</p>
                         <p th:text="${product.getDescription()}"></p>
                         <div class="cart-wrap padding-small">
-                            <div class="color-options product-select">
-                                <div class="color-toggle" data-option-index="0">
-                                    <h4 class="item-title text-uppercase text-dark text-decoration-underline">Color:
-                                    </h4>
-                                    <ul class="select-list list-unstyled d-flex">
-                                        <li class="select-item pe-3" data-val="Green" title="Green">
-                                            <a href="#">Green</a>
-                                        </li>
-                                        <li class="select-item pe-3" data-val="Orange" title="Orange">
-                                            <a href="#">Orange</a>
-                                        </li>
-                                        <li class="select-item pe-3" data-val="Red" title="Red">
-                                            <a href="#">Red</a>
-                                        </li>
-                                        <li class="select-item" data-val="Black" title="Black">
-                                            <a href="#">Black</a>
-                                        </li>
-                                    </ul>
-                                </div>
-                            </div>
-
                             <div class="product-quantity">
-                                <div class="stock-number text-dark">2 in stock</div>
                                 <div class="stock-button-wrap pt-3">
-
                                     <div class="input-group product-qty">
                                         <span class="input-group-btn">
                                             <button type="button" class="quantity-left-minus btn btn-number"
@@ -71,15 +54,19 @@
                                         <span class="input-group-btn">
                                             <button type="button" class="quantity-right-plus btn btn-number"
                                                     data-type="plus" data-field="">
-
+                                                +
                                             </button>
                                         </span>
                                     </div>
-                                    <div class="qty-button d-flex flex-wrap pt-3">
+                                    <div class="qty-button d-flex flex-wrap pt-3" th:remove="${product.getQuantity()==0}?none:all">
+                                        <button
+                                                class="btn btn-warning btn-medium text-uppercase mt-3">Tạm hết hàng</button>
+                                    </div>
+                                    <div class="qty-button d-flex flex-wrap pt-3" th:remove="${product.getQuantity()==0}?all:none">
                                         <button type="submit"
                                                 class="btn btn-primary btn-medium text-uppercase me-3 mt-3">Mua
                                             ngay</button>
-                                        <button type="submit" name="add-to-cart" value="1269"
+                                        <button type="submit" name="add-to-cart"
                                                 class="btn btn-black btn-medium text-uppercase mt-3">Thêm vào giỏ</button>
                                     </div>
                                 </div>
@@ -175,7 +162,7 @@
                                 <div class="col-lg-6 d-flex flex-wrap">
                                     <div class="col-md-2">
                                         <div class="image-holder">
-                                            <img src="images/image-product.pr1.png" alt="review" class="img-fluid">
+                                            <img src="images/review-item1.jpg" alt="review" class="img-fluid">
                                         </div>
                                     </div>
                                     <div class="col-md-8">
@@ -262,7 +249,7 @@
                     <div class="col-lg-4 col-md-6 p-3">
                         <div class="product-card pe-3 pb-3">
                             <div class="image-holder">
-                                <img src="images/image-product/pr1.png" alt="product-item" class="img-fluid ">
+                                <img src="images/products/pr3.png" alt="product-item" class="img-fluid ">
                             </div>
                             <div class="card-detail justify-content-between pb-3">
                                 <p class="card-title text-uppercase">
@@ -283,7 +270,7 @@
                     <div class="col-lg-4 col-md-6 p-3">
                         <div class="product-card pe-3 pb-3">
                             <div class="image-holder">
-                                <img src="images/image-product/pr1.png" alt="product-item" class="img-fluid ">
+                                <img src="images/products/pr3.png" alt="product-item" class="img-fluid ">
                             </div>
                             <div class="card-detail justify-content-between pb-3">
                                 <p class="card-title text-uppercase">
@@ -304,7 +291,7 @@
                     <div class="col-lg-4 col-md-6 p-3">
                         <div class="product-card pe-3 pb-3">
                             <div class="image-holder">
-                                <img src="images/image-product/pr1.png" alt="product-item" class="img-fluid ">
+                                <img src="images/products/pr3.png" alt="product-item" class="img-fluid ">
                             </div>
                             <div class="card-detail justify-content-between pb-3">
                                 <p class="card-title text-uppercase">
@@ -325,7 +312,7 @@
                     <div class="col-lg-4 col-md-6 p-3">
                         <div class="product-card pe-3 pb-3">
                             <div class="image-holder">
-                                <img src="images/image-product/pr1.png" alt="product-item" class="img-fluid ">
+                                <img src="images/products/pr3.png" alt="product-item" class="img-fluid ">
                             </div>
                             <div class="card-detail justify-content-between pb-3">
                                 <p class="card-title text-uppercase">

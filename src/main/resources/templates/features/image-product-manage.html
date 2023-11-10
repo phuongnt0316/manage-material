@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout/admin}">
+<head>
+    <meta charset="UTF-8">
+    <title>Product-Manage</title>
+    <style>
+        .idproduct{
+            border-width:0px;
+            border:none;
+            outline:none;
+        }
+    </style>
+</head>
+<body>
+<div layout:fragment="content">
+    <section>
+        <div class="modal fade" id="formModal" role="dialog" aria-labelledby="formModalLabel"
+             aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h3 class="modal-title" id="formModalLabel">Thêm ảnh</h3>
+
+                        <button type="button" class="close" data-dismiss="modal" aria-label="close">
+                            <span aria-hidden="true">Đóng</span>
+                        </button>
+                    </div>
+                    <form id="formAwesome" action="#" th:action="@{/new-image-product}" method="post"
+                          enctype="multipart/form-data">
+                        <div class="modal-body">
+                            <input th:value="${idproduct}" type="text" name="idproduct" class="idproduct" readonly>
+                            <div class="form-group row">
+                                <label for="image" class="col-sm-6 col-form-label">
+                                    Hình ảnh
+                                </label>
+                                <div class="col-sm-6">
+                                    <input type="file" id="image" name="image" placeholder="Chọn file" >
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <label for="image1" class="col-sm-6 col-form-label">
+                                    Hình ảnh
+                                </label>
+                                <div class="col-sm-6">
+                                    <input type="file" id="image1" name="image1" placeholder="Chọn file" >
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <label for="image2" class="col-sm-6 col-form-label">
+                                    Hình ảnh
+                                </label>
+                                <div class="col-sm-6">
+                                    <input type="file" id="image2" name="image2" placeholder="Chọn file">
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <label for="image3" class="col-sm-6 col-form-label">
+                                    Hình ảnh
+                                </label>
+                                <div class="col-sm-6">
+                                    <input type="file" id="image3" name="image3" placeholder="Chọn file" >
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <label for="image4" class="col-sm-6 col-form-label">
+                                    Hình ảnh
+                                </label>
+                                <div class="col-sm-6">
+                                    <input type="file" id="image4" name="image4" placeholder="Chọn file" >
+                                </div>
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <input type="submit" class="btn btn-secondary" value="Lưu">
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </section>
+    <section class="ftco-section">
+        <div class="container">
+            <div class="row justify-content-center">
+                <div class="col-md-6 text-center mb-5">
+                    <h3>Danh sách ảnh</h3>
+
+                    <button id="btnStart" type="button" class="btn" data-toggle="modal"
+                            title="Thêm sản phẩm" data-target="#formModal"><span
+                            aria-hidden="true">
+                    Thêm sản phẩm mới
+                                  <i class="fa-solid fa-circle-plus"></i> </span></button>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="table-wrap">
+                        <table class="table table-responsive-xl table-hover sortable">
+                            <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>Tên ảnh</th>
+                                <th>Hình ảnh</th>
+                            </tr>
+                            </thead>
+                            <tbody id="myTable">
+                            <tr th:each="image:${images}">
+                                <td th:text="${image.getId()}"></td>
+                                <td th:text="${image.getName()}"></td>
+                                <td><img th:src="${image.getUrl()}" class="image-product"></td>
+                                <td>
+                                    <a th:href="'/delete-image-product?id='+${image.getId()}" class="btn" title="Sửa">
+                                        <span aria-hidden="true"><i class="fa-solid fa-trash-can"></i></span>
+                                    </a>
+                                <td>
+                                </td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+</div>
+</body>
+</html>

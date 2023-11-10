@@ -12,7 +12,7 @@ import javax.persistence.*;
 @Table(name = "product_images")
 public class ProductImage {
     @Id
-    @Column(name = "ID", nullable = false)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
     @Column(name = "NAME", length = 250)

@@ -1,0 +1,14 @@
+<ul class="pagination pagination-sm d-flex">
+  <li th:if="${curentpage>1}"><a
+          th:href="@{${keyword!=null&&keyword!=''?'?key='+keyword+'&':'?'}+'?pageNo='+${curentpage-1}}">&laquo;</a>
+  </li>
+  <li th:each="i:${#numbers.sequence(1,totalPage)}">
+    <a th:class="${curentpage==i?'active':''}"
+       th:href="@{${keyword!=null&&keyword!=''?'?key='+keyword+'&':'?'}+'pageNo='+${i}}"
+       th:text="${i}"> </a>
+  </li>
+  <li th:if="${curentpage<totalPage}"><a
+          th:href="@{${keyword!=null&&keyword!=''?'?key='+keyword+'&':'?'}+'pageNo='+${curentpage+1}}">
+    &raquo;</a>
+  </li>
+</ul>

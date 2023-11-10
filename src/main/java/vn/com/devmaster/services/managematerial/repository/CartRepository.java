@@ -35,4 +35,8 @@ public interface CartRepository extends JpaRepository<Cart,Integer> {
     @Transactional
     @Query(value = Sql.UPDATE_QUANTITY_CART,nativeQuery = true)
     Integer updateCart(Integer id, Integer idpr);
+    @Modifying(clearAutomatically=true)
+    @Transactional
+    @Query(value = Sql.UPDATE_CART_QUANTITY,nativeQuery = true)
+    int updateQuantityCart(Integer id, Integer idproduct, Integer quantity);
 }
