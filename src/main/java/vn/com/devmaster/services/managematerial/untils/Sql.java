@@ -55,4 +55,32 @@ public class Sql {
             "where id_customer = :id\n" +
             "  and id_product = :idproduct";
     public static  final String CUSTOMER_BY_USER_NAME="select *from customer where USERNAME=:username";
+    public static final String REVENUE_BY_MONTH = "select sum(TOTAL_MONEY) as sum, (select month(ORDERS_DATE)) as month\n" +
+            " from orders\n" +
+            " group by (select month(ORDERS_DATE))\n" +
+            " order by (select month(ORDERS_DATE)) ASC";
+    public static final String REVENUE_BY_CATEGORY = "select sum(orders_details.PRICE * orders_details.QTY) as sum, c.NAME as name\n" +
+            "\n" +
+            "   from orders_details\n" +
+            "         inner join product p on orders_details.IDPRODUCT = p.ID\n" +
+            "         inner join category c on p.IDCATEGORY = c.ID\n" +
+            "   group by c.NAME";
+    public static final String REVENUE_BY_DAY="select sum(TOTAL_MONEY) as sum, CONVERT(ORDERS_DATE, DATE) as day\n" +
+            " from orders\n" +
+            " where MONTH(ORDERS_DATE) = :month\n" +
+            " group by CONVERT(ORDERS_DATE, DATE)\n" +
+            " order by CONVERT(ORDERS_DATE, DATE) ASC";
+
+    public static final String MONTH_YEAR="select distinct MONTH(ORDERS_DATE) as month ,YEAR(ORDERS_DATE) as year\n" +
+            "from orders\n" +
+            "where YEAR(ORDERS_DATE)=:year\n" +
+            "order by MONTH(ORDERS_DATE)";
+    public static final String ORDER_DETAIL_BY_IDOD = "select*from orders_details where IDORD=:idod";
+    public static final String UPDATE_PAYMENT = "update payment_method\n" +
+            "set NAME=:namePayment,\n" +
+            "    NOTES=:notes,\n" +
+            "    UPDATED_DATE=:updatedDate,\n" +
+            "    ISACTIVE=:paymentActive,\n" +
+            "    PAYMENT_IMAGE=:urlImage\n" +
+            "where ID = :idPayment";
 }

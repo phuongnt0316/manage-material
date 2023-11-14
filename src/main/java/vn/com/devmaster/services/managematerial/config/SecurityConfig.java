@@ -8,9 +8,6 @@ import org.springframework.security.config.annotation.web.configurers.AuthorizeH
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
-import org.springframework.security.web.firewall.DefaultHttpFirewall;
-import org.springframework.security.web.firewall.HttpFirewall;
-import org.springframework.security.web.firewall.StrictHttpFirewall;
 
 @Configuration
 @EnableWebSecurity
@@ -21,9 +18,9 @@ public class SecurityConfig {
                 ((AuthorizeHttpRequestsConfigurer.AuthorizedUrl)
                 ((AuthorizeHttpRequestsConfigurer.AuthorizedUrl) ((HttpSecurity)
                         http.csrf().disable()).authorizeHttpRequests()
-                        .antMatchers("/admin"))
+                        .antMatchers("/product-manage"))
                         .hasAuthority("ADMIN")
-                        .antMatchers(new String[]{"/product-manage"}))
+                        .antMatchers(new String[]{"/admin"}))
                 .hasAnyAuthority("ADMIN", "USER")
                 .antMatchers(new String[]{"/**"}))
                 .permitAll().and()).formLogin()

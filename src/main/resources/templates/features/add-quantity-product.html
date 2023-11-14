@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+        <html lang="en" xmlns:th="http://www.thymeleaf.org"
+        xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+        layout:decorate="~{layout/admin}">
+        <head>
+        <meta charset="UTF-8">
+        <title>Add quantity product</title>
+
+</head>
+<body>
+
+<section class="ftco-section" layout:fragment="content">
+    <div th:remove="tag" th:utext="${message}"></div>
+    <div class="container">
+            <h3> Cập nhật sản phẩm</h3>
+
+            <form action="#" th:action="@{/add-quantity-product-action}" method="post">
+                    <div class="form-group row">
+                        <label for="idProduct" class="col-sm-4 col-form-label">
+                            ID Sản phẩm
+                        </label>
+                        <div class="col-sm-4">
+                            <select id="idProduct" name="idProduct" class="form-control" onchange="onchangeIdproduct(this.value,this.id)">
+                                <option>Chọn ID</option>
+                                <option th:if="${idproduct ==0}"
+                                        th:each="product:${products}" th:value="${product.getId()}"
+                                        th:text="${product.getId()}"></option>
+                                <option th:if="${idproduct != 0}"
+                                        th:each="product:${products}" th:value="${product.getId()}"
+                                        th:text="${product.getId()}"
+                                th:selected="(${product.getId()==product1.getId()})"></option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <label  class="col-sm-4 col-form-label">
+                            Tên sản phẩm
+                        </label>
+                        <div class="d-flex col-sm-4">
+                            <img th:src="${idproduct!=0?product1.getImage():''}" class="img-add-product">
+                            <p th:text="${idproduct!=0?product1.getName():''}"></p>
+
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <label for="quantity" class="col-sm-4 col-form-label">
+                            Số lượng
+                        </label>
+                        <div class="col-sm-4">
+                            <input type="text" onkeypress='return isNumberKey(event)' class="form-control" id="quantity" name="quantity" >
+                        </div>
+                    </div>
+                <div>
+                    <input type="submit" class="btn btn-secondary" value="Lưu">
+                    <a class="btn btn-addCart" href="/product-manage"> Hủy</a>
+                </div>
+            </form>
+        </div>
+    </div>
+</section>
+
+</body>
+</html></title>
+</head>
+<body>
+
+</body>
+</html>

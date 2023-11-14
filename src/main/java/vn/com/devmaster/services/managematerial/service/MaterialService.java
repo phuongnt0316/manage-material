@@ -2,18 +2,20 @@ package vn.com.devmaster.services.managematerial.service;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.*;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 import vn.com.devmaster.services.managematerial.domain.*;
 import vn.com.devmaster.services.managematerial.mapper.CartMapper;
 import vn.com.devmaster.services.managematerial.mapper.ProductMapper;
-import vn.com.devmaster.services.managematerial.projection.IOrderDetailDTO;
-import vn.com.devmaster.services.managematerial.projection.IOrderInFor;
-import vn.com.devmaster.services.managematerial.projection.IViewProduct;
+import vn.com.devmaster.services.managematerial.projection.*;
 import vn.com.devmaster.services.managematerial.repository.*;
 
 import java.io.IOException;
+import java.time.Instant;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Date;
@@ -49,6 +51,8 @@ public class MaterialService {
     private final FileUpload fileUpload;
     @Autowired
     private ProductImageRepository productImageRepository;
+    @Autowired
+    private ProductReceivedRepository productReceivedRepository;
 
     public List<Customer> getAll() {
         List<Customer> customers =customerRepository.findAll();
@@ -136,27 +140,27 @@ public class MaterialService {
         return cartRepository.getCartByID(idcustomer);
     }
 
-    public void saveAll(Integer idcustomer, Order order) {
-        List<OrdersDetail> ordersDetails = new ArrayList<>();
+    public void saveAllOrderDetail(Integer idcustomer, Order order) {
+            List<OrdersDetail> ordersDetails = new ArrayList<>();
 
-        List<IOrderDetailDTO> detailDtoList = getCartById(idcustomer);
+            List<IOrderDetailDTO> detailDtoList = getCartById(idcustomer);
 
-        for (IOrderDetailDTO iorder : detailDtoList) {
-            OrdersDetail ordersDetail = OrdersDetail
-                    .builder()
-                    .idord(order.getId())
-                    .idproduct(iorder.getIdproduct())
-                    .price(iorder.getPrice())
-                    .qty(iorder.getQuantity())
-                    .build();
-            ordersDetails.add(ordersDetail);
-        }
-        for (IOrderDetailDTO detail : detailDtoList) {
-            updateQuantityProduct(detail.getIdproduct(), (-detail.getQuantity())); //update quantity after buy product
-        }
+            for (IOrderDetailDTO iorder : detailDtoList) {
+                OrdersDetail ordersDetail = OrdersDetail
+                        .builder()
+                        .idord(order.getId())
+                        .idproduct(iorder.getIdproduct())
+                        .price(iorder.getPrice())
+                        .qty(iorder.getQuantity())
+                        .build();
+                ordersDetails.add(ordersDetail);
+            }
+            for (IOrderDetailDTO detail : detailDtoList) {
+                updateQuantityProduct(detail.getIdproduct(), (-detail.getQuantity())); //update quantity after buy product
+            }
 
-        ordersDetailRepository.saveAll(ordersDetails);
-        BuyCarts(ordersDetails, idcustomer);
+            ordersDetailRepository.saveAll(ordersDetails);
+            BuyCarts(ordersDetails, idcustomer);
     }
 
     public void save(OrdersPayment ordersPayment) {
@@ -326,13 +330,15 @@ public class MaterialService {
 
     public List<Status> getStatus() {
         List<Status> statusList = new ArrayList<>();
-        Status status = new Status(1, "Đã đặt đơn");
+        Status status = new Status(1, "Đã đặt hàng");
         statusList.add(status);
         status = new Status(2, "Đang chuẩn bị");
         statusList.add(status);
         status = new Status(3, "Đang giao hàng");
         statusList.add(status);
         status = new Status(4, "Đã giao hàng");
+        statusList.add(status);
+        status = new Status(5, "Đã hủy");
         statusList.add(status);
         return statusList;
     }
@@ -346,7 +352,8 @@ public class MaterialService {
     }
 
     public int getShipMoney(Integer idtransport, Integer size) {
-        int ship = idtransport == 4 ? 0 : 15000 * size;
+        TransportMethod transportMethod=transportMethodRepository.getOne(idtransport);
+        int ship = transportMethod.getPrice()*size;
         return ship;
     }
 
@@ -393,12 +400,11 @@ public class MaterialService {
         }
     }
 
-    public void saveOrderPayment(Integer idpayment, Order order, String totalPrice) {
+    public void saveOrderPayment(Integer idpayment, Order order) {
         OrdersPayment ordersPayment = OrdersPayment
                 .builder()
                 .idord(order.getId())
                 .idpayment(idpayment)
-                .total(Integer.valueOf(totalPrice))
                 .build();
         ordersPaymentRepository.save(ordersPayment);
     }
@@ -527,5 +533,109 @@ public class MaterialService {
 
     public void saveOrderPayment(OrdersPayment ordersPayment) {
         ordersPaymentRepository.save(ordersPayment);
+    }
+
+    public List<IRevenueMonth> getRevenueByMonth() {
+        return orderRepository.getRevenueByMonth();
+    }
+
+    public List<IRevenueCategory> getRevenueByCategory() {
+        return categoryRepository.getRevenueByCategory();
+    }
+
+    public List<IRevenueDay> getRevenueByDay(int month) {
+        return orderRepository.getRevenueByDay(month);
+    }
+
+    public List<IMonth> getMonthYear(int year) {
+        return orderRepository.getMonthYear(year);
+    }
+
+    public Order setOrder(Integer idcustomer, String fname, String detailadd, String address1, String note, String phone, Double totalMoney) {
+        String idorder = getOrderId(idcustomer);
+        Customer customer = Customer.builder().id(idcustomer).build();
+        Order order = Order
+                .builder()
+                .idorders(idorder)
+                .ordersDate(new Date().toInstant())
+                .idcustomer(customer)
+                .nameReciver(fname)
+                .status(1)
+                .address(detailadd.concat(", ").concat(address1))
+                .notes(note)
+                .phone(phone)
+                .totalMoney(totalMoney)
+                .build();
+        return order;
+    }
+
+    public List<OrdersDetail> setListOrderDetail(Integer idcustomer, Order order) {
+        List<OrdersDetail> ordersDetails = new ArrayList<>();
+
+        List<IOrderDetailDTO> detailDtoList = getCartById(idcustomer);
+
+        for (IOrderDetailDTO iorder : detailDtoList) {
+            OrdersDetail ordersDetail = OrdersDetail
+                    .builder()
+                    .idord(order.getId())
+                    .idproduct(iorder.getIdproduct())
+                    .price(iorder.getPrice())
+                    .qty(iorder.getQuantity())
+                    .build();
+            ordersDetails.add(ordersDetail);
+        }
+//        for (IOrderDetailDTO detail : detailDtoList) {
+//            updateQuantityProduct(detail.getIdproduct(), (-detail.getQuantity())); //update quantity after buy product
+//        }
+
+//        ordersDetailRepository.saveAll(ordersDetails);
+//        BuyCarts(ordersDetails, idcustomer);
+        return ordersDetails;
+    }
+
+    public int TotalMoney(Integer idtransport, List<Cart> carts) {
+        int ship = getShipMoney(idtransport, carts.size());
+        Double total = getTotal(toViewCart(carts));
+        int totalMoney= (int) (ship+total);
+        return totalMoney;
+    }
+
+    public Order saveOrder(Order order) {
+        orderRepository.save(order);
+        return order;
+    }
+
+    public List<Category> getCategory() {
+        return categoryRepository.findAll();
+    }
+
+    public Product getOneProduct(Integer idproduct1) {
+        return productRepository.getOne(idproduct1);
+    }
+
+    public void saveProductRecevied(Integer idProduct, Integer quantity) {
+        ProductReceived productReceived=ProductReceived.builder().idProduct(idProduct).quantity(quantity).receivedDate(Instant.now()).build();
+        productReceivedRepository.save(productReceived);
+    }
+
+    public List<OrdersDetail> getOrderDetailByIDOrder(Integer idod) {
+        return ordersDetailRepository.getOrderDetailByIDOrder(idod);
+    }
+
+    public List<PaymentMethod> getAllPayment() {
+    return paymentMethodRepository.findAll();
+    }
+
+    public PaymentMethod getOnePayment(Integer idpayment) {
+        return paymentMethodRepository.getOne(idpayment);
+    }
+
+    public void updatePaymentMethod(Integer idPayment, String namePayment, String notes, Byte paymentActive, MultipartFile multipartFile) throws IOException {
+        PaymentMethod paymentMethod=paymentMethodRepository.getOne(idPayment);
+        namePayment = namePayment.trim().isEmpty() ? paymentMethod.getName() : namePayment;
+        notes = notes.trim().isEmpty() ? paymentMethod.getNotes() : notes;
+        String urlImage = multipartFile.isEmpty() ? paymentMethod.getPaymentImage() : fileUpload.uploadFile(multipartFile);
+        Date updatedDate = new Date();
+        paymentMethodRepository.updatePayMentMethod(idPayment, namePayment, notes, paymentActive, urlImage,updatedDate.toInstant());
     }
 }

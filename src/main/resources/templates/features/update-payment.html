@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout/admin}">
+<head>
+  <meta charset="UTF-8">
+  <title>Update-Payment Method</title>
+  <style>
+
+  </style>
+</head>
+<body>
+
+<section class="ftco-section" layout:fragment="content">
+  <div class="container">
+
+    <div>
+
+      <h3> Cập nhật phương thức thanh toán</h3>
+
+      <form action="#" th:action="@{/update-payment-action}" method="post" enctype="multipart/form-data">
+        <div>
+          <div class="form-group row">
+            <label for="idPayment" class="col-sm-6 col-form-label">
+              ID
+            </label>
+            <div class="col-sm-6">
+              <input type="text" readonly class="form-control" id="idPayment" name="idPayment" th:value="${payment.getId()}">
+            </div>
+          </div>
+          <div class="form-group row">
+            <label for="namePayment" class="col-sm-6 col-form-label">
+              Tên phương thức
+            </label>
+            <div class="col-sm-6">
+              <input type="text" class="form-control" id="namePayment" name="namePayment" th:value="${payment.getName()}">
+            </div>
+          </div>
+          <div class="form-group row">
+            <label for="imagePayment" class="col-sm-6 col-form-label">
+              Hình ảnh
+            </label>
+            <div class="col-sm-6">
+              <input type="file" name="imagePayment" class="form-control" id="imagePayment" placeholder="Chọn file">
+            </div>
+          </div>
+          <div class="form-group row">
+            <label for="notes" class="col-sm-6 col-form-label">
+              Ghi chú
+            </label>
+            <div class="col-sm-6">
+              <textarea name="notes" class="form-control" cols="25" rows="5" id="notes" th:text="${payment.getNotes()}"></textarea>
+            </div>
+          </div>
+          <div class="form-group row">
+            <label for="paymentActive" class="col-sm-6 col-form-label">
+              Trạng thái hiển thị
+            </label>
+            <div class="col-sm-6">
+              <select name="paymentActive" id="paymentActive" class="form-control">
+                <option value="0" th:selected="${payment.getIsactive()==0}">Tắt</option>
+                <option value="1" th:selected="${payment.getIsactive()==1}">Bật</option>
+              </select>
+            </div>
+          </div>
+        </div>
+        <div>
+          <input type="submit" class="btn btn-secondary" value="Lưu">
+          <a class="btn btn-addCart" href="/payment"> Hủy</a>
+        </div>
+      </form>
+
+    </div>
+  </div>
+</section>
+
+</body>
+</html>

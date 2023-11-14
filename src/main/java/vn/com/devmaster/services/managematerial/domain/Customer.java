@@ -1,9 +1,9 @@
 package vn.com.devmaster.services.managematerial.domain;
 
-import lombok.*;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 import java.time.Instant;
@@ -47,5 +47,7 @@ public class Customer {
     @OneToMany
     @JoinColumn(name = "idcustomer")
     List<Order> orders=new ArrayList<>();
+    @Column(name = "ROLE")
+    private Integer role;
 
 }

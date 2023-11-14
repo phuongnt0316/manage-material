@@ -44,4 +44,5 @@ public interface ProductRepository extends JpaRepository<Product,Integer> {
     Page<Product> getProduct(Pageable pageable);
     @Query(value = "select * from product s where s.NAME like concat('%',:keyword,'%') and s.ISACTIVE=1", nativeQuery = true)
     List<Product> searchProductbyUser(String keyword);
+
 }

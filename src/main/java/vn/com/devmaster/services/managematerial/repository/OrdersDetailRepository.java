@@ -11,4 +11,6 @@ import java.util.List;
 public interface OrdersDetailRepository extends JpaRepository<OrdersDetail, Integer> {
     @Query(value = Sql.VIEW_ORDER_DETAIL,nativeQuery = true)
     List<IViewProduct> getOrderDetailByID(Integer id);
+    @Query(value = Sql.ORDER_DETAIL_BY_IDOD,nativeQuery = true)
+    List<OrdersDetail> getOrderDetailByIDOrder(Integer idod);
 }

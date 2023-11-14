@@ -11,7 +11,7 @@ public interface IMaterialControll {
             "                                                    <i class='fa-regular fa-file-lines'></i>" +
             "                                                    <p class='mb-0 fs-3'>Đơn hàng</p></a>" +
             "                                                <a href='/logout' class='btn btn-outline-primary mx-3 mt-2 d-block'>Đăng xuất</a>";
-    public static final String MENU_CUSTOMER = "<a href='/view-cart' class='d-flex align-items-center gap-2 dropdown-item'>" +
+    public static final String MENU_CUSTOMER = "<a href='/view-cart1' class='d-flex align-items-center gap-2 dropdown-item'>" +
             "                                                    <i class='fa-solid fa-cart-shopping'></i>" +
             "                                                    <p class='mb-0 fs-3'>Giỏ hàng</p></a>" +
             "                                                <a href='/login' class='btn btn-outline-primary mx-3 mt-2 d-block'>Đăng nhập</a>";

@@ -124,7 +124,7 @@
 <header th:replace="features/header" id="header" class="site-header header-scrolled position-fixed text-black bg-light">
 </header>
 
-<div layout:fragment="content">
+<th:block layout:fragment="content">
     <section id="billboard" class="position-relative overflow-hidden bg-light-blue">
         <div class="swiper main-swiper ">
             <div class="swiper-wrapper">
@@ -238,22 +238,22 @@
             </div>
         </div>
     </section>
-    <section id="mobile-products" class="product-store padding-large position-relative">
+    <section id="mobile-products" class="product-store padding-small position-relative">
         <div class="container">
             <div class="row">
-                <div class="display-header d-flex justify-content-between pb-3">
+                <div class="display-header d-flex justify-content-between pb-1">
                     <h2 class="display-7 text-dark text-uppercase">Sản phẩm bán chạy</h2>
                     <div class="btn-right">
                         <a href="/shop" class="btn btn-goShop  text-uppercase">Xem cửa hàng</a>
                     </div>
                 </div>
                 <div class="swiper-wrapper regular slider">
-                    <div class="col-lg-4 col-md-6 p-3" th:each="product:${products}">
-                        <div class="product-card pe-3 pb-3">
+                    <div class="col-lg-4 col-md-6 pb-1" th:each="product:${products}">
+                        <div class="product-card pe-1 pb-1">
                             <div class="image-holder">
                                 <img th:src="${product.getImage()}" alt="product-item" class="img-fluid item-product">
                             </div>
-                            <div class="card-detail justify-content-between pb-3">
+                            <div class="card-detail justify-content-between pt-1 pb-1">
                                 <p class="card-title text-uppercase">
                                     <a th:href="'/product-detail?idpr='+${product.getId()}" th:text="${product.getName()}"></a>
                                 </p>
@@ -279,19 +279,19 @@
     <section id="smart-watches" class="product-store padding-large position-relative">
         <div class="container">
             <div class="row">
-                <div class="display-header d-flex justify-content-between pb-3">
-                    <h2 class="display-7 text-dark text-uppercase"> Phụ kiện máy tính</h2>
+                <div class="display-header d-flex justify-content-between pb-1">
+                    <h2 class="display-7 text-dark text-uppercase">Sản phẩm bán chạy</h2>
                     <div class="btn-right">
-                        <a href="shop.html" class="btn btn-goShop text-uppercase">Xem cửa hàng</a>
+                        <a href="/shop" class="btn btn-goShop  text-uppercase">Xem cửa hàng</a>
                     </div>
                 </div>
                 <div class="swiper-wrapper regular slider">
-                    <div class="col-lg-4 col-md-6 p-3" th:each="product:${products}">
-                        <div class="product-card pe-3 pb-3">
+                    <div class="col-lg-4 col-md-6 pb-1" th:each="product:${products}">
+                        <div class="product-card pe-1 pb-1">
                             <div class="image-holder">
                                 <img th:src="${product.getImage()}" alt="product-item" class="img-fluid item-product">
                             </div>
-                            <div class="card-detail justify-content-between pb-3">
+                            <div class="card-detail justify-content-between pt-1 pb-1">
                                 <p class="card-title text-uppercase">
                                     <a th:href="'/product-detail?idpr='+${product.getId()}" th:text="${product.getName()}"></a>
                                 </p>
@@ -379,7 +379,7 @@
             </div>
         </div>
     </section>
-</div>
+</th:block>
 
 <section id="instagram" class="padding-large overflow-hidden no-padding-top">
     <div class="container">

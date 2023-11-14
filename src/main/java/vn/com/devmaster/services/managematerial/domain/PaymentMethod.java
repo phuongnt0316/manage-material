@@ -31,5 +31,7 @@ public class PaymentMethod {
 
     @Column(name = "ISACTIVE")
     private Byte isactive;
+    @Column(name = "PAYMENT_IMAGE")
+    private String paymentImage;
 
 }

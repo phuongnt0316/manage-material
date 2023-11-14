@@ -1,13 +1,17 @@
 $(function () {
+  // console.log(product1)
+
 
 
   // =====================================
   // Profit
   // =====================================
+  var transaction_y = chart1.map(x => x["day"])
+  var transaction_x = chart1.map(x => x["sum"])
   var chart = {
     series: [
-      { name: "Earnings this month:", data: [355, 390, 300, 350, 390, 180, 355, 390] },
-      { name: "Expense this month:", data: [280, 250, 325, 215, 250, 310, 280, 250] },
+      { name: "Doanh thu:", data: transaction_x },
+      // { name: "Expense this month:", data: [280, 250, 325, 215, 250, 310, 280, 250] },
     ],
 
     chart: {
@@ -57,7 +61,7 @@ $(function () {
 
     xaxis: {
       type: "category",
-      categories: ["16/08", "17/08", "18/08", "19/08", "20/08", "21/08", "22/08", "23/08"],
+      categories: transaction_y,
       labels: {
         style: { cssClass: "grey--text lighten-2--text fill-color" },
       },
@@ -67,7 +71,7 @@ $(function () {
     yaxis: {
       show: true,
       min: 0,
-      max: 400,
+      max: 1000000000,
       tickAmount: 4,
       labels: {
         style: {

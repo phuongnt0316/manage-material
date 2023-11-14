@@ -19,7 +19,6 @@
                         <div class="input-select">
                             <select data-trigger="" name="choices-single-defaul"
                                     th:onchange="'window.location.href = \'/orders-manage?idstatus=\' + this.value '">
-                                <option>----Chọn danh mục----</option>
                                 <option th:each="sta:${status}" th:value="${sta.getId()}" th:text="${sta.getStatus()}"
                                         th:selected="${sta.getId()==idstatus}"></option>
                             </select>

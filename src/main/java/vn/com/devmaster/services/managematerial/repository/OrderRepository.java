@@ -5,7 +5,10 @@ import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.PagingAndSortingRepository;
 import vn.com.devmaster.services.managematerial.domain.Order;
+import vn.com.devmaster.services.managematerial.projection.IMonth;
 import vn.com.devmaster.services.managematerial.projection.IOrderInFor;
+import vn.com.devmaster.services.managematerial.projection.IRevenueDay;
+import vn.com.devmaster.services.managematerial.projection.IRevenueMonth;
 import vn.com.devmaster.services.managematerial.untils.Sql;
 
 import javax.transaction.Transactional;
@@ -24,4 +27,10 @@ public interface OrderRepository extends JpaRepository<Order, Integer>, PagingAn
     @Transactional
     @Query(value = Sql.UPDATE_ORDER_STATUS,nativeQuery = true)
     int updateOrderStatus(Integer idod, Integer status);
+    @Query(value = Sql.REVENUE_BY_MONTH,nativeQuery = true)
+    List<IRevenueMonth> getRevenueByMonth();
+    @Query(value = Sql.REVENUE_BY_DAY,nativeQuery = true)
+    List<IRevenueDay> getRevenueByDay(int month);
+    @Query(value = Sql.MONTH_YEAR,nativeQuery = true)
+    List<IMonth> getMonthYear(int year);
 }
