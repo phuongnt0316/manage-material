@@ -53,6 +53,8 @@ public class MaterialService {
     private ProductImageRepository productImageRepository;
     @Autowired
     private ProductReceivedRepository productReceivedRepository;
+    @Autowired
+    private BlogRepository blogRepository;
 
     public List<Customer> getAll() {
         List<Customer> customers =customerRepository.findAll();
@@ -92,7 +94,7 @@ public class MaterialService {
         productRepository.save(product);
     }
 
-    public List<Category> getAllCategory() {
+    public List<Category> getAllCategory1() {
         List<Category> categories = categoryRepository.getAllCategory1();
         return categories;
     }
@@ -243,23 +245,23 @@ public class MaterialService {
     public Double getTotalMoney(List<IViewProduct> carts) {
         Double sum = 0.0;
         for (IViewProduct cart : carts) {
-            sum += cart.getPrice()*cart.getQuantity();
+            sum += cart.getPrice()*cart.getQuantityCart();
         }
         return sum;
     }
 
-    public Double getTotal(List<ViewCart> carts) {
-        Double sum = 0.0;
+    public Integer getTotal(List<ViewCart> carts) {
+        double sum = 0;
         for (ViewCart cart : carts) {
-            sum += cart.getPrice()*cart.getQuantity();
+            sum +=cart.getPrice()*cart.getQuantityCart();
         }
-        return sum;
+        return (int) sum;
     }
 
     public int getToTal(List<IViewProduct> iViewProducts) {
         int total = 0;
         for (IViewProduct iViewProduct : iViewProducts) {
-            total += iViewProduct.getQuantity() * iViewProduct.getPrice();
+            total += iViewProduct.getQuantityCart() * iViewProduct.getPrice();
         }
         return total;
     }
@@ -274,7 +276,8 @@ public class MaterialService {
                     .name(product.getName())
                     .image(product.getImage())
                     .price(product.getPrice())
-                    .quantity(cart.getQuantity())
+                    .quantityCart(cart.getQuantity())
+                    .quantityProduct(product.getQuantity())
                     .build();
             viewCarts.add(viewCart);
         }
@@ -390,7 +393,7 @@ public class MaterialService {
                     .idord(order.getId())
                     .idproduct(viewCart.getIdProduct())
                     .price(viewCart.getPrice())
-                    .qty(viewCart.getQuantity())
+                    .qty(viewCart.getQuantityCart())
                     .build();
             ordersDetails.add(ordersDetail);
         }
@@ -473,17 +476,33 @@ public class MaterialService {
         productImageRepository.saveAll(productImages);
     }
 
-    public void updateQuantityCart(Integer id, Integer idproduct, Integer quantity) {
-        cartRepository.updateQuantityCart(id,idproduct,quantity);
+    public int updateQuantityCart(Integer id, Integer idProduct, Integer quantity) {
+        Product product=productRepository.getOne(idProduct);
+        if(quantity>product.getQuantity())
+        {
+            return 0;
+        }
+        else {
+            cartRepository.updateQuantityCart(id, idProduct, quantity);
+            return 1;
+        }
     }
 
-    public void updateQuantityCart(List<Cart> carts, Integer idproduct, Integer quantity) {
+    public int updateQuantityCart(List<Cart> carts, Integer idProduct, Integer quantity) {
         for(Cart cart:carts){
-            if(cart.getIdProduct()==idproduct){
-                cart.setQuantity(quantity);
+            if(cart.getIdProduct()==idProduct){
+                Product product=productRepository.getOne(idProduct);
+                if(quantity>product.getQuantity()){
+                    return 0;
+                }
+                else {
+                    cart.setQuantity(quantity);
+                }
                 break;
             }
+
         }
+        return 1;
     }
 
     public List<Category> findAll() {
@@ -498,13 +517,14 @@ public class MaterialService {
     }
 
     public void saveCustomer(Customer customer) {
+        customer.setRole(0);
         customerRepository.save(customer);
     }
 
     public int getTotalProduct(List<IViewProduct> carts) {
         int rs=0;
         for(IViewProduct cart:carts){
-            rs+=cart.getQuantity();
+            rs+=cart.getQuantityCart();
         }
         return  rs;
     }
@@ -551,7 +571,7 @@ public class MaterialService {
         return orderRepository.getMonthYear(year);
     }
 
-    public Order setOrder(Integer idcustomer, String fname, String detailadd, String address1, String note, String phone, Double totalMoney) {
+    public Order setOrder(Integer idcustomer, String fname, String detailadd, String address1, String note, String phone, int totalMoney) {
         String idorder = getOrderId(idcustomer);
         Customer customer = Customer.builder().id(idcustomer).build();
         Order order = Order
@@ -564,7 +584,7 @@ public class MaterialService {
                 .address(detailadd.concat(", ").concat(address1))
                 .notes(note)
                 .phone(phone)
-                .totalMoney(totalMoney)
+                .totalMoney((double) totalMoney)
                 .build();
         return order;
     }
@@ -595,7 +615,7 @@ public class MaterialService {
 
     public int TotalMoney(Integer idtransport, List<Cart> carts) {
         int ship = getShipMoney(idtransport, carts.size());
-        Double total = getTotal(toViewCart(carts));
+        int total = getTotal(toViewCart(carts));
         int totalMoney= (int) (ship+total);
         return totalMoney;
     }
@@ -614,7 +634,8 @@ public class MaterialService {
     }
 
     public void saveProductRecevied(Integer idProduct, Integer quantity) {
-        ProductReceived productReceived=ProductReceived.builder().idProduct(idProduct).quantity(quantity).receivedDate(Instant.now()).build();
+        Product product=Product.builder().id(idProduct).build();
+        ProductReceived productReceived=ProductReceived.builder().idProduct(product).quantity(quantity).receivedDate(Instant.now()).build();
         productReceivedRepository.save(productReceived);
     }
 
@@ -637,5 +658,46 @@ public class MaterialService {
         String urlImage = multipartFile.isEmpty() ? paymentMethod.getPaymentImage() : fileUpload.uploadFile(multipartFile);
         Date updatedDate = new Date();
         paymentMethodRepository.updatePayMentMethod(idPayment, namePayment, notes, paymentActive, urlImage,updatedDate.toInstant());
+    }
+
+    public int getTotalRevenue() {
+        return orderRepository.getTotalRevenue();
+    }
+
+    public List<Category> getAllCategory() {
+        return categoryRepository.findAll();
+    }
+
+    public List<Blog> getBlog() {
+        return blogRepository.getBlog();
+    }
+
+    public Blog getOneBlog(Integer idBlog) {
+        return  blogRepository.getOne(idBlog);
+    }
+
+    public List<ProductReceived> getProductInventory() {
+        List<IInventory> inventoryList=productReceivedRepository.getAllReceived();
+
+        List<ProductReceived> productInventories=new ArrayList<>();
+        for(IInventory inventory:inventoryList){
+            int quantity=inventory.getQuantity();
+            List<ProductReceived> productReceivedList=productReceivedRepository.getReceivedByID(inventory.getID());
+            for(int i=0;i<productReceivedList.size();i++){
+                int qty=quantity;
+                int qty1=qty;
+                qty=qty-productReceivedList.get(i).getQuantity();
+                if(qty>=0){
+                    productInventories.add(productReceivedList.get(i));
+                }
+                else {
+                    ProductReceived productReceived=productReceivedList.get(i);
+                    productReceived.setQuantity(qty1);
+                    productInventories.add(productReceived);
+                    break;
+                }
+            }
+        }
+        return productInventories;
     }
 }

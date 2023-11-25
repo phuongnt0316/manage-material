@@ -6,12 +6,12 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+import vn.com.devmaster.services.managematerial.builders.MailBuilder;
 import vn.com.devmaster.services.managematerial.domain.*;
 import vn.com.devmaster.services.managematerial.projection.IViewProduct;
+import vn.com.devmaster.services.managematerial.service.EmailService;
 import vn.com.devmaster.services.managematerial.service.MaterialService;
 import vn.com.devmaster.services.managematerial.vnpay.VNPayService;
 
@@ -26,6 +26,11 @@ public class MaterialController implements IMaterialControll {
     private MaterialService materialService;
     @Autowired
     private VNPayService vnPayService;
+    private final EmailService emailService;
+
+    public MaterialController(EmailService emailService) {
+        this.emailService = emailService;
+    }
 
     @GetMapping("/login")
     public String showLogin(Model model) {
@@ -69,7 +74,7 @@ public class MaterialController implements IMaterialControll {
             model.addAttribute("keyword", keyword);
         }
         model.addAttribute("size", products.getSize());
-        model.addAttribute("categories", materialService.getAllCategory());
+        model.addAttribute("categories", materialService.getAllCategory1());
         model.addAttribute("products", products);
         model.addAttribute("totalPage", products.getTotalPages());
         model.addAttribute("curentpage", pageNo);
@@ -127,9 +132,11 @@ public class MaterialController implements IMaterialControll {
     @GetMapping("/view-cart")
     public String showCart(Model model,
                            HttpSession session,
+                           @ModelAttribute("rs") String rs,
                            @RequestParam(name = "idtransport", required = false) Integer idtransport) {
+        setDesignMenu(session,model);
         model.addAttribute("customer", session.getAttribute("customer"));
-        model.addAttribute("design", MENU_CUSTOMER_LOGIN);
+//        model.addAttribute("design", MENU_CUSTOMER_LOGIN);
         Customer customer = (Customer) session.getAttribute("customer");
         Integer idcustomer = customer.getId();
         List<IViewProduct> carts = materialService.getCartByIdCustomer(idcustomer);
@@ -146,6 +153,7 @@ public class MaterialController implements IMaterialControll {
             model.addAttribute("totalmoney", totalMoney);
             model.addAttribute("transports", materialService.getTransport());
             model.addAttribute("total", materialService.getTotalProduct(carts));
+            model.addAttribute("rs",rs);
 
         } else {
             model.addAttribute("emptycart", "<p>Giỏ hàng trống</p>");
@@ -156,6 +164,7 @@ public class MaterialController implements IMaterialControll {
     @GetMapping("/view-cart1")
     public String showCart1(Model model,
                             HttpSession session,
+                            @ModelAttribute("rs") String rs,
                             @RequestParam(name = "idtransport", required = false) Integer idtransport) {
         setDesignMenu(session, model);
         List<Cart> carts = (List<Cart>) session.getAttribute("carts");
@@ -166,13 +175,14 @@ public class MaterialController implements IMaterialControll {
             int ship = materialService.getShipMoney(idtransport, materialService.getTotalProduct1(carts));
             model.addAttribute("idtransport", idtransport);
             List<ViewCart> viewCarts = materialService.toViewCart(carts);
-            Double totalMoney = materialService.getTotal(viewCarts) + ship;
+            int totalMoney = materialService.getTotal(viewCarts) + ship;
             model.addAttribute("carts", viewCarts);
             model.addAttribute("ship", ship);
             model.addAttribute("totalCart", materialService.getTotal(viewCarts));
             model.addAttribute("totalmoney", totalMoney);
             model.addAttribute("transports", materialService.getTransport());
             model.addAttribute("total", materialService.getTotalProduct1(carts));
+            model.addAttribute("rs",rs);
         }
         return "features/cart";
     }
@@ -180,14 +190,35 @@ public class MaterialController implements IMaterialControll {
     @GetMapping("/updateCart")
     public String updateCart(@RequestParam("idproduct") Integer idproduct,
                              @RequestParam("quantity") Integer quantity,
-                             HttpSession session) {
+                             HttpSession session,Model model,
+                             RedirectAttributes attributes) {
         if (session.getAttribute("customer") != null) {
             Customer customer = (Customer) session.getAttribute("customer");
-            materialService.updateQuantityCart(customer.getId(), idproduct, quantity);
+            int rs = materialService.updateQuantityCart(customer.getId(), idproduct, quantity);
+            if(rs==0){
+                attributes.addFlashAttribute("rs", "<script>\n" +
+                        "    alert('Số lượng tồn kho không đủ');\n" +
+                        "  </script>");
+            }
+            else {
+                attributes.addFlashAttribute("rs", "<script>\n" +
+                        "    alert('Cập nhật thành công!');\n" +
+                        "  </script>");
+            }
             return "redirect:/view-cart";
         } else {
             List<Cart> carts = (List<Cart>) session.getAttribute("carts");
-            materialService.updateQuantityCart(carts, idproduct, quantity);
+            int rs=materialService.updateQuantityCart(carts, idproduct, quantity);
+            if(rs==0){
+                attributes.addFlashAttribute("rs", "<script>\n" +
+                        "    alert('Số lượng tồn kho không đủ');\n" +
+                        "  </script>");
+            }
+            else {
+                attributes.addFlashAttribute("rs", "<script>\n" +
+                        "    alert('Cập nhật thành công!');\n" +
+                        "  </script>");
+            }
             return "redirect:/view-cart1";
         }
     }
@@ -274,9 +305,9 @@ public class MaterialController implements IMaterialControll {
         List<Cart> carts = session.getAttribute("customer") == null ? (List<Cart>) session.getAttribute("carts") : materialService.getCartByCustomer(idcustomer);
         //  int totalMoney=materialService.TotalMoney(idtransport,carts);
         int ship = materialService.getShipMoney(idtransport, carts.size());
-        Double total = materialService.getTotal(materialService.toViewCart(carts));
+        int total = materialService.getTotal(materialService.toViewCart(carts));
         int totalMoney = (int) (ship + total);
-        Order order = materialService.setOrder(idcustomer, fname, detailadd, address1, note, phone, Double.valueOf(totalMoney));//insert orders
+        Order order = materialService.setOrder(idcustomer, fname, detailadd, address1, note, phone, totalMoney);//insert orders
         session.setAttribute("order", order);
         String orderInfo = "Thanh toan: " + order.getIdorders();
 //        if (session.getAttribute("customer") != null) {
@@ -325,7 +356,8 @@ public class MaterialController implements IMaterialControll {
             Integer idcustomer = 0;
             List<Cart> carts = session.getAttribute("customer") == null ? (List<Cart>) session.getAttribute("carts") : materialService.getCartByCustomer(idcustomer);
             if (session.getAttribute("customer") != null) {
-                idcustomer = (Integer) session.getAttribute("customer");
+                Customer customer= (Customer) session.getAttribute("customer");
+                idcustomer = customer.getId();
                 materialService.saveAllOrderDetail(idcustomer, order);
             } else {
                 materialService.saveOrderDetail(carts, order); //insert orders detail
@@ -373,6 +405,66 @@ public class MaterialController implements IMaterialControll {
         }
         return "layout/login";
     }
-
+    @GetMapping("/blog")
+    public String blog(Model model){
+        model.addAttribute("blogs",materialService.getBlog());
+        return "features/blog";
+    }
+    @GetMapping("/blog-detail")
+    public String blogDetail(Model model,@RequestParam(name = "idBlog")Integer idBlog){
+        model.addAttribute("blog",materialService.getOneBlog(idBlog));
+        return "features/blog-detail";
+    }
+    @GetMapping("/test")
+    public String sendTestReport(HttpServletRequest request){
+        final Mail mail = new MailBuilder()
+                .From("phuong16397@gmail.com") // For gmail, this field is ignored.
+                .To("ntphuong163@gmail.com")
+                .Template("mail-template.html")
+                .AddContext("subject", "Test Email")
+                .AddContext("content", "Hello World!")
+                .Subject("Hello")
+                .createMail();
+        String responseMessage = request.getRequestURI();
+        try {
+            this.emailService.sendHTMLEmail(mail);
+        }
+        catch (Exception e) {
+            responseMessage = "Request Unsuccessful \n" + e.getMessage() + "\n" + responseMessage;
+            return responseMessage;
+        }
+        responseMessage = "Request Successful \n" + responseMessage;
+        return responseMessage;
+    }
+    @GetMapping("forgot-password")
+    public String forgotPassword(){
+        return "features/forgot-password";
+    }
+    @PostMapping("forgot-password-action")
+    public String sendMail(@RequestParam(name = "txtEmail") String email){
+        final Mail mail = new MailBuilder()
+                .From("phuong16397@gmail.com") // For gmail, this field is ignored.
+                .To(email)
+                .Template("mail-template.html")
+                .AddContext("subject", "Bạn quên mật khẩu")
+                .AddContext("content", "Ministore chào bạn,")
+                .Subject("Ministore, quên mật khẩu")
+                .createMail();
+        try {
+            this.emailService.sendHTMLEmail(mail);
+        }
+        catch (Exception e) {
+            return "layout/error";
+        }
+        return "features/forgot-password";
+    }
+    @GetMapping("/showError")
+    public String showError(){
+        return "layout/error";
+    }
+    @GetMapping("/change-password")
+    public String viewChangePassword(){
+        return "features/change-password";
+    }
 
 }

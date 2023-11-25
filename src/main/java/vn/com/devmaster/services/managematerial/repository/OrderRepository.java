@@ -33,4 +33,6 @@ public interface OrderRepository extends JpaRepository<Order, Integer>, PagingAn
     List<IRevenueDay> getRevenueByDay(int month);
     @Query(value = Sql.MONTH_YEAR,nativeQuery = true)
     List<IMonth> getMonthYear(int year);
+    @Query(value = Sql.TOTAL_REVENUE,nativeQuery = true)
+    int getTotalRevenue();
 }

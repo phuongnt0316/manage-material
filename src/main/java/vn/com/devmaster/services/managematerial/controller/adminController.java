@@ -12,12 +12,11 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import vn.com.devmaster.services.managematerial.DTO.ProductDto;
-import vn.com.devmaster.services.managematerial.domain.Order;
-import vn.com.devmaster.services.managematerial.domain.OrdersDetail;
-import vn.com.devmaster.services.managematerial.domain.Product;
-import vn.com.devmaster.services.managematerial.domain.Status;
+import vn.com.devmaster.services.managematerial.domain.*;
+import vn.com.devmaster.services.managematerial.exportToExcel.CustomerExport;
 import vn.com.devmaster.services.managematerial.service.MaterialService;
 
+import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.List;
 
@@ -40,6 +39,7 @@ public class adminController {
     @GetMapping("/revenue")
     public String showRevenue(Model model,@RequestParam(name = "month",required = false,defaultValue = "11") int month) {
         int year=2023;
+        model.addAttribute("revenue",materialService.getTotalRevenue());
         model.addAttribute("chart_month",materialService.getRevenueByMonth());
         model.addAttribute("chart_day",materialService.getRevenueByDay(month));
         model.addAttribute("chart_category",materialService.getRevenueByCategory());
@@ -89,13 +89,12 @@ public class adminController {
 
     @GetMapping("/orders-manage")
     public String showOrders(Model model,
-                             @RequestParam(name = "idcustomer", required = false) Integer idcustomer,
-                             @RequestParam(name = "choices-single-defaul",required = false) Integer idsatus) {
+                             @RequestParam(name = "idcustomer", required = false) Integer idCustomer) {
 
         List<Order> orders = materialService.getAllOrders();
-        if (idcustomer != null) {
-            orders = materialService.getOrderByCustomer(idcustomer);
-            model.addAttribute("customer", materialService.getCustomer(idcustomer));
+        if (idCustomer != null) {
+            orders = materialService.getOrderByCustomer(idCustomer);
+            model.addAttribute("customer", materialService.getCustomer(idCustomer));
         }
         model.addAttribute("orders", orders);
         List<Status> statusList = materialService.getStatus();
@@ -160,21 +159,21 @@ public class adminController {
 
     @GetMapping("/update-product")
     public String updateProduct(@RequestParam("id") Integer id, Model model) {
-        model.addAttribute("categories", materialService.getAllCategory());
+        model.addAttribute("categories", materialService.getAllCategory1());
         model.addAttribute("product", materialService.getProductByID(id));
         return "features/update-product";
     }
     @GetMapping("add-quantity-product")
     public String addQuantity(Model model,
-                             @RequestParam(name = "idProduct",required = false,defaultValue = "0") Integer idproduct,
+                             @RequestParam(name = "idProduct",required = false,defaultValue = "0") Integer idProduct,
                               @ModelAttribute("message") String message
                               ){
         Product product=new Product();
-        if(idproduct!=null){
-            product=materialService.getOneProduct(idproduct);
+        if(idProduct!=null){
+            product=materialService.getOneProduct(idProduct);
             model.addAttribute("product1",product);
         }
-        model.addAttribute("idproduct",idproduct);
+        model.addAttribute("idproduct",idProduct);
         model.addAttribute("products",materialService.getAllProduct());
         model.addAttribute("message",message);
         return("features/add-quantity-product");
@@ -195,13 +194,13 @@ public class adminController {
     @PostMapping("/update-product-action")
     public String updateProductAction(@RequestParam("id-product") Integer id,
                                       @RequestParam(name = "name-product", required = false) String name,
-                                      @RequestParam(name = "category") Integer idcategory,
+                                      @RequestParam(name = "category") Integer idCategory,
                                       @RequestParam(name = "price", required = false) Double price,
                                       @RequestParam(name = "description", required = false) String description,
                                       @RequestParam(name = "notes", required = false) String notes,
                                       @RequestParam("product-active") Byte isactive,
                                       @RequestParam(name = "image", required = false) MultipartFile multipartFile) throws IOException {
-        materialService.updateProduct(id, name, idcategory, price, description, notes, isactive, multipartFile);
+        materialService.updateProduct(id, name, idCategory, price, description, notes, isactive, multipartFile);
 
         return "redirect:/product-manage";
 
@@ -213,9 +212,9 @@ public class adminController {
 
     }
     @GetMapping("/update-payment")
-    public String updatePayment(@RequestParam(name = "idpayment")Integer idpayment,
+    public String updatePayment(@RequestParam(name = "idpayment")Integer idPayment,
                                       Model model){
-        model.addAttribute("payment",materialService.getOnePayment(idpayment));
+        model.addAttribute("payment",materialService.getOnePayment(idPayment));
         return "features/update-payment";
     }
 
@@ -227,5 +226,28 @@ public class adminController {
                                       @RequestParam(name = "imagePayment", required = false) MultipartFile multipartFile) throws IOException {
         materialService.updatePaymentMethod(idPayment,namePayment,notes,paymentActive,multipartFile);
         return "features/payment";
+    }
+    @GetMapping("/category-manage")
+    public String getCategory(Model model){
+        model.addAttribute("categories",materialService.getAllCategory());
+        return "features/category-manage";
+    }
+    @GetMapping("/product-inventory-manage")
+    public String getProductInventory(Model model){
+        int time=90;
+        model.addAttribute("inventories",materialService.getProductInventory());
+         // get product inventory list
+        return "features/product-inventory-manage";
+    }
+    @GetMapping("/users-export")
+    public void exportToExcel(HttpServletResponse response) throws IOException {
+        response.setContentType("application/octet-stream");
+        String headerKey = "Content-Disposition";
+        String headerValue = "attachment; filename=user.xlsx";
+        response.setHeader(headerKey,headerValue);
+        List<Customer> customers = materialService.getAll();
+        CustomerExport exportToExcel = new CustomerExport(customers);
+        exportToExcel.export(response);
+
     }
 }

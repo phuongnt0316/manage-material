@@ -12,7 +12,8 @@ import lombok.NoArgsConstructor;
 public class ViewCart {
     Integer idProduct;
     String name;
-    Integer quantity;
+    Integer quantityCart;
     String image;
     Double price;
+    Integer quantityProduct;
 }

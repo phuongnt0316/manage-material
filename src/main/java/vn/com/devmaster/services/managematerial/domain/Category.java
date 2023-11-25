@@ -26,7 +26,7 @@ public class Category {
     @Column(name = "NOTES")
     private String notes;
 
-    @Column(name = "ICON", length = 250)
+    @Column(name = "IMAGE", length = 250)
     private String icon;
 
     @Column(name = "CREATED_DATE")

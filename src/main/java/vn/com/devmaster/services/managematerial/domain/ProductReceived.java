@@ -16,8 +16,9 @@ public class ProductReceived {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
-    @Column(name = "ID_PRODUCT")
-    private Integer idProduct;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "ID_PRODUCT")
+    private Product idProduct;
 
     @Column(name = "QUANTITY")
     private Integer quantity;

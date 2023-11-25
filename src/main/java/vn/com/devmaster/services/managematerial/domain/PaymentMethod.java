@@ -23,14 +23,15 @@ public class PaymentMethod {
     @Column(name = "NOTES")
     private String notes;
 
-    @Column(name = "CREATED_DATE")
-    private Instant createdDate;
+    @Column(name = "UPDATED_BY")
+    private Instant updatedBy;
 
     @Column(name = "UPDATED_DATE")
     private Instant updatedDate;
 
     @Column(name = "ISACTIVE")
     private Byte isactive;
+
     @Column(name = "PAYMENT_IMAGE")
     private String paymentImage;
 

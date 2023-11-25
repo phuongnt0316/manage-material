@@ -29,7 +29,5 @@ public class OrdersPayment {
     @Column(name = "NOTES")
     private Integer notes;
 
-    @Column(name = "STATUS", length = 50)
-    private String status;
 
 }

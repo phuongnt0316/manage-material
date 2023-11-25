@@ -12,7 +12,7 @@ function validate() {
 }
 function changeDate(){
     var month=document.getElementById("date-sale").value;
-    window.location.href = '/admin?month='+month;
+    window.location.href = '/revenue?month='+month;
 }
 function onchangeIdproduct(id,id1){
   //  console.log(product1);
