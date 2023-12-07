@@ -4,7 +4,7 @@
       layout:decorate="~{layout/admin}">
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
+    <title>Doanh thu</title>
 </head>
 <body>
 <th:block layout:fragment="content">
@@ -15,9 +15,16 @@
             <div class="col-lg-8 d-flex align-items-strech">
                 <div class="card w-100">
                     <div class="card-body">
+                        <div class="p-3">
+                            <a href="/revenue" class="btn btn-pr-active"> Doanh thu</a>
+                            <a href="/statistical" class="btn btn-pr"> Sản phẩm đã bán</a>
+                            <a href="/product-inventory-manage" class="btn btn-pr">Tồn kho sản phẩm</a>
+
+                        </div>
                         <div class="d-sm-flex d-block align-items-center justify-content-between mb-9">
                             <div class="mb-3 mb-sm-0">
-                                <h5 class="card-title fw-semibold">Doanh thu theo ngày</h5>
+                                <h5 class="card-title fw-semibold" th:text="'Doanh thu tháng '+${month}"></h5>
+                                <h5 th:text="'Tổng: '+${#numbers.formatDecimal(revenue,3,'DEFAULT', 0, 'DEFAULT')}+' VND'"></h5>
                             </div>
                             <div>
                                 <select class="form-select" name="date-sale" id="date-sale" onchange="changeDate()">

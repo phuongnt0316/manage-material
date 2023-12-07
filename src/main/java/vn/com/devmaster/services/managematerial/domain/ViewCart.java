@@ -16,4 +16,5 @@ public class ViewCart {
     String image;
     Double price;
     Integer quantityProduct;
+    Double sale;
 }

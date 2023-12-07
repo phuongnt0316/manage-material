@@ -24,8 +24,6 @@
           rel="stylesheet">
     <script src="https://kit.fontawesome.com/a6248806d8.js" crossorigin="anonymous"></script>
 
-    <!-- script
-      ================================================== -->
     <script th:src="@{js/modernizr.js}"></script>
 
 </head>
@@ -172,7 +170,7 @@
             </div>
         </div>
     </section>
-    <section id="company-services" class="padding-large">
+    <section id="company-services" class="padding-small">
         <div class="container">
             <div class="row">
                 <div class="col-lg-3 col-md-6 pb-3">
@@ -238,17 +236,17 @@
             </div>
         </div>
     </section>
-    <section id="mobile-products" class="product-store padding-small position-relative">
+    <section id="mobile-products" class="product-store padding-xsmall position-relative">
         <div class="container">
             <div class="row">
                 <div class="display-header d-flex justify-content-between pb-1">
-                    <h2 class="display-7 text-dark text-uppercase">Sản phẩm bán chạy</h2>
+                    <h2 class="display-7 text-dark text-uppercase"> Sản phẩm đang giảm giá </h2>
                     <div class="btn-right">
                         <a href="/shop" class="btn btn-goShop  text-uppercase">Xem cửa hàng</a>
                     </div>
                 </div>
                 <div class="swiper-wrapper regular slider">
-                    <div class="col-lg-4 col-md-6 pb-1" th:each="product:${products}">
+                    <div class="col-lg-4 col-md-6 pb-1" th:each="product:${saleProducts}">
                         <div class="product-card pe-1 pb-1">
                             <div class="image-holder">
                                 <img th:src="${product.getImage()}" alt="product-item" class="img-fluid item-product">
@@ -260,52 +258,67 @@
                                 <p class="card-content">
                                     <span th:text="${product.getDescription()}"></span>
                                 </p>
-                                <p class="item-price" th:text="${#numbers.formatDecimal(product.getPrice(),3,'DEFAULT', 0, 'DEFAULT')}+' VNĐ'"></p>
-                                <div th:remove="${product.getQuantity()==0}?none:all">
-
-                                    <a href="#" class="btn btn-warning">Tạm hết hàng</a>
+                                <div class="d-flex"  th:remove="${product.getSale()!=0}?none:all">
+                                    <p class="item-price p-2"><del  th:text="${#numbers.formatDecimal(product.getPrice(),3,'DEFAULT', 0, 'DEFAULT')}+' VNĐ'"></del></p>
+                                    <p class="item-price-sale mr-auto p-2" th:text="${#numbers.formatDecimal((product.getPrice()*(1.0-product.getSale())),3,'DEFAULT', 0, 'DEFAULT')}+' VNĐ'"></p>
                                 </div>
-                                <div th:remove="${product.getQuantity()==0}?all:none">
-                                <a th:href="${(check==0)?'/add-cart?idpr='+product.getId():'/cart?idpr='+product.getId()}" class="btn btn-primary"><i class="fa-solid fa-cart-plus"></i></a>
-                                <a th:href="'/buyProduct?idpr='+${product.getId()}" class="btn btn-danger">Mua ngay</a>
+                                <div th:remove="${product.getSale()==0}?none:all">
+                                    <p class="item-price p-2" th:text="${#numbers.formatDecimal(product.getPrice(),3,'DEFAULT', 0, 'DEFAULT')}+' VNĐ'"></p>
                                 </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-    <section id="smart-watches" class="product-store padding-large position-relative">
-        <div class="container">
-            <div class="row">
-                <div class="display-header d-flex justify-content-between pb-1">
-                    <h2 class="display-7 text-dark text-uppercase">Sản phẩm bán chạy</h2>
-                    <div class="btn-right">
-                        <a href="/shop" class="btn btn-goShop  text-uppercase">Xem cửa hàng</a>
-                    </div>
-                </div>
-                <div class="swiper-wrapper regular slider">
-                    <div class="col-lg-4 col-md-6 pb-1" th:each="product:${products}">
-                        <div class="product-card pe-1 pb-1">
-                            <div class="image-holder">
-                                <img th:src="${product.getImage()}" alt="product-item" class="img-fluid item-product">
-                            </div>
-                            <div class="card-detail justify-content-between pt-1 pb-1">
-                                <p class="card-title text-uppercase">
-                                    <a th:href="'/product-detail?idpr='+${product.getId()}" th:text="${product.getName()}"></a>
-                                </p>
-                                <p class="card-content">
-                                    <span th:text="${product.getDescription()}"></span>
-                                </p>
-                                <p class="item-price" th:text="${#numbers.formatDecimal(product.getPrice(),3,'DEFAULT', 0, 'DEFAULT')}+' VNĐ'"></p>
+                                <!--                                <p class="item-price" th:text="${#numbers.formatDecimal(product.getPrice(),3,'DEFAULT', 0, 'DEFAULT')}+' VNĐ'"></p>-->
                                 <div th:remove="${product.getQuantity()==0}?none:all">
 
                                     <a href="#" class="btn btn-warning">Tạm hết hàng</a>
                                 </div>
                                 <div th:remove="${product.getQuantity()==0}?all:none">
                                     <a th:href="${(check==0)?'/add-cart?idpr='+product.getId():'/cart?idpr='+product.getId()}" class="btn btn-primary"><i class="fa-solid fa-cart-plus"></i></a>
-                                    <a th:href="'/buyProduct?idpr='+${product.getId()}" class="btn btn-danger">Mua ngay</a>
+                                    <a th:href="'/buyNow?idProduct='+${product.getId()}+'&&quantity=1'" class="btn btn-danger">Mua ngay</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </section>
+    <section id="smart-watches" class="product-store padding-xsmall position-relative">
+        <div class="container">
+            <div class="row">
+                <div class="display-header d-flex justify-content-between pb-1">
+                    <h2 class="display-7 text-dark text-uppercase">Sản phẩm bán chạy</h2>
+                    <div class="btn-right">
+                        <a href="/shop" class="btn btn-goShop  text-uppercase">Xem cửa hàng</a>
+                    </div>
+                </div>
+                <div class="swiper-wrapper regular slider">
+                    <div class="col-lg-4 col-md-6 pb-1" th:each="product:${products}">
+                        <div class="product-card pe-1 pb-1">
+                            <div class="image-holder">
+                                <img th:src="${product.getImage()}" alt="product-item" class="img-fluid item-product">
+                            </div>
+                            <div class="card-detail justify-content-between pt-1 pb-1">
+                                <p class="card-title text-uppercase">
+                                    <a th:href="'/product-detail?idpr='+${product.getId()}" th:text="${product.getName()}"></a>
+                                </p>
+                                <p class="card-content">
+                                    <span th:text="${product.getDescription()}"></span>
+                                </p>
+                                <div class="d-flex"  th:remove="${product.getSale()!=0}?none:all">
+                                    <p class="item-price p-2"><del  th:text="${#numbers.formatDecimal(product.getPrice(),3,'DEFAULT', 0, 'DEFAULT')}+' VNĐ'"></del></p>
+                                    <p class="item-price-sale mr-auto p-2" th:text="${#numbers.formatDecimal((product.getPrice()*(1.0-product.getSale())),3,'DEFAULT', 0, 'DEFAULT')}+' VNĐ'"></p>
+                                </div>
+                                <div th:remove="${product.getSale()==0}?none:all">
+                                    <p class="item-price p-2" th:text="${#numbers.formatDecimal(product.getPrice(),3,'DEFAULT', 0, 'DEFAULT')}+' VNĐ'"></p>
+                                </div>
+                                <!--                                <p class="item-price" th:text="${#numbers.formatDecimal(product.getPrice(),3,'DEFAULT', 0, 'DEFAULT')}+' VNĐ'"></p>-->
+                                <div th:remove="${product.getQuantity()==0}?none:all">
+
+                                    <a href="#" class="btn btn-warning">Tạm hết hàng</a>
+                                </div>
+                                <div th:remove="${product.getQuantity()==0}?all:none">
+                                    <a th:href="${(check==0)?'/add-cart?idpr='+product.getId():'/cart?idpr='+product.getId()}" class="btn btn-primary"><i class="fa-solid fa-cart-plus"></i></a>
+                                    <a th:href="'/buyNow?idProduct='+${product.getId()}+'&&quantity=1'" class="btn btn-danger">Mua ngay</a>
                                 </div>
                             </div>
                         </div>
@@ -315,7 +328,7 @@
         </div>
     </section>
 
-    <section id="lastest-blog" class="padding-large">
+    <section id="lastest-blog" class="padding-xsmall">
         <div class="container">
             <div class="row">
                 <div class="display-header d-flex justify-content-between pb-3">
@@ -323,65 +336,34 @@
                         Bài viết mới nhất
                     </h2>
                     <div class="btn-right">
-                        <a href="blog.html" class="btn btn-medium btn-normal text-uppercase">Xem bài viết</a>
+                        <a href="/blog" class="btn btn-medium btn-normal text-uppercase">Xem bài viết</a>
                     </div>
                 </div>
-                <div class="post-grid d-flex flex-wrap justify-content-between">
-                    <div class="col-lg-4 col-sm-12">
+                <div class="post-grid d-flex flex-wrap justify-content-between" >
+                    <div class="col-lg-4 col-sm-12" th:each="blog:${blogs}">
                         <div class="card border-none me-3">
                             <div class="card-image">
-                                <img src="images/post-image1.jpg" alt class="img-fluid"/>
+                                <img th:src="${blog.getBlogImage()}" alt class="image-blog"/>
                             </div>
                         </div>
                         <div class="card-body text-uppercase">
                             <div class="card-meta text-muted">
-                                <span class="meta-date">feb 22, 2023</span>
-                                <span class="meta-category">-Gadgets</span>
+                                <span class="meta-date" th:text="${blog.getCreatedDate()}"></span>
+                                <span class="meta-category"></span>
                             </div>
                             <h3 class="card-title">
-                                <a href="#">Get some cool gadgets in 2023</a>
+                                <a th:href="'/blog-detail?idBlog='+${blog.getId()}" th:text="${blog.getTitle()}"></a>
                             </h3>
                         </div>
                     </div>
-                    <div class="col-lg-4 col-sm-12">
-                        <div class="card border-none me-3">
-                            <div class="card-image">
-                                <img src="images/post-image1.jpg" alt class="img-fluid"/>
-                            </div>
-                        </div>
-                        <div class="card-body text-uppercase">
-                            <div class="card-meta text-muted">
-                                <span class="meta-date">feb 22, 2023</span>
-                                <span class="meta-category">-Gadgets</span>
-                            </div>
-                            <h3 class="card-title">
-                                <a href="#">Get some cool gadgets in 2023</a>
-                            </h3>
-                        </div>
-                    </div>
-                    <div class="col-lg-4 col-sm-12">
-                        <div class="card border-none me-3">
-                            <div class="card-image">
-                                <img src="images/post-image1.jpg" alt class="img-fluid"/>
-                            </div>
-                        </div>
-                        <div class="card-body text-uppercase">
-                            <div class="card-meta text-muted">
-                                <span class="meta-date">feb 22, 2023</span>
-                                <span class="meta-category">-Gadgets</span>
-                            </div>
-                            <h3 class="card-title">
-                                <a href="#">Get some cool gadgets in 2023</a>
-                            </h3>
-                        </div>
-                    </div>
+
                 </div>
             </div>
         </div>
     </section>
 </th:block>
 
-<section id="instagram" class="padding-large overflow-hidden no-padding-top">
+<section id="instagram" class="padding-small overflow-hidden no-padding-top">
     <div class="container">
         <div class="row">
             <div class="display-header text-uppercase text-dark text-center pb-3">
@@ -442,7 +424,7 @@
         </div>
     </div>
 </section>
-<section id="subscribe" class="container-grid padding-large position-relative overflow-hidden">
+<section id="subscribe" class="container-grid padding-small position-relative overflow-hidden">
     <div class="container">
         <div class="row">
             <div
@@ -599,7 +581,7 @@
 <script type="text/javascript" src="//code.jquery.com/jquery-migrate-1.2.1.min.js"></script>
 <script th:src="@{js/slick.js}" type="text/javascript" charset="utf-8"></script>
 <script th:src="@{js/limit-word.js}" type="text/javascript" charset="utf-8"></script>
-<script th:src="@{js/detail-product.js}" type="text/javascript" charset="utf-8"></script>
+<script th:src="@{js/product.js}" type="text/javascript" charset="utf-8"></script>
 </body>
 
 </html>

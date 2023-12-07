@@ -16,85 +16,14 @@
           <article class="post-item mt-5">
             <div class="post-content">
               <div class="post-meta text-uppercase">
-                <span class="post-category" th:text="${blog.getDateBlog()}"></span> / <span class="meta-date" th:text="${blog.getBlogTopic()}"></span>
+                <span class="post-category" th:text="${#dates.format(blog.getCreatedDate(), 'dd-MM-yyyy')}"></span> / <span class="meta-date" th:text="${blog.getBlogTopic()}"></span>
               </div>
-              <h1 class="post-title" th:text="${blog.getTitle()}">TECHNOLOGY HACK YOU WON’T GET</h1>
+              <h1 class="post-title" th:text="${blog.getTitle()}"></h1>
               <div class="hero-image col-lg-12 mt-5">
                 <img th:src="${blog.getBlogImage()}" alt="single-post" class="img-fluid">
               </div>
               <div class="post-description review-item padding-medium">
                 <p th:text="${blog.getContentL()}"></p>
-                <div class="post-bottom-link d-flex justify-content-between">
-                  <div class="block-tag">
-                    <ul class="list-unstyled d-flex">
-                      <li class="pe-3">
-                        <a href="#">Tech</a>
-                      </li>
-                      <li class="pe-3">
-                        <a href="#">Tips</a>
-                      </li>
-                      <li class="pe-3">
-                        <a href="#">Gadgets</a>
-                      </li>
-                    </ul>
-                  </div>
-                  <div class="social-links d-flex">
-                    <div class="element-title pe-2">Share:</div>
-                    <ul class="d-flex list-unstyled">
-                      <li>
-                        <a href="#">
-                          <svg class="facebook">
-                            <use xlink:href="#facebook"></use>
-                          </svg>
-                        </a>
-                      </li>
-                      <li>
-                        <a href="#">
-                          <svg class="instagram">
-                            <use xlink:href="#instagram"></use>
-                          </svg>
-                        </a>
-                      </li>
-                      <li>
-                        <a href="#">
-                          <svg class="twitter">
-                            <use xlink:href="#twitter"></use>
-                          </svg>
-                        </a>
-                      </li>
-                      <li>
-                        <a href="#">
-                          <svg class="linkedin">
-                            <use xlink:href="#linkedin"></use>
-                          </svg>
-                        </a>
-                      </li>
-                      <li>
-                        <a href="#">
-                          <svg class="youtube">
-                            <use xlink:href="#youtube"></use>
-                          </svg>
-                        </a>
-                      </li>
-                    </ul>
-                  </div>
-                </div>
-              </div>
-              <div id="single-post-navigation" class="mb-5">
-                <div class="post-navigation d-flex flex-wrap align-items-center justify-content-between">
-                  <a itemprop="url" class="post-prev d-flex align-items-center" href="">
-                    <svg class="chevron-left">
-                      <use xlink:href="#chevron-left"></use>
-                    </svg>
-                    <span class="page-nav-title text-uppercase">Get some cool gadgets in 2023</span>
-                  </a>
-                  <a itemprop="url" class="post-next d-flex align-items-center" href="">
-                    <span class="page-nav-title text-uppercase">TOP 10 SMALL cAMERA IN THE WORLD</span>
-                    <svg class="chevron-right">
-                      <use xlink:href="#chevron-right"></use>
-                    </svg>
-                  </a>
-                </div>
               </div>
             </div>
           </article>
@@ -107,60 +36,29 @@
   <div class="container">
     <div class="row">
       <div class="display-header d-flex justify-content-between pb-3">
-        <h2 class="display-7 text-dark text-uppercase">Related Posts</h2>
+        <h2 class="display-7 text-dark text-uppercase">Bài viết gần đây</h2>
         <div class="btn-right">
-          <a href="#" class="btn btn-medium btn-normal text-uppercase">Bài viết gần đây</a>
+          <a href="/blog" class="btn btn-medium btn-normal text-uppercase">Bài viết</a>
         </div>
       </div>
       <div class="post-grid d-flex flex-wrap justify-content-between">
-        <div class="col-lg-4 col-sm-12 pe-3">
+        <div class="col-lg-4 col-sm-12 pe-3" th:each="blog:${blogs}">
           <div class="card border-none">
             <div class="card-image">
-              <img src="images/post-item1.jpg" alt="" class="img-fluid">
+              <img th:src="${blog.getBlogImage()}" alt="" class="img-fluid">
             </div>
           </div>
           <div class="card-body text-uppercase">
             <div class="card-meta text-muted">
-              <span class="meta-date">feb 22, 2023</span>
-              <span class="meta-category">- Gadgets</span>
+              <span class="meta-date" th:text="${#dates.format(blog.getCreatedDate(), 'dd-MM-yyyy')}"></span>
+              <span class="meta-category" th:text="${blog.getBlogTopic()}"></span>
             </div>
             <h3 class="card-title">
-              <a href="#">Get some cool gadgets in 2023</a>
+              <a th:href="'/blog-detail?idBlog='+${blog.getId()}" th:text="${blog.getTitle()}"></a>
             </h3>
           </div>
         </div>
-        <div class="col-lg-4 col-sm-12 pe-3">
-          <div class="card border-none">
-            <div class="card-image">
-              <img src="images/post-item2.jpg" alt="" class="img-fluid">
-            </div>
-          </div>
-          <div class="card-body text-uppercase">
-            <div class="card-meta text-muted">
-              <span class="meta-date">feb 25, 2023</span>
-              <span class="meta-category">- Technology</span>
-            </div>
-            <h3 class="card-title">
-              <a href="#">Technology Hack You Won't Get</a>
-            </h3>
-          </div>
-        </div>
-        <div class="col-lg-4 col-sm-12 pe-3">
-          <div class="card border-none">
-            <div class="card-image">
-              <img src="images/post-item3.jpg" alt="" class="img-fluid">
-            </div>
-          </div>
-          <div class="card-body text-uppercase">
-            <div class="card-meta text-muted">
-              <span class="meta-date">feb 22, 2023</span>
-              <span class="meta-category">- Camera</span>
-            </div>
-            <h3 class="card-title">
-              <a href="#">Top 10 Small Camera In The World</a>
-            </h3>
-          </div>
-        </div>
+
       </div>
     </div>
   </div>

@@ -29,91 +29,127 @@
         <div class="container">
             <div class="row">
                 <main class="col-md-9">
-                    <div class="filter-shop d-flex justify-content-between">
-                        <div class="showing-product">
-                            <p></p>
-                        </div>
-<!--                        <div class="sort-by">-->
-<!--                            <select id="input-sort" class="form-control" data-filter-sort="" data-filter-order="">-->
-<!--                                <option value="">Mặc định</option>-->
-<!--                                <option value="ASC">Giá (Thấp-Cao)</option>-->
-<!--                                <option value="DESC">Giá (Cao-Thấp)</option>-->
-
-<!--                            </select>-->
-<!--                        </div>-->
+                    <div class="showing-product">
+                        <p th:text="${size}+' sản phẩm'"></p>
                     </div>
-                    <div class="product-content product-store d-flex justify-content-between flex-wrap">
-                        <div class="col-lg-4 col-md-6 p-3" th:each="product:${products}">
-                            <div class="product-card pe-3 pb-3">
-                                <div class="image-holder">
-                                    <img th:src="${product.getImage()}" alt="product-item" class="img-fluid item-product">
-                                </div>
-                                <div class="card-detail justify-content-between pb-3">
-                                    <p class="card-title text-uppercase">
-                                        <a th:href="'/product-detail?idpr='+${product.getId()}" th:text="${product.getName()}"></a>
-                                    </p>
-                                    <p class="card-content">
-                                        <span th:text="${product.getDescription()}"></span>
-                                    </p>
-                                    <p class="item-price" th:text="${#numbers.formatDecimal(product.getPrice(),3,'DEFAULT', 0, 'DEFAULT')}+' VNĐ'"></p>
-                                    <div th:remove="${product.getQuantity()==0}?none:all">
+            <div class="product-content product-store d-flex justify-content-between flex-wrap">
 
-                                        <a href="#" class="btn btn-warning">Tạm hết hàng</a>
-                                    </div>
-                                    <div th:remove="${product.getQuantity()==0}?all:none">
-                                        <a th:href="${(check==0)?'/add-cart?idpr='+product.getId():'/cart?idpr='+product.getId()}" class="btn btn-primary"><i class="fa-solid fa-cart-plus"></i></a>
-                                        <a th:href="'/buyProduct?idpr='+${product.getId()}" class="btn btn-danger">Mua ngay</a>
-                                    </div>
-                                </div>
+                <div class="col-lg-4 col-md-6 p-3" th:each="product:${products}">
+                    <div class="product-card pe-0 pb-3">
+                        <div class="image-holder">
+                            <img th:src="${product.getImage()}" alt="product-item" class="img-fluid item-product">
+                        </div>
+                        <div class="card-detail justify-content-between pb-3">
+                            <p class="card-title text-uppercase">
+                                <a th:href="'/product-detail?idpr='+${product.getId()}"
+                                   th:text="${product.getName()}"></a>
+                            </p>
+                            <p class="card-content">
+                                <span th:text="${product.getDescription()}"></span>
+                            </p>
+                            <div class="d-flex"  th:remove="${product.getSale()!=0}?none:all">
+                                <p class="item-price p-2"><del  th:text="${#numbers.formatDecimal(product.getPrice(),3,'DEFAULT', 0, 'DEFAULT')}+' VNĐ'"></del></p>
+                                <p class="item-price-sale mr-auto p-2" th:text="${#numbers.formatDecimal((product.getPrice()*(1.0-product.getSale())),3,'DEFAULT', 0, 'DEFAULT')}+' VNĐ'"></p>
+                            </div>
+                            <div th:remove="${product.getSale()==0}?none:all">
+                                <p class="item-price p-2" th:text="${#numbers.formatDecimal(product.getPrice(),3,'DEFAULT', 0, 'DEFAULT')}+' VNĐ'"></p>
+                            </div>
+                            <!--                                <p class="item-price" th:text="${#numbers.formatDecimal(product.getPrice(),3,'DEFAULT', 0, 'DEFAULT')}+' VNĐ'"></p>-->
+                            <div th:remove="${product.getQuantity()==0}?none:all">
+
+                                <a href="#" class="btn btn-warning">Tạm hết hàng</a>
+                            </div>
+                            <div th:remove="${product.getQuantity()==0}?all:none">
+                                <a th:href="${(check==0)?'/add-cart?idpr='+product.getId():'/cart?idpr='+product.getId()}" class="btn btn-primary"><i class="fa-solid fa-cart-plus"></i></a>
+                                <a th:href="'/buyNow?idProduct='+${product.getId()}+'&&quantity=1'" class="btn btn-danger">Mua ngay</a>
                             </div>
                         </div>
                     </div>
-                    <nav class="navigation paging-navigation text-center padding-medium" role="navigation">
-                        <ul class="pagination loop-pagination d-flex justify-content-center align-items-center">
-                            <li th:if="${curentpage>1}"><a
-                                    th:href="@{${keyword!=null&&keyword!=''?'?key='+keyword+'&':'?'}+'?pageNo='+${curentpage-1}}">&laquo;</a>
-                            </li>
-                            <li th:each="i:${#numbers.sequence(1,totalPage)}">
-                                <a th:class="${curentpage==i?'active':''}"
-                                   th:href="@{${keyword!=null&&keyword!=''?'?key='+keyword+'&':'?'}+'pageNo='+${i}}"
-                                   th:text="${i}"> </a>
-                            </li>
-                            <li th:if="${curentpage<totalPage}"><a
-                                    th:href="@{${keyword!=null&&keyword!=''?'?key='+keyword+'&':'?'}+'pageNo='+${curentpage+1}}">
-                                &raquo;</a>
-                            </li>
-                        </ul>
-                    </nav>
+                </div>
+            </div>
+<!--            <nav class="navigation paging-navigation text-center padding-medium" role="navigation">-->
+<!--                <ul class="pagination loop-pagination d-flex justify-content-center align-items-center">-->
+<!--                    <li th:if="${curentpage>1}"><a-->
+<!--                            th:href="@{'?pageNo='+${curentpage-1}}">&laquo;</a>-->
+<!--                    </li>-->
+<!--                    <li th:each="i:${#numbers.sequence(1,totalPage)}">-->
+<!--                        <a th:class="${curentpage==i?'active':''}"-->
+<!--                           th:href="@{'?pageNo='+${i}}"-->
+<!--                           th:text="${i}"> </a>-->
+<!--                    </li>-->
+<!--                    <li th:if="${curentpage<totalPage}"><a-->
+<!--                            th:href="@{'?pageNo='+${curentpage+1}}">-->
+<!--                        &raquo;</a>-->
+<!--                    </li>-->
+<!--                </ul>-->
+<!--            </nav>-->
                 </main>
-                <aside class="col-md-3">
+            <aside class="col-md-3">
+                <form role="search" method="get" th:action="@{/shop}">
                     <div class="sidebar">
                         <div class="widget-menu">
                             <div class="widget-search-bar">
-                                <form role="search" method="get" class="d-flex" th:action="@{/shop}">
-                                    <input class="search-field" placeholder="Nhập ..." type="search" name="key" th:value="${keyword}">
 
-                                        <button type="submit" class="btn btn-dark">
-                                            Tìm kiếm
-                                        </button>
+                                <input class="search-field" placeholder="Nhập tên..." type="search" name="key"
+                                       th:value="${keyword}">
+                                <button type="submit" class="btn btn-dark">
+                                    Tìm kiếm
+                                </button>
 
-                                </form>
                             </div>
                         </div>
 
                         <div class="widget-price-filter pt-3">
                             <div class="widget-product-categories pt-5">
                                 <h5 class="widget-title text-decoration-underline text-uppercase">Danh mục</h5>
-                                <ul class="product-categories sidebar-list list-unstyled" th:each="category:${categories}">
-                                    <li class="cat-item">
-                                        <a th:href="'/shop?idcate='+${category.getId()}" th:text="${category.getName()}"></a>
-                                    </li>
-                                </ul>
+                                <div>
+                                    <input type="checkbox" id="category1" name="category" value="0" onClick="toggle(this)">
+                                    <label for="category1">Tất cả</label>
+                                </div>
+                                <div th:each="category:${categories}">
+                                    <input type="checkbox" th:id="'category'+${category.getId()}" name="category"
+                                           th:value="${category.getId()}">
+                                    <label th:for="'category'+${category.getId()}"
+                                           th:text="${category.getName()}"></label>
+                                </div>
+                            </div>
+                            <div class="widget-product-categories pt-5">
+                                <h5 class="widget-title text-decoration-underline text-uppercase">Danh mục</h5>
+                                <div>
+                                    <input type="radio" id="price0" name="price"  value="0">
+                                    <label for="price0"> Tất cả</label>
+                                </div>
+                                <div>
+                                    <input type="radio" id="price1" name="price"  value="1">
+                                    <label for="price1"> Dưới 10 triệu</label>
+                                </div>
+                                <div>
+                                    <input type="radio" id="price2" name="price" value="2">
+                                    <label for="price2"> 10-15 triệu</label>
+                                </div>
+                                <div>
+                                    <input type="radio" id="price3" name="price"  value="3">
+                                    <label for="price3"> 15-20 triệu</label>
+                                </div>
+                                <div>
+                                    <input type="radio" id="price4" name="price" value="4">
+                                    <label for="price4"> 20-25 triệu</label>
+                                </div>
+                                <div>
+                                    <input type="radio" id="price5" name="price" value="5">
+                                    <label for="price5"> 25-30 triệu</label>
+                                </div>
+                                <div>
+                                    <input type="radio" id="price6" name="price" value="6">
+                                    <label for="price6"> Trên 30 triệu</label>
+                                </div>
                             </div>
                         </div>
                     </div>
-                </aside>
-            </div>
+                </form>
+            </aside>
         </div>
+    </div>
     </div>
 </th:block>
 </body>

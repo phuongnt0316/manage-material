@@ -23,6 +23,11 @@
             <table class="table table-responsive-xl table-hover">
               <thead>
               <tr>
+                <td>Thời gian đặt</td>
+                <td th:text="${orderInfor.getDate()}"></td>
+
+              </tr>
+              <tr>
 
                 <td class="vertical-center">
                   Địa chỉ nhận hàng
@@ -54,6 +59,11 @@
                 <td th:text="${orderInfor.getNameTranSport()}"></td>
 
               </tr>
+              <tr>
+                <td>Tổng tiền</td>
+                <td th:text="${#numbers.formatDecimal(orderInfor.getTotalMoney(),3,'DEFAULT', 0, 'DEFAULT')}"></td>
+
+              </tr>
               </tr>
               <tr>
                 <td colspan="5">Chi tiết đơn hàng</td>
@@ -79,20 +89,20 @@
           <h6 class="text-black mb-0" th:text="'x'+${od.getQuantityCart()}"></h6>
         </div>
         <div class="col-md-3 col-lg-2 col-xl-2">
-          <h6 class="mb-0" th:text="'₫'+${#numbers.formatDecimal(od.getPrice(),3,'DEFAULT', 0, 'DEFAULT')}"> </h6>
+          <h6 class="mb-0" th:text="${#numbers.formatDecimal(od.getPrice()*od.getQuantityCart(),3,'DEFAULT', 0, 'DEFAULT')}+'VND'"> </h6>
         </div>
 <!--        <div class="col-md-3 col-lg-2 col-xl-2">-->
 <!--          <h6 class="mb-0" th:text="'₫'+${#numbers.formatDecimal(od.getPrice(),3,'DEFAULT', 0, 'DEFAULT')}"> </h6>-->
 <!--        </div>-->
       </div>
-      <hr>
+      <hr class="my-4">
       <div class="row mb-4 d-flex d-flex align-items-center">
-      <div class="col-md-2  col-lg-2 col-xl-2 ">
-      <h6> Tổng tiền</h6>
-      </div>
-      <div class="col-md-3  col-lg-2 col-xl-2 ">
-        <h6 th:text="'₫'+${#numbers.formatDecimal(total,3,'DEFAULT', 0, 'DEFAULT')}"></h6>
-      </div>
+<!--      <div class="col-md-9  col-lg-9 col-xl-9 ">-->
+<!--      <h6> Tổng </h6>-->
+<!--      </div>-->
+<!--      <div class="col-md-3  col-lg-2 col-xl-2 ">-->
+<!--        <h6 th:text="${#numbers.formatDecimal(total,3,'DEFAULT', 0, 'DEFAULT')}+'VND'"></h6>-->
+<!--      </div>-->
     </div>
     </div>
   </section>

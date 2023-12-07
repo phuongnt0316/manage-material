@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout/admin}">
+<head>
+    <meta charset="UTF-8">
+    <title>Update category</title>
+    <style>
+
+    </style>
+</head>
+<body>
+
+<section class="ftco-section" layout:fragment="content">
+    <div class="container">
+
+        <div>
+
+            <h3> Cập nhật danh mục</h3>
+
+            <form action="#" th:action="@{/update-category-action}" method="post" enctype="multipart/form-data">
+                <div>
+                    <div class="form-group row">
+                        <label for="id-category" class="col-sm-6 col-form-label">
+                            ID category
+                        </label>
+                        <div class="col-sm-6">
+                            <input type="text" readonly class="form-control" id="id-category" name="id-category" th:value="${category.getId()}">
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <label for="name-category" class="col-sm-6 col-form-label">
+                            Tên sản phẩm
+                        </label>
+                        <div class="col-sm-6">
+                            <input type="text" class="form-control" id="name-category" name="name-category" th:value="${category.getName()}">
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <label for="image-category" class="col-sm-6 col-form-label">
+                            Hình ảnh
+                        </label>
+                        <div class="col-sm-6">
+                            <input type="file" name="image" class="form-control" id="image-category" placeholder="Chọn file">
+                        </div>
+                    </div>
+
+                    <div class="form-group row">
+                        <label for="notes" class="col-sm-6 col-form-label">
+                            Ghi chú
+                        </label>
+                        <div class="col-sm-6">
+                            <textarea name="notes" class="form-control" cols="25" rows="5" id="notes" th:text="${category.getNotes()}"></textarea>
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <label for="category-active" class="col-sm-6 col-form-label">
+                            Trạng thái hiển thị
+                        </label>
+                        <div class="col-sm-6">
+                            <select name="category-active" id="category-active" class="form-control">
+                                <option value="0" th:selected="${category.getIsactive()==0}">Tắt</option>
+                                <option value="1" th:selected="${category.getIsactive()==1}">Bật</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                <div>
+                    <input type="submit" class="btn btn-secondary" value="Lưu">
+                    <a class="btn btn-addCart" href="/product-manage"> Hủy</a>
+                </div>
+            </form>
+
+        </div>
+    </div>
+</section>
+
+</body>
+</html>

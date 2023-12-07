@@ -30,12 +30,26 @@
                 </div>
                 <div class="col-lg-6">
                     <div>
-                        <p th:text="'Mã sản phẩm: '+${product.getId()}"></p>
-                        <h3 itemprop="name" class="display-7 text-uppercase" th:text="${product.getName()}"></h3>
+                        <div class="d-flex" ><h3 class="text-id">Mã sản phẩm: </h3>
+                            <h3 class="text-id" name="id-product" id="id-product" th:text="${product.getId()}"></h3>
+                        </div>
+                        <h6 itemprop="name" class="display-7 text-uppercase" th:text="${product.getName()}"></h6>
                     </div>
+<!--                    <div>-->
+<!--                        <p th:text="'Mã sản phẩm: '+${product.getId()}"></p>-->
+<!--                        -->
+<!--                        <h3 itemprop="name" class="display-7 text-uppercase" th:text="${product.getName()}"></h3>-->
+<!--                    </div>-->
                     <div class="product-info">
-                        <div class="product-price pt-3 pb-3">
-                            <strong class="text-primary display-6 fw-bold" th:text="${#numbers.formatDecimal(product.getPrice(),3,'DEFAULT', 0, 'DEFAULT')}+' VNĐ'"></strong>
+<!--                        <div class="product-price pt-3 pb-3">-->
+<!--                            <strong class="text-primary display-6 fw-bold" th:text="${#numbers.formatDecimal(product.getPrice(),3,'DEFAULT', 0, 'DEFAULT')}+' VNĐ'"></strong>-->
+<!--                        </div>-->
+                        <div class="d-flex product-price pt-3 pb-3"  th:remove="${product.getSale()!=0}?none:all">
+                            <p class="item-price p-2" style="font-size: 16px"><del  th:text="${#numbers.formatDecimal(product.getPrice(),3,'DEFAULT', 0, 'DEFAULT')}+' VNĐ'"></del></p>
+                            <p class="item-price-sale mr-auto p-2" style="font-size: 16px" th:text="${#numbers.formatDecimal((product.getPrice()*(1.0-product.getSale())),3,'DEFAULT', 0, 'DEFAULT')}+' VNĐ'"></p>
+                        </div>
+                        <div th:remove="${product.getSale()==0}?none:all" class="product-price pt-3 pb-3">
+                            <p class="item-price p-2" style="font-size: 16px" th:text="${#numbers.formatDecimal(product.getPrice(),3,'DEFAULT', 0, 'DEFAULT')}+' VNĐ'"></p>
                         </div>
                         <p>Thông số sản phẩm</p>
                         <p th:text="${product.getDescription()}"></p>
@@ -63,278 +77,277 @@
                                                 class="btn btn-warning btn-medium text-uppercase mt-3">Tạm hết hàng</button>
                                     </div>
                                     <div class="qty-button d-flex flex-wrap pt-3" th:remove="${product.getQuantity()==0}?all:none">
-                                        <button type="submit"
-                                                class="btn btn-primary btn-medium text-uppercase me-3 mt-3">Mua
-                                            ngay</button>
-                                        <button type="submit" name="add-to-cart"
-                                                class="btn btn-black btn-medium text-uppercase mt-3">Thêm vào giỏ</button>
+                                        <a name="add-cart"
+                                                class="btn btn-primary btn-medium text-uppercase me-3 mt-3" onclick="buyNow()">Mua
+                                            ngay</a>
+                                        <a name="add-to-cart" class="btn btn-black btn-medium text-uppercase mt-3" >Thêm vào giỏ</a>
                                     </div>
                                 </div>
                             </div>
                         </div>
-                        <div class="meta-product py-2">
-                            <div class="meta-item d-flex align-items-baseline">
-                                <h4 class="item-title no-margin pe-2">SKU:</h4>
-                                <ul class="select-list list-unstyled d-flex">
-                                    <li data-value="S" class="select-item">1223</li>
-                                </ul>
-                            </div>
-                            <div class="meta-item d-flex align-items-baseline">
-                                <h4 class="item-title no-margin pe-2">Category:</h4>
-                                <ul class="select-list list-unstyled d-flex">
-                                    <li data-value="S" class="select-item">
-                                        <a href="#">Watch</a>,
-                                    </li>
-                                    <li data-value="S" class="select-item">
-                                        <a href="#"> Screen touch</a>,
-                                    </li>
-                                </ul>
-                            </div>
-                            <div class="meta-item d-flex align-items-baseline">
-                                <h4 class="item-title no-margin pe-2">Tags:</h4>
-                                <ul class="select-list list-unstyled d-flex">
-                                    <li data-value="S" class="select-item">
-                                        <a href="#">Classic</a>,
-                                    </li>
-                                    <li data-value="S" class="select-item">
-                                        <a href="#"> Modern</a>
-                                    </li>
-                                </ul>
-                            </div>
-                        </div>
+<!--                        <div class="meta-product py-2">-->
+<!--                            <div class="meta-item d-flex align-items-baseline">-->
+<!--                                <h4 class="item-title no-margin pe-2">SKU:</h4>-->
+<!--                                <ul class="select-list list-unstyled d-flex">-->
+<!--                                    <li data-value="S" class="select-item">1223</li>-->
+<!--                                </ul>-->
+<!--                            </div>-->
+<!--                            <div class="meta-item d-flex align-items-baseline">-->
+<!--                                <h4 class="item-title no-margin pe-2">Category:</h4>-->
+<!--                                <ul class="select-list list-unstyled d-flex">-->
+<!--                                    <li data-value="S" class="select-item">-->
+<!--                                        <a href="#">Watch</a>,-->
+<!--                                    </li>-->
+<!--                                    <li data-value="S" class="select-item">-->
+<!--                                        <a href="#"> Screen touch</a>,-->
+<!--                                    </li>-->
+<!--                                </ul>-->
+<!--                            </div>-->
+<!--                            <div class="meta-item d-flex align-items-baseline">-->
+<!--                                <h4 class="item-title no-margin pe-2">Tags:</h4>-->
+<!--                                <ul class="select-list list-unstyled d-flex">-->
+<!--                                    <li data-value="S" class="select-item">-->
+<!--                                        <a href="#">Classic</a>,-->
+<!--                                    </li>-->
+<!--                                    <li data-value="S" class="select-item">-->
+<!--                                        <a href="#"> Modern</a>-->
+<!--                                    </li>-->
+<!--                                </ul>-->
+<!--                            </div>-->
+<!--                        </div>-->
                     </div>
                 </div>
             </div>
         </div>
     </section>
-    <section class="product-info-tabs">
-        <div class="container">
-            <div class="row">
-                <div class="tabs-listing">
-                    <nav>
-                        <div class="nav nav-tabs d-flex flex-wrap justify-content-center" id="nav-tab" role="tablist">
-                            <button class="nav-link active text-uppercase pe-5" id="nav-home-tab" data-bs-toggle="tab"
-                                    data-bs-target="#nav-home" type="button" role="tab" aria-controls="nav-home"
-                                    aria-selected="true">Mô tả</button>
-                            <button class="nav-link text-uppercase pe-5" id="nav-information-tab" data-bs-toggle="tab"
-                                    data-bs-target="#nav-information" type="button" role="tab"
-                                    aria-controls="nav-information" aria-selected="false">Thông tin thêm</button>
-                            <button class="nav-link text-uppercase pe-5" id="nav-review-tab" data-bs-toggle="tab"
-                                    data-bs-target="#nav-review" type="button" role="tab" aria-controls="nav-review"
-                                    aria-selected="false">Đánh giá</button>
-                        </div>
-                    </nav>
-                    <div class="tab-content" id="nav-tabContent">
-                        <div class="tab-pane fade show active border-top border-bottom padding-small" id="nav-home"
-                             role="tabpanel" aria-labelledby="nav-home-tab">
-                            <p>Product Description</p>
-                            <p>Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Donec odio. Quisque volutpat
-                                mattis eros. Nullam malesuada erat ut turpis. Suspendisse urna viverra non, semper
-                                suscipit, posuere a, pede. Donec nec justo eget felis facilisis fermentum. Aliquam
-                                porttitor mauris sit amet orci. Aenean dignissim pellentesque felis. Phasellus ultrices
-                                nulla quis nibh. Quisque a lectus. Donec consectetuer ligula vulputate sem tristique
-                                cursus.</p>
-                            <ul style="list-style-type:disc;" class="list-unstyled ps-4">
-                                <li>Donec nec justo eget felis facilisis fermentum.</li>
-                                <li>Suspendisse urna viverra non, semper suscipit pede.</li>
-                                <li>Aliquam porttitor mauris sit amet orci.</li>
-                            </ul>
-                            <p>Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Donec odio. Quisque volutpat
-                                mattis eros. Nullam malesuada erat ut turpis. Suspendisse urna viverra non, semper
-                                suscipit, posuere a, pede. Donec nec justo eget felis facilisis fermentum. Aliquam
-                                porttitor mauris sit amet orci. Aenean dignissim pellentesque felis. Phasellus ultrices
-                                nulla quis nibh. Quisque a lectus. Donec consectetuer ligula vulputate sem tristique
-                                cursus. </p>
-                        </div>
-                        <div class="tab-pane fade border-top border-bottom padding-small" id="nav-information"
-                             role="tabpanel" aria-labelledby="nav-information-tab">
-                            <p>It is Comfortable and Best</p>
-                            <p>Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat
-                                nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui
-                                officia deserunt mollit anim id est laborum. Duis aute irure dolor in reprehenderit in
-                                voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat
-                                cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
-                            </p>
-                        </div>
-                        <div class="tab-pane fade border-top border-bottom padding-small" id="nav-review"
-                             role="tabpanel" aria-labelledby="nav-review-tab">
-                            <div class="review-box d-flex flex-wrap">
-                                <div class="col-lg-6 d-flex flex-wrap">
-                                    <div class="col-md-2">
-                                        <div class="image-holder">
-                                            <img src="images/review-item1.jpg" alt="review" class="img-fluid">
-                                        </div>
-                                    </div>
-                                    <div class="col-md-8">
-                                        <div class="review-content">
-                                            <div class="rating-container d-flex align-items-center">
-                                                <div class="rating" data-rating="1" onclick="rate(1)">
-                                                    <i class="icon icon-star"></i>
-                                                </div>
-                                                <div class="rating" data-rating="2" onclick="rate(1)">
-                                                    <i class="icon icon-star"></i>
-                                                </div>
-                                                <div class="rating" data-rating="3" onclick="rate(1)">
-                                                    <i class="icon icon-star"></i>
-                                                </div>
-                                                <div class="rating" data-rating="4" onclick="rate(1)">
-                                                    <i class="icon icon-star-half"></i>
-                                                </div>
-                                                <div class="rating" data-rating="5" onclick="rate(1)">
-                                                    <i class="icon icon-star-empty"></i>
-                                                </div>
-                                                <span class="rating-count">(3.5)</span>
-                                            </div>
-                                            <div class="review-header">
-                                                <span class="author-name">Tina Johnson</span>
-                                                <span class="review-date">– 03/07/2023</span>
-                                            </div>
-                                            <p>Vitae tortor condimentum lacinia quis vel eros donec ac. Nam at lectus
-                                                urna duis convallis convallis</p>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="col-lg-6 d-flex flex-wrap">
-                                    <div class="col-md-2">
-                                        <div class="image-holder">
-                                            <img src="images/review-item2.jpg" alt="review" class="img-fluid">
-                                        </div>
-                                    </div>
-                                    <div class="col-md-8">
-                                        <div class="review-content">
-                                            <div class="rating-container d-flex align-items-center">
-                                                <div class="rating" data-rating="1" onclick="rate(1)">
-                                                    <i class="icon icon-star"></i>
-                                                </div>
-                                                <div class="rating" data-rating="2" onclick="rate(1)">
-                                                    <i class="icon icon-star"></i>
-                                                </div>
-                                                <div class="rating" data-rating="3" onclick="rate(1)">
-                                                    <i class="icon icon-star"></i>
-                                                </div>
-                                                <div class="rating" data-rating="4" onclick="rate(1)">
-                                                    <i class="icon icon-star-half"></i>
-                                                </div>
-                                                <div class="rating" data-rating="5" onclick="rate(1)">
-                                                    <i class="icon icon-star-empty"></i>
-                                                </div>
-                                                <span class="rating-count">(3.5)</span>
-                                            </div>
-                                            <div class="review-header">
-                                                <span class="author-name">Jenny Willis</span>
-                                                <span class="review-date">– 03/06/2022</span>
-                                            </div>
-                                            <p>Vitae tortor condimentum lacinia quis vel eros donec ac. Nam at lectus
-                                                urna duis convallis convallis</p>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-    <section id="related-products" class="product-store position-relative padding-large">
-        <div class="container">
-            <div class="row">
-                <div class="display-header d-flex justify-content-between pb-3">
-                    <h2 class="display-7 text-dark text-uppercase">Sản phẩm tương tự</h2>
-                    <div class="btn-right">
-                        <a href="shop.html" class="btn btn-medium btn-normal text-uppercase">Xem cửa hàng</a>
-                    </div>
-                </div>
-                <div class="swiper-wrapper regular slider">
-                    <div class="col-lg-4 col-md-6 p-3">
-                        <div class="product-card pe-3 pb-3">
-                            <div class="image-holder">
-                                <img src="images/products/pr3.png" alt="product-item" class="img-fluid ">
-                            </div>
-                            <div class="card-detail justify-content-between pb-3">
-                                <p class="card-title text-uppercase">
-                                    <a href="#">LAPTOP ASUS GAMING TUF FX507ZC4-HN074W (I5 12500H/8GB RAM/512GB
-                                        SSD/15.6 FHD 144HZ/RTX
-                                        3050 4GB/WIN11/XÁM)</a>
-                                </p>
-                                <p>
-                                    CPU : Intel® Core™ i3-1215U <br>
-                                    RAM : 8GB (1 x 8GB) DDR4 3200MHz (Còn trống 1 khe,tối đa 32GB) <br>
-                                    Ổ cứng : 256 GB SSD M.2 PCIe
-                                </p>
-                                <p class="item-price">12.000.000 VNĐ</p>
-                                <a href="#" class="btn btn-primary btn-addCart">Thêm vào giỏ hàng</a>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-lg-4 col-md-6 p-3">
-                        <div class="product-card pe-3 pb-3">
-                            <div class="image-holder">
-                                <img src="images/products/pr3.png" alt="product-item" class="img-fluid ">
-                            </div>
-                            <div class="card-detail justify-content-between pb-3">
-                                <p class="card-title text-uppercase">
-                                    <a href="#">LAPTOP ASUS GAMING TUF FX507ZC4-HN074W (I5 12500H/8GB RAM/512GB
-                                        SSD/15.6 FHD 144HZ/RTX
-                                        3050 4GB/WIN11/XÁM)</a>
-                                </p>
-                                <p>
-                                    CPU : Intel® Core™ i3-1215U <br>
-                                    RAM : 8GB (1 x 8GB) DDR4 3200MHz (Còn trống 1 khe,tối đa 32GB) <br>
-                                    Ổ cứng : 256 GB SSD M.2 PCIe
-                                </p>
-                                <p class="item-price">12.000.000 VNĐ</p>
-                                <a href="#" class="btn btn-primary btn-addCart">Thêm vào giỏ hàng</a>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-lg-4 col-md-6 p-3">
-                        <div class="product-card pe-3 pb-3">
-                            <div class="image-holder">
-                                <img src="images/products/pr3.png" alt="product-item" class="img-fluid ">
-                            </div>
-                            <div class="card-detail justify-content-between pb-3">
-                                <p class="card-title text-uppercase">
-                                    <a href="#">LAPTOP ASUS GAMING TUF FX507ZC4-HN074W (I5 12500H/8GB RAM/512GB
-                                        SSD/15.6 FHD 144HZ/RTX
-                                        3050 4GB/WIN11/XÁM)</a>
-                                </p>
-                                <p>
-                                    CPU : Intel® Core™ i3-1215U <br>
-                                    RAM : 8GB (1 x 8GB) DDR4 3200MHz (Còn trống 1 khe,tối đa 32GB) <br>
-                                    Ổ cứng : 256 GB SSD M.2 PCIe
-                                </p>
-                                <p class="item-price">12.000.000 VNĐ</p>
-                                <a href="#" class="btn btn-primary btn-addCart">Thêm vào giỏ hàng</a>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-lg-4 col-md-6 p-3">
-                        <div class="product-card pe-3 pb-3">
-                            <div class="image-holder">
-                                <img src="images/products/pr3.png" alt="product-item" class="img-fluid ">
-                            </div>
-                            <div class="card-detail justify-content-between pb-3">
-                                <p class="card-title text-uppercase">
-                                    <a href="#">LAPTOP ASUS GAMING TUF FX507ZC4-HN074W (I5 12500H/8GB RAM/512GB
-                                        SSD/15.6 FHD 144HZ/RTX
-                                        3050 4GB/WIN11/XÁM)</a>
-                                </p>
-                                <p>
-                                    CPU : Intel® Core™ i3-1215U <br>
-                                    RAM : 8GB (1 x 8GB) DDR4 3200MHz (Còn trống 1 khe,tối đa 32GB) <br>
-                                    Ổ cứng : 256 GB SSD M.2 PCIe
-                                </p>
-                                <p class="item-price">12.000.000 VNĐ</p>
-                                <a href="#" class="btn btn-primary btn-addCart">Thêm vào giỏ hàng</a>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div class="swiper-pagination position-absolute text-center"></div>
-    </section>
+<!--    <section class="product-info-tabs">-->
+<!--        <div class="container">-->
+<!--            <div class="row">-->
+<!--                <div class="tabs-listing">-->
+<!--                    <nav>-->
+<!--                        <div class="nav nav-tabs d-flex flex-wrap justify-content-center" id="nav-tab" role="tablist">-->
+<!--                            <button class="nav-link active text-uppercase pe-5" id="nav-home-tab" data-bs-toggle="tab"-->
+<!--                                    data-bs-target="#nav-home" type="button" role="tab" aria-controls="nav-home"-->
+<!--                                    aria-selected="true">Mô tả</button>-->
+<!--                            <button class="nav-link text-uppercase pe-5" id="nav-information-tab" data-bs-toggle="tab"-->
+<!--                                    data-bs-target="#nav-information" type="button" role="tab"-->
+<!--                                    aria-controls="nav-information" aria-selected="false">Thông tin thêm</button>-->
+<!--                            <button class="nav-link text-uppercase pe-5" id="nav-review-tab" data-bs-toggle="tab"-->
+<!--                                    data-bs-target="#nav-review" type="button" role="tab" aria-controls="nav-review"-->
+<!--                                    aria-selected="false">Đánh giá</button>-->
+<!--                        </div>-->
+<!--                    </nav>-->
+<!--                    <div class="tab-content" id="nav-tabContent">-->
+<!--                        <div class="tab-pane fade show active border-top border-bottom padding-small" id="nav-home"-->
+<!--                             role="tabpanel" aria-labelledby="nav-home-tab">-->
+<!--                            <p>Product Description</p>-->
+<!--                            <p>Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Donec odio. Quisque volutpat-->
+<!--                                mattis eros. Nullam malesuada erat ut turpis. Suspendisse urna viverra non, semper-->
+<!--                                suscipit, posuere a, pede. Donec nec justo eget felis facilisis fermentum. Aliquam-->
+<!--                                porttitor mauris sit amet orci. Aenean dignissim pellentesque felis. Phasellus ultrices-->
+<!--                                nulla quis nibh. Quisque a lectus. Donec consectetuer ligula vulputate sem tristique-->
+<!--                                cursus.</p>-->
+<!--                            <ul style="list-style-type:disc;" class="list-unstyled ps-4">-->
+<!--                                <li>Donec nec justo eget felis facilisis fermentum.</li>-->
+<!--                                <li>Suspendisse urna viverra non, semper suscipit pede.</li>-->
+<!--                                <li>Aliquam porttitor mauris sit amet orci.</li>-->
+<!--                            </ul>-->
+<!--                            <p>Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Donec odio. Quisque volutpat-->
+<!--                                mattis eros. Nullam malesuada erat ut turpis. Suspendisse urna viverra non, semper-->
+<!--                                suscipit, posuere a, pede. Donec nec justo eget felis facilisis fermentum. Aliquam-->
+<!--                                porttitor mauris sit amet orci. Aenean dignissim pellentesque felis. Phasellus ultrices-->
+<!--                                nulla quis nibh. Quisque a lectus. Donec consectetuer ligula vulputate sem tristique-->
+<!--                                cursus. </p>-->
+<!--                        </div>-->
+<!--                        <div class="tab-pane fade border-top border-bottom padding-small" id="nav-information"-->
+<!--                             role="tabpanel" aria-labelledby="nav-information-tab">-->
+<!--                            <p>It is Comfortable and Best</p>-->
+<!--                            <p>Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat-->
+<!--                                nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui-->
+<!--                                officia deserunt mollit anim id est laborum. Duis aute irure dolor in reprehenderit in-->
+<!--                                voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat-->
+<!--                                cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.-->
+<!--                            </p>-->
+<!--                        </div>-->
+<!--                        <div class="tab-pane fade border-top border-bottom padding-small" id="nav-review"-->
+<!--                             role="tabpanel" aria-labelledby="nav-review-tab">-->
+<!--                            <div class="review-box d-flex flex-wrap">-->
+<!--                                <div class="col-lg-6 d-flex flex-wrap">-->
+<!--                                    <div class="col-md-2">-->
+<!--                                        <div class="image-holder">-->
+<!--                                            <img src="images/review-item1.jpg" alt="review" class="img-fluid">-->
+<!--                                        </div>-->
+<!--                                    </div>-->
+<!--                                    <div class="col-md-8">-->
+<!--                                        <div class="review-content">-->
+<!--                                            <div class="rating-container d-flex align-items-center">-->
+<!--                                                <div class="rating" data-rating="1" onclick="rate(1)">-->
+<!--                                                    <i class="icon icon-star"></i>-->
+<!--                                                </div>-->
+<!--                                                <div class="rating" data-rating="2" onclick="rate(1)">-->
+<!--                                                    <i class="icon icon-star"></i>-->
+<!--                                                </div>-->
+<!--                                                <div class="rating" data-rating="3" onclick="rate(1)">-->
+<!--                                                    <i class="icon icon-star"></i>-->
+<!--                                                </div>-->
+<!--                                                <div class="rating" data-rating="4" onclick="rate(1)">-->
+<!--                                                    <i class="icon icon-star-half"></i>-->
+<!--                                                </div>-->
+<!--                                                <div class="rating" data-rating="5" onclick="rate(1)">-->
+<!--                                                    <i class="icon icon-star-empty"></i>-->
+<!--                                                </div>-->
+<!--                                                <span class="rating-count">(3.5)</span>-->
+<!--                                            </div>-->
+<!--                                            <div class="review-header">-->
+<!--                                                <span class="author-name">Tina Johnson</span>-->
+<!--                                                <span class="review-date">– 03/07/2023</span>-->
+<!--                                            </div>-->
+<!--                                            <p>Vitae tortor condimentum lacinia quis vel eros donec ac. Nam at lectus-->
+<!--                                                urna duis convallis convallis</p>-->
+<!--                                        </div>-->
+<!--                                    </div>-->
+<!--                                </div>-->
+<!--                                <div class="col-lg-6 d-flex flex-wrap">-->
+<!--                                    <div class="col-md-2">-->
+<!--                                        <div class="image-holder">-->
+<!--                                            <img src="images/review-item2.jpg" alt="review" class="img-fluid">-->
+<!--                                        </div>-->
+<!--                                    </div>-->
+<!--                                    <div class="col-md-8">-->
+<!--                                        <div class="review-content">-->
+<!--                                            <div class="rating-container d-flex align-items-center">-->
+<!--                                                <div class="rating" data-rating="1" onclick="rate(1)">-->
+<!--                                                    <i class="icon icon-star"></i>-->
+<!--                                                </div>-->
+<!--                                                <div class="rating" data-rating="2" onclick="rate(1)">-->
+<!--                                                    <i class="icon icon-star"></i>-->
+<!--                                                </div>-->
+<!--                                                <div class="rating" data-rating="3" onclick="rate(1)">-->
+<!--                                                    <i class="icon icon-star"></i>-->
+<!--                                                </div>-->
+<!--                                                <div class="rating" data-rating="4" onclick="rate(1)">-->
+<!--                                                    <i class="icon icon-star-half"></i>-->
+<!--                                                </div>-->
+<!--                                                <div class="rating" data-rating="5" onclick="rate(1)">-->
+<!--                                                    <i class="icon icon-star-empty"></i>-->
+<!--                                                </div>-->
+<!--                                                <span class="rating-count">(3.5)</span>-->
+<!--                                            </div>-->
+<!--                                            <div class="review-header">-->
+<!--                                                <span class="author-name">Jenny Willis</span>-->
+<!--                                                <span class="review-date">– 03/06/2022</span>-->
+<!--                                            </div>-->
+<!--                                            <p>Vitae tortor condimentum lacinia quis vel eros donec ac. Nam at lectus-->
+<!--                                                urna duis convallis convallis</p>-->
+<!--                                        </div>-->
+<!--                                    </div>-->
+<!--                                </div>-->
+<!--                            </div>-->
+<!--                        </div>-->
+<!--                    </div>-->
+<!--                </div>-->
+<!--            </div>-->
+<!--        </div>-->
+<!--    </section>-->
+<!--    <section id="related-products" class="product-store position-relative padding-large">-->
+<!--        <div class="container">-->
+<!--            <div class="row">-->
+<!--                <div class="display-header d-flex justify-content-between pb-3">-->
+<!--                    <h2 class="display-7 text-dark text-uppercase">Sản phẩm tương tự</h2>-->
+<!--                    <div class="btn-right">-->
+<!--                        <a href="shop.html" class="btn btn-medium btn-normal text-uppercase">Xem cửa hàng</a>-->
+<!--                    </div>-->
+<!--                </div>-->
+<!--                <div class="swiper-wrapper regular slider">-->
+<!--                    <div class="col-lg-4 col-md-6 p-3">-->
+<!--                        <div class="product-card pe-3 pb-3">-->
+<!--                            <div class="image-holder">-->
+<!--                                <img src="images/products/pr3.png" alt="product-item" class="img-fluid ">-->
+<!--                            </div>-->
+<!--                            <div class="card-detail justify-content-between pb-3">-->
+<!--                                <p class="card-title text-uppercase">-->
+<!--                                    <a href="#">LAPTOP ASUS GAMING TUF FX507ZC4-HN074W (I5 12500H/8GB RAM/512GB-->
+<!--                                        SSD/15.6 FHD 144HZ/RTX-->
+<!--                                        3050 4GB/WIN11/XÁM)</a>-->
+<!--                                </p>-->
+<!--                                <p>-->
+<!--                                    CPU : Intel® Core™ i3-1215U <br>-->
+<!--                                    RAM : 8GB (1 x 8GB) DDR4 3200MHz (Còn trống 1 khe,tối đa 32GB) <br>-->
+<!--                                    Ổ cứng : 256 GB SSD M.2 PCIe-->
+<!--                                </p>-->
+<!--                                <p class="item-price">12.000.000 VNĐ</p>-->
+<!--                                <a href="#" class="btn btn-primary btn-addCart">Thêm vào giỏ hàng</a>-->
+<!--                            </div>-->
+<!--                        </div>-->
+<!--                    </div>-->
+<!--                    <div class="col-lg-4 col-md-6 p-3">-->
+<!--                        <div class="product-card pe-3 pb-3">-->
+<!--                            <div class="image-holder">-->
+<!--                                <img src="images/products/pr3.png" alt="product-item" class="img-fluid ">-->
+<!--                            </div>-->
+<!--                            <div class="card-detail justify-content-between pb-3">-->
+<!--                                <p class="card-title text-uppercase">-->
+<!--                                    <a href="#">LAPTOP ASUS GAMING TUF FX507ZC4-HN074W (I5 12500H/8GB RAM/512GB-->
+<!--                                        SSD/15.6 FHD 144HZ/RTX-->
+<!--                                        3050 4GB/WIN11/XÁM)</a>-->
+<!--                                </p>-->
+<!--                                <p>-->
+<!--                                    CPU : Intel® Core™ i3-1215U <br>-->
+<!--                                    RAM : 8GB (1 x 8GB) DDR4 3200MHz (Còn trống 1 khe,tối đa 32GB) <br>-->
+<!--                                    Ổ cứng : 256 GB SSD M.2 PCIe-->
+<!--                                </p>-->
+<!--                                <p class="item-price">12.000.000 VNĐ</p>-->
+<!--                                <a href="#" class="btn btn-primary btn-addCart">Thêm vào giỏ hàng</a>-->
+<!--                            </div>-->
+<!--                        </div>-->
+<!--                    </div>-->
+<!--                    <div class="col-lg-4 col-md-6 p-3">-->
+<!--                        <div class="product-card pe-3 pb-3">-->
+<!--                            <div class="image-holder">-->
+<!--                                <img src="images/products/pr3.png" alt="product-item" class="img-fluid ">-->
+<!--                            </div>-->
+<!--                            <div class="card-detail justify-content-between pb-3">-->
+<!--                                <p class="card-title text-uppercase">-->
+<!--                                    <a href="#">LAPTOP ASUS GAMING TUF FX507ZC4-HN074W (I5 12500H/8GB RAM/512GB-->
+<!--                                        SSD/15.6 FHD 144HZ/RTX-->
+<!--                                        3050 4GB/WIN11/XÁM)</a>-->
+<!--                                </p>-->
+<!--                                <p>-->
+<!--                                    CPU : Intel® Core™ i3-1215U <br>-->
+<!--                                    RAM : 8GB (1 x 8GB) DDR4 3200MHz (Còn trống 1 khe,tối đa 32GB) <br>-->
+<!--                                    Ổ cứng : 256 GB SSD M.2 PCIe-->
+<!--                                </p>-->
+<!--                                <p class="item-price">12.000.000 VNĐ</p>-->
+<!--                                <a href="#" class="btn btn-primary btn-addCart">Thêm vào giỏ hàng</a>-->
+<!--                            </div>-->
+<!--                        </div>-->
+<!--                    </div>-->
+<!--                    <div class="col-lg-4 col-md-6 p-3">-->
+<!--                        <div class="product-card pe-3 pb-3">-->
+<!--                            <div class="image-holder">-->
+<!--                                <img src="images/products/pr3.png" alt="product-item" class="img-fluid ">-->
+<!--                            </div>-->
+<!--                            <div class="card-detail justify-content-between pb-3">-->
+<!--                                <p class="card-title text-uppercase">-->
+<!--                                    <a href="#">LAPTOP ASUS GAMING TUF FX507ZC4-HN074W (I5 12500H/8GB RAM/512GB-->
+<!--                                        SSD/15.6 FHD 144HZ/RTX-->
+<!--                                        3050 4GB/WIN11/XÁM)</a>-->
+<!--                                </p>-->
+<!--                                <p>-->
+<!--                                    CPU : Intel® Core™ i3-1215U <br>-->
+<!--                                    RAM : 8GB (1 x 8GB) DDR4 3200MHz (Còn trống 1 khe,tối đa 32GB) <br>-->
+<!--                                    Ổ cứng : 256 GB SSD M.2 PCIe-->
+<!--                                </p>-->
+<!--                                <p class="item-price">12.000.000 VNĐ</p>-->
+<!--                                <a href="#" class="btn btn-primary btn-addCart">Thêm vào giỏ hàng</a>-->
+<!--                            </div>-->
+<!--                        </div>-->
+<!--                    </div>-->
+<!--                </div>-->
+<!--            </div>-->
+<!--        </div>-->
+<!--        <div class="swiper-pagination position-absolute text-center"></div>-->
+<!--    </section>-->
 </th:block>
 </body>
 </html>

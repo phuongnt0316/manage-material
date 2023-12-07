@@ -1,11 +1,9 @@
 package vn.com.devmaster.services.managematerial.projection;
 
-import java.util.Date;
-
 public interface IOrderInFor {
     Integer getId();
     String getIdOrder();
-    Date getDate();
+    String getDate();
     String getNamePayment();
     String getNameTranSport();
     Double getTotalMoney();
@@ -13,5 +11,6 @@ public interface IOrderInFor {
     String getAddress();
     String getPhone();
     Integer getStatus();
+    String getNote();
 
 }

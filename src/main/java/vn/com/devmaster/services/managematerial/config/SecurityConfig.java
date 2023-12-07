@@ -18,7 +18,7 @@ public class SecurityConfig {
                 ((AuthorizeHttpRequestsConfigurer.AuthorizedUrl)
                 ((AuthorizeHttpRequestsConfigurer.AuthorizedUrl) ((HttpSecurity)
                         http.csrf().disable()).authorizeHttpRequests()
-                        .antMatchers("/product-manage"))
+                        .antMatchers("/product-manage","/orders-manage","/revenue","/orders-manage"))
                         .hasAuthority("ADMIN")
                         .antMatchers(new String[]{"/admin"}))
                 .hasAnyAuthority("ADMIN", "USER")

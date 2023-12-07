@@ -5,7 +5,6 @@ import lombok.Setter;
 
 import javax.persistence.*;
 import java.time.Instant;
-import java.time.LocalDate;
 
 @Getter
 @Setter
@@ -23,9 +22,6 @@ public class Blog {
     @Lob
     @Column(name = "CONTENT_L")
     private String contentL;
-
-    @Column(name = "DATE_BLOG")
-    private LocalDate dateBlog;
 
     @Column(name = "BLOG_TOPIC", length = 100)
     private String blogTopic;

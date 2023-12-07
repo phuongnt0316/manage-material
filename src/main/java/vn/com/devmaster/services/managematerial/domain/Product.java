@@ -61,4 +61,7 @@ public class Product {
     @JoinColumn(name = "ID_PRODUCT")
     List<ProductImage> productImages=new ArrayList<>();
 
+    @Column(name = "SALE")
+    private Double sale;
+
 }

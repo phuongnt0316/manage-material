@@ -145,20 +145,21 @@ public class MaterialService {
     public void saveAllOrderDetail(Integer idcustomer, Order order) {
             List<OrdersDetail> ordersDetails = new ArrayList<>();
 
-            List<IOrderDetailDTO> detailDtoList = getCartById(idcustomer);
+          //  List<IOrderDetailDTO> detailDtoList = getCartById(idcustomer);
+            List<IViewProduct>viewProducts=cartRepository.getCartByIdCustomer(idcustomer);
 
-            for (IOrderDetailDTO iorder : detailDtoList) {
+            for (IViewProduct viewProduct:viewProducts) {
                 OrdersDetail ordersDetail = OrdersDetail
                         .builder()
                         .idord(order.getId())
-                        .idproduct(iorder.getIdproduct())
-                        .price(iorder.getPrice())
-                        .qty(iorder.getQuantity())
+                        .idproduct(viewProduct.getIdProduct())
+                        .price(viewProduct.getPrice()*(1.0-viewProduct.getSale()))
+                        .qty(viewProduct.getQuantityCart())
                         .build();
                 ordersDetails.add(ordersDetail);
             }
-            for (IOrderDetailDTO detail : detailDtoList) {
-                updateQuantityProduct(detail.getIdproduct(), (-detail.getQuantity())); //update quantity after buy product
+            for (IViewProduct viewProduct:viewProducts) {
+                updateQuantityProduct(viewProduct.getIdProduct(), (-viewProduct.getQuantityCart())); //update quantity after buy product
             }
 
             ordersDetailRepository.saveAll(ordersDetails);
@@ -245,7 +246,7 @@ public class MaterialService {
     public Double getTotalMoney(List<IViewProduct> carts) {
         Double sum = 0.0;
         for (IViewProduct cart : carts) {
-            sum += cart.getPrice()*cart.getQuantityCart();
+            sum += cart.getPrice()*(1.0-cart.getSale())*cart.getQuantityCart();
         }
         return sum;
     }
@@ -253,15 +254,15 @@ public class MaterialService {
     public Integer getTotal(List<ViewCart> carts) {
         double sum = 0;
         for (ViewCart cart : carts) {
-            sum +=cart.getPrice()*cart.getQuantityCart();
+            sum +=cart.getPrice()*(1.0-cart.getSale())*cart.getQuantityCart();
         }
         return (int) sum;
     }
 
-    public int getToTal(List<IViewProduct> iViewProducts) {
-        int total = 0;
+    public Double getToTal(List<IViewProduct> iViewProducts) {
+        Double total = 0.0;
         for (IViewProduct iViewProduct : iViewProducts) {
-            total += iViewProduct.getQuantityCart() * iViewProduct.getPrice();
+            total += iViewProduct.getQuantityCart()*(1.0-iViewProduct.getSale()) * iViewProduct.getPrice();
         }
         return total;
     }
@@ -278,6 +279,7 @@ public class MaterialService {
                     .price(product.getPrice())
                     .quantityCart(cart.getQuantity())
                     .quantityProduct(product.getQuantity())
+                    .sale(product.getSale())
                     .build();
             viewCarts.add(viewCart);
         }
@@ -320,7 +322,7 @@ public class MaterialService {
         return carts;
     }
 
-    public void updateProduct(Integer id, String name, Integer idcategory, Double price, String description, String notes, Byte isactive, MultipartFile multipartFile) throws IOException {
+    public void updateProduct(Integer id, String name, Integer idcategory, Double price, String description, String notes, Byte isactive, MultipartFile multipartFile, Double sale, Integer customerId) throws IOException {
         Product product = getProductByID(id);
         name = name.trim().isEmpty() ? product.getName() : name;
         price = (price == null) ? product.getPrice() : price;
@@ -328,7 +330,7 @@ public class MaterialService {
         notes = notes.trim().isEmpty() ? product.getNotes() : notes;
         String urlImage = multipartFile.isEmpty() ? product.getImage() : fileUpload.uploadFile(multipartFile);
         Date date = new Date();
-        productRepository.updateProduct(id, name, idcategory, price, description, notes, isactive, urlImage, date.toInstant());
+        productRepository.updateProduct(id, name, idcategory, price, description, notes, isactive, urlImage, date.toInstant(),sale,customerId);
     }
 
     public List<Status> getStatus() {
@@ -392,7 +394,7 @@ public class MaterialService {
                     .builder()
                     .idord(order.getId())
                     .idproduct(viewCart.getIdProduct())
-                    .price(viewCart.getPrice())
+                    .price(viewCart.getPrice()*(1.0-viewCart.getSale()))
                     .qty(viewCart.getQuantityCart())
                     .build();
             ordersDetails.add(ordersDetail);
@@ -435,6 +437,7 @@ public class MaterialService {
                 .idcategory(cate)
                 .price(price)
                 .quantity(0)
+                .sale(0.0)
                 .createdDate(date.toInstant())
                 .isactive((byte) 1)
                 .build();
@@ -515,9 +518,16 @@ public class MaterialService {
         }
         return false;
     }
+    public boolean checkEmail(String email) {
+        if(customerRepository.getCustomerByEmail(email)==null){
+            return true;
+        }
+        return false;
+    }
 
     public void saveCustomer(Customer customer) {
         customer.setRole(0);
+        customer.setIsactive((byte) 1);
         customerRepository.save(customer);
     }
 
@@ -629,8 +639,8 @@ public class MaterialService {
         return categoryRepository.findAll();
     }
 
-    public Product getOneProduct(Integer idproduct1) {
-        return productRepository.getOne(idproduct1);
+    public Product getOneProduct(Integer idproduct) {
+        return productRepository.getOne(idproduct);
     }
 
     public void saveProductRecevied(Integer idProduct, Integer quantity) {
@@ -660,8 +670,8 @@ public class MaterialService {
         paymentMethodRepository.updatePayMentMethod(idPayment, namePayment, notes, paymentActive, urlImage,updatedDate.toInstant());
     }
 
-    public int getTotalRevenue() {
-        return orderRepository.getTotalRevenue();
+    public int getTotalRevenue(Integer month) {
+        return orderRepository.getTotalRevenue(month);
     }
 
     public List<Category> getAllCategory() {
@@ -699,5 +709,89 @@ public class MaterialService {
             }
         }
         return productInventories;
+    }
+
+    public void changePassword(String email, String password) {
+        customerRepository.changePassword(email,password);
+    }
+
+    public List<Product> saleProduct() {
+        return productRepository.saleProduct();
+
+    }
+
+    public List<Product> getProduct(List<Integer> idCates, double priceProduct1, double priceProduct2, String keyword) {
+        return productRepository.searchAllProduct(idCates,priceProduct1,priceProduct2,keyword);
+//        Page<Product> products = productRepository.searchAllProduct(idCates,priceProduct1,priceProduct2,keyword,pageNo);
+//        Pageable pageable = PageRequest.of(pageNo - 1, 9);
+//        Integer start = (int) pageable.getOffset();
+//        Integer end = (pageable.getOffset() + pageable.getPageSize()) > products.size() ? products.size() : (int) pageable.getOffset() + pageable.getPageSize();
+//        products = products.subList(start, end);
+//        return new PageImpl<Product>(products, pageable, productRepository.searchAllProduct(idCates,priceProduct1,priceProduct2,keyword).size());
+    }
+
+    public List<IOrderInFor> getViewOrder() {
+        return orderRepository.getViewOrder();
+    }
+    public Double getTotalDetail(List<IViewProduct> carts) {
+        Double sum = 0.0;
+        for (IViewProduct cart : carts) {
+            sum += cart.getPrice()*cart.getQuantityCart();
+        }
+        return sum;
+    }
+
+    public List<IProduct> getStatisticalProduct() {
+        return orderRepository.getStatisticalProduct();
+    }
+
+    public Product getCartByIdProduct(Integer idProduct) {
+        return productRepository.getOne(idProduct);
+    }
+
+    public List<Product> getProductByQuantityDsc() {
+        List<Product> products=new ArrayList<>();
+        List<IProduct> iProducts= orderRepository.getStatisticalProduct1();
+        for (IProduct iProduct:iProducts){
+            Product product=productRepository.getOne(iProduct.getId());
+            products.add(product);
+        }
+        return products;
+    }
+
+    public void saveCategory(String name, String notes, MultipartFile multipartFile, Integer id) throws IOException {
+        String imageURL = fileUpload.uploadFile(multipartFile);
+        Date date = new Date();
+        Category category=Category.builder().name(name).notes(notes).createdDate(date.toInstant()).isactive((byte) 1).image(imageURL).createdBy(id).build();
+       categoryRepository.save(category);
+    }
+
+    public Category getOneCategory(Integer idCategory) {
+        return categoryRepository.getOne(idCategory);
+    }
+
+    public void updateCategory(Integer id, String name, String notes, MultipartFile multipartFile, Integer customerId, Integer isActive) throws IOException {
+
+        Category category=categoryRepository.getOne(id);
+        name = name.trim().isEmpty() ? category.getName() : name;
+        notes = notes.trim().isEmpty() ? category.getNotes() : notes;
+        String urlImage = multipartFile.isEmpty() ? category.getImage() : fileUpload.uploadFile(multipartFile);
+        Date date = new Date();
+        if(isActive==0){
+            productRepository.updateProductIsActive(id);
+        }
+       categoryRepository.updateCategory(id, name, notes, urlImage, isActive, date.toInstant(),customerId);
+    }
+
+    public List<Blog> getBlogRelated() {
+        return blogRepository.getBlogRelated();
+    }
+
+    public void deleteImage(Integer id) {
+        productImageRepository.deleteById(id);
+    }
+
+    public List<TransportMethod> getAllTransort() {
+        return transportMethodRepository.findAll();
     }
 }

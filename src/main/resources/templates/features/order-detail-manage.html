@@ -34,6 +34,7 @@
                             </tr>
                             <tr>
                                 <th>Thời gian đặt</th>
+                                <td th:text="${orderInfor.getDate()}"></td>
                                 <!--              <td th:text="${#dates.format(orderInfor.getOrdersDate(), 'dd-MM-yyyy HH:mm:ss')}"></td>-->
                             </tr>
                             <tr>
@@ -42,7 +43,7 @@
                             </tr>
                             <tr>
                                 <th>Ghi chú</th>
-                                <!--              <td th:text="${orderInfor.getNotes()}"></td>-->
+                                <td th:text="${orderInfor.getNote()}"></td>
                             </tr>
                             <tr>
                                 <th>Người nhận</th>
@@ -73,13 +74,12 @@
                                                 th:text="${sta.getStatus()}"
                                                 th:selected="${sta.getId()==orderInfor.getStatus()}"></option>
                                     </select>
-
                                 </td>
                             </tr>
                             <tr th:remove="${orderInfor.getStatus()!=5}?none:all">
-                                <th >Tùy chọn</th>
+                                <th>Tùy chọn</th>
                                 <td class="btn-active">
-                                    <button type="submit">Cập nhật</button>
+                                    <button type="submit" class="btn btn-pr">Cập nhật</button>
                                 </td>
                             </tr>
                             </tbody>
@@ -100,14 +100,11 @@
                 <p class="text-black" th:text="${od.getName()}"></p>
             </div>
             <div class="col-md-1 col-lg-1  col-md-1 ">
-                <h6 class="text-black mb-0" th:text="'x'+${od.getQuantity()}"></h6>
+                <h6 class="text-black mb-0" th:text="'x'+${od.getQuantityCart()}"></h6>
             </div>
             <div class="col-md-3 col-lg-2 col-xl-2">
                 <h6 class="mb-0" th:text="'₫'+${#numbers.formatDecimal(od.getPrice(),3,'DEFAULT', 0, 'DEFAULT')}"></h6>
             </div>
-            <!--        <div class="col-md-3 col-lg-2 col-xl-2">-->
-            <!--          <h6 class="mb-0" th:text="'₫'+${#numbers.formatDecimal(od.getPrice(),3,'DEFAULT', 0, 'DEFAULT')}"> </h6>-->
-            <!--        </div>-->
         </div>
     </div>
 

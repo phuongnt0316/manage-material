@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout/admin}">
+<head>
+  <meta charset="UTF-8">
+  <title>User-Manage</title>
+</head>
+<body>
+
+<section class="ftco-section" layout:fragment="content">
+  <div  class="container" >
+    <div><a href="/revenue" class="btn btn-pr"> Doanh thu</a>
+      <a href="/statistical" class="btn btn-pr-active"> Sản phẩm đã bán</a>
+      <a href="/product-inventory-manage" class="btn btn-pr">Tồn kho sản phẩm</a></div>
+    <div class="row d-flex">
+      <div class=" text-center p-5">
+        <h3>Danh sách số lượng sản phẩm đã bán </h3>
+      </div>
+      <div class="d-flex ">
+<!--        <div>-->
+<!--          <a class="btn btn-pr" href="/product-statistical-export">Xuất excel <i class="fa-solid fa-file-export"></i></a>-->
+<!--        </div>-->
+    </div>
+    <div class="row">
+      <div class="col-md-12">
+        <div class="table-wrap">
+          <table class="table table-responsive-xl">
+            <thead>
+            <tr>
+              <th>ID</th>
+              <th>Tên sản phẩm</th>
+              <th>Số lượng bán</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr class="alert" role="alert" th:each="product:${products}">
+              <td>
+                <span th:text="${product.getId()}"></span>
+              </td>
+              <td>
+                <span th:text="${product.getName()}"></span>
+              </td>
+              <td>
+                <span th:text="${product.getQuantity()}"></span>
+              </td>
+            </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+</body>
+</html>

@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout/admin}">
+<head>
+  <meta charset="UTF-8">
+  <title>Transport Method-Manage</title>
+</head>
+<body>
+
+<section class="ftco-section" layout:fragment="content">
+  <div class="container">
+    <div class="row justify-content-center">
+      <div class="col-md-6 text-center mb-5">
+        <h3>Danh sách phương thức vận chuyển</h3>
+      </div>
+      <form>
+        <div class="inner-form d-flex float-end pb-3">
+<!--          <div class="input-field">-->
+<!--            <div class="input-select">-->
+<!--              <select data-trigger="" name="choices-single-defaul">-->
+<!--                <option>&#45;&#45;&#45;&#45;Chọn&#45;&#45;&#45;&#45;</option>-->
+<!--                <option value="id">ID</option>-->
+<!--                <option value="email">Email</option>-->
+<!--                <option value="sdt">Số điện thoại</option>-->
+<!--                <option value="hoten">Họ tên</option>-->
+<!--              </select>-->
+<!--            </div>-->
+<!--          </div>-->
+          <div class="input-field ">
+            <input id="search" type="text" placeholder="Nhập từ khóa"/>
+          </div>
+
+          <div class="input-field">
+            <button class="btn-search btn btn-primary" type="button">Tìm kiếm</button>
+          </div>
+        </div>
+      </form>
+    </div>
+    <div class="row">
+      <div class="col-md-12">
+        <div class="table-wrap">
+          <table class="table table-responsive-xl table-hover">
+            <thead>
+            <tr>
+              <th>ID</th>
+              <th>Tên phương thức</th>
+              <th>Đơn giá</th>
+              <th>Ghi chú</th>
+              <th>Ngày tạo</th>
+              <th>Trạng thái</th>
+              <th>Tùy chọn</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr class="alert" role="alert" th:each="transport:${transports}">
+              <td>
+                <span th:text="${transport.getId()}"></span>
+              </td>
+              <td>
+                <span th:text="${transport.getName()}"></span>
+              </td>
+              <td>
+                <span th:text="${#numbers.formatDecimal(transport.getPrice(),3,'DEFAULT', 0, 'DEFAULT')}"></span>
+              </td>
+
+              <td>
+                <span th:text="${transport.getNotes()}"></span>
+              </td>
+              <td><span th:text="${#dates.format(transport.getCreatedDate(), 'dd-MM-yyyy HH:mm:ss')}"></span></td>
+              <!--              <td class="status">-->
+              <!--                <select class="form-select form-select-sm">-->
+              <!--                  <option class="active" th:value="1" th:selected="${(payment.getIsactive()==1)}">Bật</option>-->
+              <!--                  <option class="waiting" th:value="0" th:selected="${(payment.getIsactive()==0)}">Tắt</option>-->
+              <!--                </select>-->
+              <!--                -->
+
+              <!--              </td>-->
+              <td class="status"><span th:class="${(transport.getIsactive()==1)? 'active' : 'waiting'}"
+                                       th:text="${(transport.getIsactive()==1)?'Bật':'Tắt'}"></span>
+              </td>
+              <td>
+                                <span><a type="button" class="btn"
+                                         th:href="'/update-transport?idtransport='+${transport.getId()}"><i
+                                        class="fa-solid fa-pen-to-square"></i></a></span>
+              </td>
+            </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+</body>
+</html>

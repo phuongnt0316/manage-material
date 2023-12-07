@@ -16,4 +16,5 @@ public interface ProductReceivedRepository extends JpaRepository<ProductReceived
     List<ProductReceived> getReceivedByInventory();
     @Query(value = Sql.GET_RECEIVED_BY_ID, nativeQuery = true)
     List<ProductReceived> getReceivedByID(int id);
+
 }

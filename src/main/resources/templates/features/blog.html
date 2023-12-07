@@ -16,7 +16,7 @@
             <h1 class="display-2 text-uppercase fw-bolder text-dark">Bài viết</h1>
             <div class="breadcrumbs">
                 <span class="item">
-                  <a href="index.html">Trang chủ ></a>
+                  <a href="/ministore">Trang chủ ></a>
                 </span>
               <span class="item">Bài viết</span>
             </div>
@@ -43,101 +43,29 @@
               </form>
             </div>
             <div class="sidebar-filter pt-5">
-<!--              <div class="widget sidebar-product-categories mb-5">-->
-<!--                <h5 class="widget-title text-uppercase">Phụ kiện</h5>-->
-<!--                <ul class="product-categories sidebar-list list-unstyled">-->
-<!--                  <li class="cat-item">-->
-<!--                    <a href="/collections/categories">Tất cả</a>-->
-<!--                  </li>-->
-<!--                  <li class="cat-item">-->
-<!--                    <a href="">Điện thoại</a>-->
-<!--                  </li>-->
-<!--                  <li class="cat-item">-->
-<!--                    <a href="">Phụ kiến</a>-->
-<!--                  </li>-->
-<!--                  <li class="cat-item">-->
-<!--                    <a href="">Máy tính bảng</a>-->
-<!--                  </li>-->
-<!--                  <li class="cat-item">-->
-<!--                    <a href="">Đông hồ</a>-->
-<!--                  </li>-->
-<!--                </ul>-->
-<!--              </div>-->
-<!--              <div class="widget sidebar-product-tags mb-5">-->
-<!--                <h5 class="widget-title text-uppercase">Từ khóa</h5>-->
-<!--                <ul class="product-tags sidebar-list list-unstyled">-->
-<!--                  <li class="tags-item">-->
-<!--                    <a href="">Trắng</a>-->
-<!--                  </li>-->
-<!--                  <li class="tags-item">-->
-<!--                    <a href="">Rẻ</a>-->
-<!--                  </li>-->
-<!--                  <li class="tags-item">-->
-<!--                    <a href="">Điện thoại</a>-->
-<!--                  </li>-->
-<!--                  <li class="tags-item">-->
-<!--                    <a href="">Cấu hình</a>-->
-<!--                  </li>-->
-<!--                </ul>-->
-<!--              </div>-->
               <div class="widget sidebar-recent-post mb-5">
                 <h5 class="widget-title text-uppercase">Bài viết mới nhất</h5>
-                <div class="sidebar-post-item">
+                <div class="sidebar-post-item" th:each="blog:${blogRelated}">
                   <div class="d-flex flex-wrap align-items-center mb-3">
                     <div class="col-lg-6">
                       <div class="card-image pe-3 pb-2">
-                        <a href="#">
-                          <img src="images/post-small-image1.jpg" alt="blog" class="img-fluid">
+                        <a th:href="'/blog-detail?idBlog='+${blog.getId()}">
+                          <img th:src="${blog.getBlogImage()}" alt="blog" class="img-fluid">
                         </a>
                       </div>
                     </div>
                     <div class="col-lg-6">
                       <div class="card-content">
                         <h5 class="card-title">
-                          <a href="#">TOP 10 SMALL CAMERA IN THE WORLD</a>
+                          <a th:href="'/blog-detail?idBlog='+${blog.getId()}" th:text="${blog.getTitle()}"></a>
                         </h5>
                       </div>
                     </div>
                   </div>
                 </div>
-                <div class="sidebar-post-item">
-                  <div class="d-flex flex-wrap align-items-center mb-3">
-                    <div class="col-lg-6">
-                      <div class="card-image pe-3 pb-2">
-                        <a href="#">
-                          <img src="images/post-small-image2.jpg" alt="blog" class="img-fluid">
-                        </a>
-                      </div>
-                    </div>
-                    <div class="col-lg-6">
-                      <div class="card-content">
-                        <h5 class="card-title">
-                          <a href="#">TECHNOLOGY HACK YOU WON’T GET</a>
-                        </h5>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-                <div class="sidebar-post-item">
-                  <div class="d-flex flex-wrap align-items-center mb-3">
-                    <div class="col-lg-6">
-                      <div class="card-image pe-3 pb-2">
-                        <a href="#">
-                          <img src="images/post-small-image3.jpg" alt="blog" class="img-fluid">
-                        </a>
-                      </div>
-                    </div>
-                    <div class="col-lg-6">
-                      <div class="card-content">
-                        <h5 class="card-title">
-                          <a href="#">GET SOME COOL GADGETS IN 2023</a>
-                        </h5>
-                      </div>
-                    </div>
-                  </div>
-                </div>
+
               </div>
-              <!-- <div class="widget sidebar-social-links mb-5">
+               <div class="widget sidebar-social-links mb-5">
                 <h4 class="widget-title text-uppercase">Social Links</h4>
                 <ul class="sidebar-list list-unstyled">
                   <li class="tags-item">
@@ -156,7 +84,7 @@
                     <a href="">Youtube</a>
                   </li>
                 </ul>
-              </div> -->
+              </div>
             </div>
           </div>
         </aside>
@@ -170,7 +98,7 @@
               </div>
               <div class="card-body text-uppercase">
                 <div class="card-meta text-muted">
-                  <span class="meta-date" th:text="${blog.getCreatedDate()}"></span>
+                  <span class="meta-date" th:text="${#dates.format(blog.getCreatedDate(), 'dd-MM-yyyy')}"></span>
                   <span class="meta-category" th:text="'-'+${blog.getBlogTopic()}"></span>
                 </div>
                 <p class="card-title">
@@ -180,25 +108,6 @@
             </div>
 
           </div>
-          <nav class="navigation paging-navigation text-center padding-medium" role="navigation">
-            <div class="pagination loop-pagination d-flex justify-content-center align-items-center">
-              <a href="#">
-                <svg class="chevron-left pe-3">
-                  <use xlink:href="#chevron-left"></use>
-                </svg>
-              </a>
-              <span aria-current="page" class="page-numbers current pe-3">1</span>
-              <a class="page-numbers pe-3" href="#">2</a>
-              <a class="page-numbers pe-3" href="#">3</a>
-              <a class="page-numbers pe-3" href="#">4</a>
-              <a class="page-numbers" href="#">5</a>
-              <a href="#">
-                <svg class="chevron-right ps-3">
-                  <use xlink:href="#chevron-right"></use>
-                </svg>
-              </a>
-            </div>
-          </nav>
         </main>
       </div>
     </div>

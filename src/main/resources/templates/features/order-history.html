@@ -36,7 +36,7 @@
                             <tbody>
                             <tr th:each="order:${orders}">
                                 <td th:text="${order.getIdorders()}"></td>
-                                <td th:text="${order.getOrdersDate()}"></td>
+                                <td th:text="${#dates.format(order.getOrdersDate(), 'dd-MM-yyyy HH:mm:ss')}"></td>
                                 <td th:text="${#numbers.formatDecimal(order.getTotalMoney(),3,'DEFAULT', 0, 'DEFAULT')}"></td>
                                 <td th:text="${order.getNotes()}"></td>
                                 <td th:text="${order.getNameReciver()}"></td>
@@ -44,9 +44,9 @@
                                 <td th:text="${order.getPhone()}"></td>
                                 <td th:switch="${order.getStatus()}">
                                     <span th:case="'1'">Đơn đã đặt</span>
-                                    <span th:case="'2'">Đang chuẩn bị</span>
+                                    <span th:case="'2'">Chuẩn bị hàng</span>
                                     <span th:case="'3'">Đang vận chuyển</span>
-                                    <span th:case="'4'">Đã giao hàng</span>
+                                    <span th:case="'4'">Giao hàng thành công</span>
                                 </td>
                                 <td class="btn-active"><a id="btnStart" type="button" class="btn" th:href="'/order-detail?id='+${order.getId()}">Xem chi tiết</a>
 

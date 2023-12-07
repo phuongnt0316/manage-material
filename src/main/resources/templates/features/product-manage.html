@@ -87,17 +87,19 @@
             </div>
         </div>
     </section>
-<section class="ftco-section">
+    <section class="ftco-section">
         <div class="container">
             <div class="row justify-content-center">
                 <div class="col-md-6 text-center mb-5">
                     <h3>Danh sách sản phẩm</h3>
-
-                    <button id="btnStart" type="button" class="btn" data-toggle="modal"
+                </div>
+                <div class="d-flex justify-content-between">
+                <div>
+                    <a id="btnStart" type="button" class="btn btn-pr" data-toggle="modal"
                             title="Thêm sản phẩm" data-target="#formModal"><span
-                            aria-hidden="true">
-                    Thêm sản phẩm mới
-                                  <i class="fa-solid fa-circle-plus"></i> </span></button>
+                            aria-hidden="true">Thêm mới<i class="fa-solid fa-circle-plus"></i> </span></a>
+                    <a class="btn btn-pr" href="/add-quantity-product">Nhập kho <i class="fa-solid fa-house-medical"></i></a>
+                    <a class="btn btn-pr" href="/products-export">Xuất excel <i class="fa-solid fa-file-export"></i></a>
                 </div>
                 <form>
                     <div class="inner-form d-flex float-end pb-3">
@@ -112,6 +114,7 @@
                         </div>
                     </div>
                 </form>
+                </div>
             </div>
             <div class="row">
                 <div class="col-md-12">
@@ -125,6 +128,7 @@
                                 <th>Danh mục</th>
                                 <th>Số lượng</th>
                                 <th>Đơn giá</th>
+                                <th>Giảm giá</th>
                                 <th>Trạng thái</th>
                                 <th>Tùy chọn</th>
                             </tr>
@@ -137,6 +141,7 @@
                                 <td th:text="${product.getIdcategory().getName()}" class="cl-name"></td>
                                 <td th:text="${product.getQuantity()}"></td>
                                 <td th:text="${#numbers.formatDecimal(product.getPrice(),3,'DEFAULT', 0, 'DEFAULT')}"></td>
+                                <td th:text="${product.getSale()*100}+'%'"></td>
                                 <td class="status"><span th:class="${(product.getIsactive()==1)? 'active' : 'waiting'}"
                                                          th:text="${(product.getIsactive()==1)?'Bật':'Tắt'}"></span>
                                 </td>
@@ -153,18 +158,18 @@
                             </tbody>
                         </table>
                         <ul class="pagination pagination-sm d-flex" th:replace="features/pagination">
-<!--                            <li th:if="${curentpage>1}"><a-->
-<!--                                    th:href="@{${keyword!=null&&keyword!=''?'?key='+keyword+'&':'?'}+'?pageNo='+${curentpage-1}}">&laquo;</a>-->
-<!--                            </li>-->
-<!--                            <li th:each="i:${#numbers.sequence(1,totalPage)}">-->
-<!--                                <a th:class="${curentpage==i?'active':''}"-->
-<!--                                   th:href="@{${keyword!=null&&keyword!=''?'?key='+keyword+'&':'?'}+'pageNo='+${i}}"-->
-<!--                                   th:text="${i}"> </a>-->
-<!--                            </li>-->
-<!--                            <li th:if="${curentpage<totalPage}"><a-->
-<!--                                    th:href="@{${keyword!=null&&keyword!=''?'?key='+keyword+'&':'?'}+'pageNo='+${curentpage+1}}">-->
-<!--                                &raquo;</a>-->
-<!--                            </li>-->
+                            <!--                            <li th:if="${curentpage>1}"><a-->
+                            <!--                                    th:href="@{${keyword!=null&&keyword!=''?'?key='+keyword+'&':'?'}+'?pageNo='+${curentpage-1}}">&laquo;</a>-->
+                            <!--                            </li>-->
+                            <!--                            <li th:each="i:${#numbers.sequence(1,totalPage)}">-->
+                            <!--                                <a th:class="${curentpage==i?'active':''}"-->
+                            <!--                                   th:href="@{${keyword!=null&&keyword!=''?'?key='+keyword+'&':'?'}+'pageNo='+${i}}"-->
+                            <!--                                   th:text="${i}"> </a>-->
+                            <!--                            </li>-->
+                            <!--                            <li th:if="${curentpage<totalPage}"><a-->
+                            <!--                                    th:href="@{${keyword!=null&&keyword!=''?'?key='+keyword+'&':'?'}+'pageNo='+${curentpage+1}}">-->
+                            <!--                                &raquo;</a>-->
+                            <!--                            </li>-->
                         </ul>
                     </div>
                 </div>

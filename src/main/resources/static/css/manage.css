@@ -113,11 +113,6 @@
      text-align: center !important;
    }
  }
-
-
-
-
-
  @media print {
 
    *,
@@ -480,15 +475,14 @@
      margin-right: 14px;
      padding: 5px 5px;
  }
- .img-add-product,img-payment{
+ .img-add-product{
      width: 100px;
      height: 100px;
 
  }
- .img-payment{
+ img.img-payment{
      width: 50px;
      height: 50px;
-
  }
 
  .table tbody td.status select option.active {
@@ -507,4 +501,29 @@
 
  .table tbody td.status select option.waiting:after {
      background: #f2be1d;
+ }
+ .btn-pr{
+     color: #007bff;
+     font-size: 11px;
+     text-transform: uppercase;
+     font-weight: bold;
+     background: none;
+     border: 1px solid #007bff;
+     padding: 6px 14px;
+     margin-top: 5px;
+     line-height: 16px;
+     border-radius: 20px;
+ }
+
+ .btn-pr-active{
+     color: darkred;
+     font-size: 11px;
+     text-transform: uppercase;
+     font-weight: bold;
+     background: none;
+     border: 1px solid darkred;
+     padding: 6px 14px;
+     margin-top: 5px;
+     line-height: 16px;
+     border-radius: 20px;
  }

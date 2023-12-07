@@ -15,5 +15,5 @@ public interface IMaterialControll {
             "                                                    <i class='fa-solid fa-cart-shopping'></i>" +
             "                                                    <p class='mb-0 fs-3'>Giỏ hàng</p></a>" +
             "                                                <a href='/login' class='btn btn-outline-primary mx-3 mt-2 d-block'>Đăng nhập</a>";
-    public  static  final String EMPTY_CART="";
+    public  static  final String EMAIL="phuong16397@gmail.com";
 }

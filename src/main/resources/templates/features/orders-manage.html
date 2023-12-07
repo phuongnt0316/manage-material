@@ -13,15 +13,19 @@
             <div class="col-md-6 text-center mb-5">
                 <h3 th:text="${customer==null?'Danh sách đơn hàng':'Danh sách đơn hàng #'+customer.getId() +'-'+customer.getName()}"></h3>
             </div>
+            <div class="d-flex justify-content-between">
+                <div>
+                    <a class="btn btn-pr" href="/orders-export">Xuất excel <i class="fa-solid fa-file-export"></i></a>
+                </div>
             <form>
                 <div class="inner-form d-flex float-end pb-3">
                     <div class="input-field">
                         <div class="input-select">
-                            <select data-trigger="" name="choices-single-defaul"
-                                    th:onchange="'window.location.href = \'/orders-manage?idstatus=\' + this.value '">
-                                <option th:each="sta:${status}" th:value="${sta.getId()}" th:text="${sta.getStatus()}"
-                                        th:selected="${sta.getId()==idstatus}"></option>
-                            </select>
+<!--                            <select data-trigger="" name="choices-single-defaul"-->
+<!--                                    th:onchange="'window.location.href = \'/orders-manage?idstatus=\' + this.value '">-->
+<!--                                <option th:each="sta:${status}" th:value="${sta.getId()}" th:text="${sta.getStatus()}"-->
+<!--                                        th:selected="${sta.getId()==idstatus}"></option>-->
+<!--                            </select>-->
                         </div>
                     </div>
                     <div class="input-field ">
@@ -32,6 +36,7 @@
                     </div>
                 </div>
             </form>
+            </div>
         </div>
         <div class="row">
             <div class="col-md-12">

@@ -1,13 +1,11 @@
 package vn.com.devmaster.services.managematerial.projection;
 
-public interface IViewProduct {
-    Integer getIdProduct();
+public interface IProduct {
+    Integer getId();
     String getName();
-    Integer getQuantityCart();
     String getImage();
     Double getPrice();
-    Integer getQuantityProduct();
+    Integer getQuantity();
+    String getDescription();
     Double getSale();
-    Integer getIsactive();
-
 }

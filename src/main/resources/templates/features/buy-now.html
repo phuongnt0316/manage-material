@@ -16,7 +16,7 @@
                         <h1 class="display-4 text-uppercase fw-bolder text-dark">Giỏ hàng</h1>
                         <div class="breadcrumbs">
                 <span class="item">
-                  <a href="index.html">Trang chủ ></a>
+                  <a href="/ministore">Trang chủ ></a>
                 </span>
                             <span class="item">Giỏ hàng</span>
                         </div>
@@ -30,36 +30,26 @@
             <div class="row d-flex justify-content-center align-items-center h-100">
                 <div class="col-12">
                     <div class="card card-registration card-registration-2" style="border-radius: 15px;">
-                        <div class="d-flex justify-content-center" th:remove="${total==0||total==null}?none:all">
-
-                            <div class="empty-cart">
-
-                                <img src="images/emptycart.jpg">
-                                <p>Giỏ hàng trống </p>
-                                <a class="btn btn-addCart" href="/shop">Xem cửa hàng</a>
-                            </div>
-                        </div>
                         <div th:remove="tag" th:utext="${rs}"></div>
-                        <div class="card-body p-0" th:remove="${total==0||total==null}?all:none">
+                        <div class="card-body p-0">
                             <div class="row g-0" >
                                 <div class="col-lg-8">
                                     <div class="p-2">
                                         <div class="d-flex justify-content-between align-items-center mb-5">
-                                            <h1 class="fw-bold mb-0 text-black">Giỏ hàng của bạn</h1>
+                                            <h1 class="fw-bold mb-0 text-black"> Đơn hàng của bạn</h1>
                                             <h6 class="mb-0 text-muted" th:text="${total}+' sản phẩm'"></h6>
                                         </div>
                                         <hr class="my-4">
-                                        <div class="row mb-2 d-flex align-items-center"
-                                             th:each="cart:${carts}">
+                                        <div class="row mb-2 d-flex align-items-center">
                                             <div class="col-md-3 col-lg-3 col-xl-3">
                                                 <img
-                                                        th:src="${cart.getImage()}"
+                                                        th:src="${product.getImage()}"
                                                         class="img-fluid rounded-3" alt="">
                                                 <div>
                                                     <div class="d-flex" ><h6 class=" text-id">Mã sản phẩm: </h6>
-                                                    <h6 class="text-id" name="id-product" th:text="${cart.getIdProduct()}"></h6>
+                                                        <h6 class="text-id" name="id-product" id="id-product" th:text="${product.getId()}"></h6>
                                                     </div>
-                                                    <h6 class="text-name mb-0" th:text="${cart.getName()}"></h6>
+                                                    <h6 class="text-name mb-0" th:text="${product.getName()}"></h6>
                                                 </div>
 
                                             </div>
@@ -70,7 +60,7 @@
                                                 </button>
 
                                                 <input id="quantity" min="0" name="quantity" type="number"
-                                                       th:value="${cart.getQuantityCart()}"
+                                                       th:value="${quantity}"
                                                        class="form-control form-control-sm text-center"/>
 
                                                 <button class="btn btn-link px-2"
@@ -79,22 +69,23 @@
                                                 </button>
                                             </div>
                                             <div class="col-md-2 col-lg-2 col-xl-2">
-                                                <th:block th:remove="${cart.getSale()==0}?all:none">
-                                                    <p class="mb-0"><del  th:text="${#numbers.formatDecimal(cart.getPrice(),3,'DEFAULT', 0, 'DEFAULT')}"></del></p>
-                                                    <p class="" th:text="${#numbers.formatDecimal((cart.getPrice()*(1.0-cart.getSale())),3,'DEFAULT', 0, 'DEFAULT')}"></p>
+                                                <th:block th:remove="${product.getSale()==0}?all:none">
+                                                    <p class="mb-0"><del  th:text="${#numbers.formatDecimal(product.getPrice(),3,'DEFAULT', 0, 'DEFAULT')}"></del></p>
+                                                    <p class="" th:text="${#numbers.formatDecimal((product.getPrice()*(1.0-product.getSale())),3,'DEFAULT', 0, 'DEFAULT')}"></p>
                                                 </th:block>
-<!--                                                <h6 class="mb-0" th:text="${#numbers.formatDecimal(cart.getPrice(),3,'DEFAULT', 0, 'DEFAULT')}"> </h6>-->
-                                            </div>
+                                                <th:block th:remove="${product.getSale()==0}?none:all">
+                                                    <p class="mb-0" th:text="${#numbers.formatDecimal(product.getPrice(),3,'DEFAULT', 0, 'DEFAULT')}"></p>
 
+                                                </th:block>
+                                                <!--                                                <h6 class="mb-0" th:text="${#numbers.formatDecimal(cart.getPrice(),3,'DEFAULT', 0, 'DEFAULT')}"> </h6>-->
+                                            </div>
                                             <div class="col-md-4 col-lg-3 col-xl-3 text-end">
                                                 <div class="d-flex">
-                                                <a name="update-taga" class="btn btn-update">Cập nhật</a>
-                                                <a th:href="${(check==1)?'/deleteCart?delete='+cart.getIdProduct()+'&&idcustomer='+customer.getId():'deleteCart1?idpr='+cart.getIdProduct()}" class=" btn btn-delete">Xóa</a>
+                                                    <a type="submit" class="btn btn-update" onclick="buyNow()">Cập nhật</a>
+
                                                 </div>
                                             </div>
-                                            <th:block>
-                                                <p th:text="${cart.getQuantityCart()>cart.getQuantityProduct()?'Số lượng tồn kho không đủ':''}"></p>
-                                            </th:block>
+
                                         </div>
                                         <hr class="my-0">
                                         <div class="pt-5">
@@ -113,18 +104,18 @@
                                             <p th:text="'Tổng '+${total}+' sản phẩm'"></p>
                                             <h5  th:text="${#numbers.formatDecimal(totalCart,3,'DEFAULT', 0, 'DEFAULT')}+' VNĐ'"></h5>
                                         </div>
-                                            <div class="d-flex justify-content-between mb-4">
-                                                <select class="select" id="idTransport" name="transport" th:onchange="'window.location.href = \'?idtransport=\' + this.value '">
-                                                    <option  th:each="transport:${transports}" th:value="${transport.getId()}" th:text="${transport.getName()}" th:selected="${idtransport==transport.getId()}"></option>
-                                                </select>
-                                                <h5  th:text="${#numbers.formatDecimal(ship,3,'DEFAULT', 0, 'DEFAULT')}+' VNĐ'"></h5>
-                                            </div>
+                                        <div class="d-flex justify-content-between mb-4">
+                                            <select id="id-transport" class="select" name="transport" th:onchange="'window.location.href = \'?idtransport=\' + this.value '">
+                                                <option  th:each="transport:${transports}" th:value="${transport.getId()}" th:text="${transport.getName()}" th:selected="${idtransport==transport.getId()}"></option>
+                                            </select>
+                                            <h5  th:text="${#numbers.formatDecimal(ship,3,'DEFAULT', 0, 'DEFAULT')}+' VNĐ'"></h5>
+                                        </div>
                                         <hr class="my-4">
                                         <div class="d-flex justify-content-between mb-5">
                                             <p>Tổng thanh toán</p>
                                             <h5 th:text="${#numbers.formatDecimal(totalmoney,3,'DEFAULT', 0, 'DEFAULT')}+' VNĐ'"></h5>
                                         </div>
-                                        <a name="" onclick="goCheckOut()" class="btn btn-dark"> Thanh toán</a>
+                                        <input type="submit" value="Thanh toán" onclick="checkOut()" class="btn btn-dark">
                                     </div>
                                 </div>
                             </div>

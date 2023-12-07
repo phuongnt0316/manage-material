@@ -4,43 +4,92 @@
       layout:decorate="~{layout/admin}">
 <head>
     <meta charset="UTF-8">
-    <title>Payment Method-Manage</title>
+    <title>Product-Manage</title>
 </head>
 <body>
+<th:block layout:fragment="content">
+    <section>
+        <div class="modal fade" id="formModal" role="dialog" aria-labelledby="formModalLabel"
+             aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h3 class="modal-title" id="formModalLabel">Thêm danh mục sản phẩm</h3>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="close">
+                            <span aria-hidden="true">Đóng</span>
+                        </button>
+                    </div>
+                    <form id="formAwesome" action="#" th:action="@{/new-category}" method="post"
+                          enctype="multipart/form-data">
+                        <div class="modal-body">
+                            <div class="form-group row">
+                                <label for="name-category" class="col-sm-6 col-form-label">
+                                    Tên danh mục
+                                </label>
+                                <div class="col-sm-6">
+                                    <input type="text" class="form-control" id="name-category" name="name-category"
+                                           required>
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <label for="image" class="col-sm-6 col-form-label">
+                                    Hình ảnh
+                                </label>
+                                <div class="col-sm-6">
+                                    <input type="file" name="image" id="image" placeholder="Chọn file" required>
+                                </div>
+                            </div>
 
-<section class="ftco-section" layout:fragment="content">
-    <div class="container">
-        <div class="row justify-content-center">
-            <div class="col-md-6 text-center mb-5">
-                <h3>Danh sách hãng sản phẩm</h3>
-            </div>
-            <form>
-                <div class="inner-form d-flex float-end pb-3">
-                    <div class="input-field">
-                        <div class="input-select">
-                            <select data-trigger="" name="choices-single-defaul">
-                                <option>----Chọn----</option>
-                                <option value="id">ID</option>
-                                <option value="email">Email</option>
-                                <option value="sdt">Số điện thoại</option>
-                                <option value="hoten">Họ tên</option>
-                            </select>
+                            <div class="form-group row">
+                                <label for="notes" class="col-sm-6 col-form-label">
+                                    Ghi chú
+                                </label>
+                                <div class="col-sm-6">
+                                            <textarea name="notes" class="form-control" cols="25" rows="5"
+                                                      id="notes"></textarea>
+                                </div>
+                            </div>
                         </div>
-                    </div>
-                    <div class="input-field ">
-                        <input id="search" type="text" placeholder="Nhập từ khóa"/>
-                    </div>
-
-                    <div class="input-field">
-                        <button class="btn-search btn btn-primary" type="button">Tìm kiếm</button>
-                    </div>
+                        <div class="modal-footer">
+                            <input type="submit" class="btn btn-secondary" value="Lưu">
+                        </div>
+                    </form>
                 </div>
-            </form>
+            </div>
         </div>
-        <div class="row">
-            <div class="col-md-12">
-                <div class="table-wrap">
-                    <table class="table table-responsive-xl table-hover">
+    </section>
+    <section class="ftco-section">
+        <div class="container">
+            <div class="row justify-content-center">
+                <div class="col-md-6 text-center mb-5">
+                    <h3>Danh sách danh mục sản phẩm</h3>
+                </div>
+                <div class="d-flex justify-content-between">
+                    <div>
+                        <a id="btnStart" type="button" class="btn btn-pr" data-toggle="modal"
+                           title="Thêm mới" data-target="#formModal"><span
+                                aria-hidden="true">Thêm mới<i class="fa-solid fa-circle-plus"></i> </span></a>
+                        <a class="btn btn-pr" href="/categories-export">Xuất excel <i class="fa-solid fa-file-export"></i></a>
+                    </div>
+                    <form>
+                        <div class="inner-form d-flex float-end pb-3">
+                            <div class="input-field ">
+                                <input id="search" type="text" placeholder="Nhập tên..."/>
+                            </div>
+
+                            <div class="input-field">
+                                <button class="btn-search btn btn-primary" type="button"
+                                        th:onclick="'window.location.href=\'/category-manage?key=\'+search.value'">Tìm kiếm
+                                </button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="table-wrap">
+                        <table class="table table-responsive-xl table-hover">
                         <thead>
                         <tr>
                             <th>ID</th>
@@ -60,7 +109,7 @@
                                 <span th:text="${category.getName()}"></span>
                             </td>
                             <td>
-                                <img th:src="${category.getIcon()}" class="img-payment">
+                                <img th:src="${category.getImage()}" class="img-payment">
                             </td>
                             <td>
                                 <span th:text="${category.getNotes()}"></span>
@@ -76,10 +125,14 @@
                         </tr>
                         </tbody>
                     </table>
+<!--                        <ul class="pagination pagination-sm d-flex" th:replace="features/pagination">-->
+<!--                        </ul>-->
+                    </div>
                 </div>
             </div>
         </div>
-    </div>
-</section>
+    </section>
+
+</th:block>
 </body>
 </html>

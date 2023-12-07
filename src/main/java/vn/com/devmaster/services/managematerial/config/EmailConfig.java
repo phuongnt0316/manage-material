@@ -17,7 +17,7 @@ public class EmailConfig {
         mailSender.setPort(587);
         mailSender.setUsername("phuong16397@gmail.com");
         //Gmail now requires you to setup App password. See https://support.google.com/accounts/answer/185833
-        mailSender.setPassword("vaee xohq yldd bljy");
+        mailSender.setPassword("");
 
         final Properties props = mailSender.getJavaMailProperties();
         props.put("mail.transport.protocol", "smtp");

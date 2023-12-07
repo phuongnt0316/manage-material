@@ -30,7 +30,7 @@
                     <form id="formAwesome" action="#" th:action="@{/new-image-product}" method="post"
                           enctype="multipart/form-data">
                         <div class="modal-body">
-                            <input th:value="${idproduct}" type="text" name="idproduct" class="idproduct" readonly>
+                           Mã sản phẩm: #<input th:value="${idproduct}" type="text" name="idproduct" class="idproduct" readonly>
                             <div class="form-group row">
                                 <label for="image" class="col-sm-6 col-form-label">
                                     Hình ảnh
@@ -84,12 +84,12 @@
         <div class="container">
             <div class="row justify-content-center">
                 <div class="col-md-6 text-center mb-5">
-                    <h3>Danh sách ảnh</h3>
+                    <h3 th:text="'Danh sách ảnh #'+${idproduct}">Danh sách ảnh #</h3>
 
                     <button id="btnStart" type="button" class="btn" data-toggle="modal"
                             title="Thêm sản phẩm" data-target="#formModal"><span
                             aria-hidden="true">
-                    Thêm sản phẩm mới
+                            Thêm ảnh
                                   <i class="fa-solid fa-circle-plus"></i> </span></button>
                 </div>
             </div>
@@ -102,6 +102,7 @@
                                 <th>ID</th>
                                 <th>Tên ảnh</th>
                                 <th>Hình ảnh</th>
+                                <th>Tùy chọn</th>
                             </tr>
                             </thead>
                             <tbody id="myTable">
@@ -110,7 +111,7 @@
                                 <td th:text="${image.getName()}"></td>
                                 <td><img th:src="${image.getUrl()}" class="image-product"></td>
                                 <td>
-                                    <a th:href="'/delete-image-product?id='+${image.getId()}" class="btn" title="Sửa">
+                                    <a th:href="'/delete-image-product?id='+${image.getId()}+'&&idProduct='+${idproduct}" class="btn" title="Sửa">
                                         <span aria-hidden="true"><i class="fa-solid fa-trash-can"></i></span>
                                     </a>
                                 <td>

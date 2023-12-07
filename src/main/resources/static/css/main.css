@@ -177,8 +177,22 @@ p.cart-title {
     font-size: 12px;
 
 }
+h3.card-title{
+    font-weight: bold;
+    font-size: 14px;
+}
+h6.text-name,h6.text-id{
+    font-weight: bold;
+    font-size: 12px;
+}
 p.item-price{
+    color: gray;
+    font-size: 13px;
+}
+p.item-price-sale{
     color: red;
+    font-size: 13px;
+    font-weight: bold;
 }
 p.card-content{
     font-size: 0.8em;
@@ -313,7 +327,34 @@ p.card-content{
     background-color: var(--dark-color);
     color: var(--light-color);
 }
+.btn-update,.btn-delete{
 
+    font-size: 11px;
+    text-transform: uppercase;
+    font-weight: bold;
+    background: none;
+
+    padding: 6px 14px;
+    margin-top: 5px;
+    line-height: 16px;
+    border-radius: 20px;
+}
+.btn-update{
+    color: #007bff;
+    border: 1px solid #007bff;
+}
+.btn-update:hover{
+    background:  var(--primary-color);
+
+}
+.btn-delete:hover{
+    background: red;
+    opacity: 0.5;
+}
+.btn-delete{
+    color: red;
+    border: 1px solid red;
+}
 /* - Buttons Aligns
 ------------------------------------------------------------- */
 .btn-addCart{
@@ -1133,4 +1174,7 @@ vertical-align: middle;
 .image-blog{
     width: 270px;
     height: 200px;
+}
+p.id-product,p.name-product{
+    font-size: 12px;
 }

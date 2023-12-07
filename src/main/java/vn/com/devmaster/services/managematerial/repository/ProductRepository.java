@@ -39,10 +39,17 @@ public interface ProductRepository extends JpaRepository<Product,Integer> {
     @Modifying(clearAutomatically = true)
     @Transactional
     @Query(value = Sql.UPDATE_PRODUCT, nativeQuery = true)
-    void updateProduct(Integer id, String name, Integer idcategory, Double price, String description, String notes, Byte isactive, String urlImage, Instant updated_date);
+    void updateProduct(Integer id, String name, Integer idcategory, Double price, String description, String notes, Byte isactive, String urlImage, Instant updated_date, Double sale, Integer customerId);
     @Query(value = "select * from product s where s.ISACTIVE=1", nativeQuery = true)
     Page<Product> getProduct(Pageable pageable);
     @Query(value = "select * from product s where s.NAME like concat('%',:keyword,'%') and s.ISACTIVE=1", nativeQuery = true)
     List<Product> searchProductbyUser(String keyword);
-
+    @Query(value = Sql.SEARCH_PRODUCT, nativeQuery = true)
+    List<Product> searchAllProduct(List<Integer> idCates, double priceProduct1, double priceProduct2, String keyword);
+    @Query(value = Sql.PRODUCT_SALE, nativeQuery = true)
+    List<Product> saleProduct();
+    @Modifying(clearAutomatically = true)
+    @Transactional
+    @Query(value = Sql.UPDATE_PRODUCT_ISACTIVE,nativeQuery = true)
+    void updateProductIsActive(Integer id);
 }

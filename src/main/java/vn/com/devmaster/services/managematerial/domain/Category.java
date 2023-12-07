@@ -13,7 +13,7 @@ import java.time.Instant;
 @Table(name = "category")
 public class Category {
     @Id
-    @Column(name = "ID", nullable = false)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
     @Column(name = "IDPARENT")
@@ -27,7 +27,7 @@ public class Category {
     private String notes;
 
     @Column(name = "IMAGE", length = 250)
-    private String icon;
+    private String image;
 
     @Column(name = "CREATED_DATE")
     private Instant createdDate;
@@ -36,10 +36,10 @@ public class Category {
     private Instant updatedDate;
 
     @Column(name = "CREATED_BY", length = 50)
-    private String createdBy;
+    private Integer createdBy;
 
     @Column(name = "UPDATED_BY", length = 50)
-    private String updatedBy;
+    private Integer updatedBy;
 
     @Column(name = "ISACTIVE")
     private Byte isactive;

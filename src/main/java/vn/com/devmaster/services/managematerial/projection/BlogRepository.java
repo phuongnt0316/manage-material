@@ -10,4 +10,6 @@ import java.util.List;
 public interface BlogRepository extends JpaRepository<Blog, Integer> {
     @Query(value = Sql.GET_BLOG, nativeQuery = true)
     List<Blog> getBlog();
+    @Query(value = Sql.GET_BLOG_RELATED, nativeQuery = true)
+    List<Blog> getBlogRelated();
 }
